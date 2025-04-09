@@ -1,0 +1,163 @@
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container px-4 px-lg-5">
+        <a href="index.html" class="logo d-flex align-items-center me-auto me-lg-0">
+     
+          <h1>Yummy<span>.</span></h1>
+        </a>
+
+          
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">  
+                  <li class="nav-item"><a class="nav-link active" aria-current="page" href="home">Home</a></li>
+      
+                  <li class="nav-item"><a class="nav-link active" aria-current="page"href="menu">Menu</a></li>
+                
+                  <li class="nav-item"><a class="nav-link active" aria-current="page"href="chefs">Chefs</a></li>
+                  <li class="nav-item"><a class="nav-link active" aria-current="page"href="contact">Contact</a></li>   
+  <!--       <li class="nav-item"> <a class="nav-link active" aria-current="page"href="information">Information</a></li> 
+                <li class="nav-item"><a class="nav-link active" aria-current="page"href="order">Order</a></li> 
+
+  -->
+            
+                  <li class="nav-item"><a class="nav-link active" aria-current="page"href="signup" *ngIf="showSignup">Sign Up</a></li>
+                  <li class="nav-item"><a class="nav-link active" aria-current="page"href="login" *ngIf="showLogin">Login</a></li>  
+                  <li class="nav-item"><a class="nav-link active" aria-current="page"href="/userinfo" *ngIf="showLogOut">UserInfo</a></li>  
+                <li class="nav-item"><a class="nav-link active" aria-current="page"href="/" *ngIf="showLogOut" (click)="LogOut()">LogOut</a></li>  
+
+                
+        </ul>
+              <form class="d-flex">
+                <a href="information">
+                  <button class="btn btn-outline-dark" type="button" >
+                      <i class="bi-cart-fill me-1"></i>
+                      Cart
+                      <span class="badge bg-dark text-white ms-1 rounded-pill">{{cartSize}}</span>
+                  </button>
+                  </a>
+              </form>
+          </div>
+      </div>
+  </nav>
+
+
+
+
+  <!--
+ 
+  <header id="header" class="header fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <a href="index.html" class="logo d-flex align-items-center me-auto me-lg-0">
+     
+        <h1>Yummy<span>.</span></h1>
+      </a>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a href="home">Home</a></li>
+      
+          <li><a href="menu">Menu</a></li>
+        
+          <li><a href="chefs">Chefs</a></li>
+          <li><a href="contact">Contact</a></li>   
+          <li><a href="about">About</a></li>
+          <li><a href="order">Order</a></li>
+          <li><a href="signup">Sign Up</a></li>
+          <li><a href="login">Login</a></li>   
+          <li><a href="information">Information</a></li> 
+         
+        </ul>
+      </nav>
+
+      <a class="btn-book-a-table" href="book">Book a Table</a>
+      
+      <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+      <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+
+    </div>
+  </header>
+-->
+
+
+<router-outlet></router-outlet>
+
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+
+    <div class="container">
+      <div class="row gy-3">
+        <div class="col-lg-3 col-md-6 d-flex">
+          <i class="bi bi-geo-alt icon"></i>
+          <div>
+            <h4>Address</h4>
+            <p>
+              A108 Adam Street <br>
+              New York, NY 535022 - US<br>
+            </p>
+          </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6 footer-links d-flex">
+          <i class="bi bi-telephone icon"></i>
+          <div>
+            <h4>Reservations</h4>
+            <p>
+              <strong>Phone:</strong> +1 5589 55488 55<br>
+              <strong>Email:</strong> info@example.com<br>
+            </p>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 footer-links d-flex">
+          <i class="bi bi-clock icon"></i>
+          <div>
+            <h4>Opening Hours</h4>
+            <p>
+              <strong>Mon-Sun: 9AM - 11PM </strong><br>
+              
+            </p>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 footer-links">
+          <h4>Follow Us</h4>
+          <div class="social-links d-flex">
+       
+            <a href="/home" class="facebook"><i class="bi bi-facebook"></i></a>
+            <a href="/home" class="instagram"><i class="bi bi-instagram"></i></a>
+            <a href="/home" class="linkedin"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong><span>Yummy</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/yummy-bootstrap-restaurant-website-template/ -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+
+  </footer><!-- End Footer -->
+  <!-- End Footer -->
+
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <div id="preloader"></div>
+
+
+</body>
+
