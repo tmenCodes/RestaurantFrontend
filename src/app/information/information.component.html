@@ -63,11 +63,11 @@
           <ul class="list-group mb-3" >
             <li class="list-group-item d-flex justify-content-between lh-condensed" *ngFor="let x of displayArray; index as i">
               <div>
-                <h6 class="my-0">{{i+1}}.) {{x.item}}</h6>
+                <h6 class="my-0">{{i+1}}.) {{x.name}}</h6>
               <!--  <small class="text-muted">Brief description</small> -->
               </div>
               <span class="text-muted">${{x.price}}</span>
-              <span class="text-muted"><button class="btn btn-outline-dark btn-sm" [ngStyle]="{'maring': '10px'}" (click)="removeIndex(i)">Remove</button></span>
+              <span class="text-muted"><button class="btn btn-outline-dark btn-sm" [ngStyle]="{'maring': '10px'}" (click)="removeIndex(x.id)">Remove</button></span>
             </li>       
            <li class="list-group-item d-flex justify-content-between">
               <span>Total (USD)</span>
