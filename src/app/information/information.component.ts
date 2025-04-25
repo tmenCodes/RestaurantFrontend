@@ -127,12 +127,22 @@ export class InformationComponent {
     });
   }
 
+  cartSize: number = 0;
   removeIndex(i: number) {
     this.cartService.RemoveMenuItem(i);
-    //remove from our display array???
-    this.displayArray.filter((x) => {
-      console.log(x.Id);
-    });
+
+    var item_index = this.displayArray.findIndex((value) => value.id == i);
+    //console.log('The item at this index has been removed ' + item_index);
+
+    this.displayArray.splice(item_index, 1);
+    let value = this.cartSize--;
+    console.log(value);
+    this.cartService.CartCount.next(value);
+    console.log(value);
+    if (value == 0) {
+      console.log('come on bro  ');
+      window.location.reload;
+    }
   }
 
   cartgreaterthenzero: boolean = false;
@@ -141,6 +151,7 @@ export class InformationComponent {
 
   ngOnInit(): void {
     this.cartService.getAllCartItems().subscribe((value) => {
+      this.cartSize = value.length - 1;
       if (value.length > 0) {
         this.cartgreaterthenzero = true;
         this.cartiszero = false;

@@ -1,88 +1,7 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container px-4 px-lg-5">
-        <a href="index.html" class="logo d-flex align-items-center me-auto me-lg-0">
-     
-          <h1>Yummy<span>.</span></h1>
-        </a>
-
-          
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">  
-                  <li class="nav-item"><a class="nav-link active" aria-current="page" href="home">Home</a></li>
-      
-                  <li class="nav-item"><a class="nav-link active" aria-current="page"href="menu">Menu</a></li>
-                
-                  <li class="nav-item"><a class="nav-link active" aria-current="page"href="chefs">Chefs</a></li>
-                  <li class="nav-item"><a class="nav-link active" aria-current="page"href="contact">Contact</a></li>   
-  <!--       <li class="nav-item"> <a class="nav-link active" aria-current="page"href="information">Information</a></li> 
-                <li class="nav-item"><a class="nav-link active" aria-current="page"href="order">Order</a></li> 
-
-  -->
-            
-                  <li class="nav-item"><a class="nav-link active" aria-current="page"href="signup" *ngIf="showSignup">Sign Up</a></li>
-                  <li class="nav-item"><a class="nav-link active" aria-current="page"href="login" *ngIf="showLogin">Login</a></li>  
-                  <li class="nav-item"><a class="nav-link active" aria-current="page"href="/userinfo" *ngIf="showLogOut">UserInfo</a></li>  
-                <li class="nav-item"><a class="nav-link active" aria-current="page"href="/" *ngIf="showLogOut" (click)="LogOut()">LogOut</a></li>  
-
-                
-        </ul>
-              <form class="d-flex">
-                <a href="information">
-                  <button class="btn btn-outline-dark" type="button" >
-                      <i class="bi-cart-fill me-1"></i>
-                      Cart
-                      <span class="badge bg-dark text-white ms-1 rounded-pill">{{cartSize}}</span>
-                  </button>
-                  </a>
-              </form>
-          </div>
-      </div>
-  </nav>
-
-
-
-
-  <!--
- 
-  <header id="header" class="header fixed-top d-flex align-items-center">
-    <div class="container d-flex align-items-center justify-content-between">
-
-      <a href="index.html" class="logo d-flex align-items-center me-auto me-lg-0">
-     
-        <h1>Yummy<span>.</span></h1>
-      </a>
-
-      <nav id="navbar" class="navbar">
-        <ul>
-          <li><a href="home">Home</a></li>
-      
-          <li><a href="menu">Menu</a></li>
-        
-          <li><a href="chefs">Chefs</a></li>
-          <li><a href="contact">Contact</a></li>   
-          <li><a href="about">About</a></li>
-          <li><a href="order">Order</a></li>
-          <li><a href="signup">Sign Up</a></li>
-          <li><a href="login">Login</a></li>   
-          <li><a href="information">Information</a></li> 
-         
-        </ul>
-      </nav>
-
-      <a class="btn-book-a-table" href="book">Book a Table</a>
-      
-      <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
-      <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
-
-    </div>
-  </header>
--->
-
-
+<app-nav-bar ></app-nav-bar>
 <router-outlet></router-outlet>
 
 
@@ -109,7 +28,7 @@
             <h4>Reservations</h4>
             <p>
               <strong>Phone:</strong> +1 5589 55488 55<br>
-              <strong>Email:</strong> info@example.com<br>
+              <strong>Email:</strong> info@gmail.com<br>
             </p>
           </div>
         </div>

@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CartService } from '../cart.service';
-
+import { switchMap, tap, delay, of, mergeMap } from 'rxjs';
 
 @Component({
   selector: 'app-menu',
@@ -12,12 +12,67 @@ export class MenuComponent {
   //for each cart we only want the guid and the item is needed
 
   PutIntoCart(item: string) {
-    this.cartService.putCart(item);
+    console.log('this is the item' + item);
+    //  this.cartService.putCart(item);
+
+    //wait fo the above observable to fnishi
+
+    this.cartService
+      .putCart2(item)
+      .pipe(
+        tap((value) => {
+          this.cartService
+            .getCartSizeLength()
+            .pipe(
+              tap((value) => {
+                console.log('this is teh value within the tappppp');
+                console.log(value);
+                this.cartService.CartCount.next(value);
+              })
+            )
+            .subscribe();
+        })
+      )
+      .subscribe();
+
+    //get the value of the original
+    // this.cartService.CartCount.subscribe((value) => {
+    //   this.cartSize = value;
+    // });
+
+    // this.cartService.CartCount.next(this.cartSize + 1);
+    //pout cart is void so can't return a value ???
+
+    // this.callonMe();
+
+    //would have to combine all three values
+  }
+
+  callonMe() {
+    //get size is inisitally not zero though
+    const firstObservable$ = this.cartService.getCartSizeLength().pipe(
+      tap((value) => {
+        console.log(value);
+        this.cartService.CartCount.next(value);
+      })
+    );
+
+    firstObservable$.subscribe({
+      next: (v) => console.log(v),
+      error: (e) => {
+        // console.error('this is the error');
+        console.log(e.error);
+      },
+      complete: () => console.info('complete'),
+    });
   }
 
   breakfeastTime: boolean = false;
   lunchTime: boolean = false;
   dinnerTime: boolean = false;
+  cartSize: number = 0;
+
+  //create event from child to parent
 
   ngOnInit(): void {
     let date = new Date();

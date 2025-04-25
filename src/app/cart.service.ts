@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of, tap } from 'rxjs';
 
 interface MenuItems {
   item: string;
@@ -23,6 +23,8 @@ export class CartService {
   TempCart: TempMenuItems[] = [];
 
   Guid: string = '';
+  CartCount = new BehaviorSubject(0);
+
   constructor(private Http: HttpClient) {}
 
   getCart(): MenuItems[] {
@@ -49,7 +51,7 @@ export class CartService {
             object
           ).subscribe({
             next: (data) => {
-              //don't need this if we are now storing from teh backend
+              data;
             },
             error: (error) => console.log(error),
           });
@@ -58,15 +60,7 @@ export class CartService {
           var url =
             'http://localhost:5182/api/Order/GetMenuItemByGuid?guidId=' + guid;
 
-          this.Http.get(url).subscribe((data) => {
-            console.log('this i comign from the backend ');
-
-            console.log(typeof data);
-            //   this.TempItems = { Item: data.ame, Price: data.Price };
-            //    this.TempCart.push(this.TempItems);
-
-            //    localStorage.setItem('myItemList', JSON.stringify(this.TempCart));
-          });
+          this.Http.get(url).subscribe((data) => {});
         }
       );
     } else {
@@ -83,15 +77,62 @@ export class CartService {
         object1
       ).subscribe({
         next: (data) => {
-          console.log('the post is working');
+          // console.log('the post is working');
           this.TempItems = { Item: data.name, Price: data.price };
-          // console.log(this.TempItems);
-
-          //   this.TempCart.push(this.TempItems);
-          //   localStorage.setItem('myItemList', JSON.stringify(this.TempCart));
         },
         error: (error) => console.log(error),
       });
+    }
+  }
+
+  putCart2(items: string): Observable<any> {
+    //initally null, then add a new guid
+    if (localStorage.getItem('myGuid') == null) {
+      return this.Http.get('http://localhost:5182/api/Order/CreateGuide').pipe(
+        tap((value) => {
+          this.Guid = value.toString();
+          localStorage.setItem('myGuid', this.Guid);
+          var object = {
+            guidId: this.Guid,
+            name: items,
+          };
+          this.Http.post<any>(
+            'http://localhost:5182/api/Order/TemporaryCartItems',
+            object
+          ).subscribe({
+            next: (data) => {
+              data;
+            },
+            error: (error) => console.log(error),
+          });
+
+          var guid = localStorage.getItem('myGuid');
+          var url =
+            'http://localhost:5182/api/Order/GetMenuItemByGuid?guidId=' + guid;
+
+          this.Http.get(url).subscribe((data) => {});
+        })
+      );
+    } else {
+      var x = localStorage.getItem('myGuid');
+
+      var object1 = {
+        guidId: x,
+        name: items,
+      };
+      console.log(object1);
+
+      return this.Http.post<any>(
+        'http://localhost:5182/api/Order/TemporaryCartItems',
+        object1
+      );
+      // .subscribe({
+      //   next: (data) => {
+      //     // console.log('the post is working');
+      //     this.TempItems = { Item: data.name, Price: data.price };
+      //   },
+      //   error: (error) => console.log(error),
+      // });
     }
   }
 
@@ -104,35 +145,42 @@ export class CartService {
   }
 
   getCartItems(): any {
-    if (localStorage.getItem('myItemList') !== null) {
-      //remove brackets from the string(array)
-      let removebrackets = localStorage.getItem('myItemList')!;
-      removebrackets = removebrackets.substring(1);
-      removebrackets = removebrackets.slice(0, -1);
-      //remove after the second common in the string , make an array out of the string
-      let result = removebrackets.match(/[^,]+,[^,]+/g);
-
-      return result;
-    }
+    //   if (localStorage.getItem('myItemList') !== null) {
+    //     //remove brackets from the string(array)
+    //     let removebrackets = localStorage.getItem('myItemList')!;
+    //     removebrackets = removebrackets.substring(1);
+    //     removebrackets = removebrackets.slice(0, -1);
+    //     //remove after the second common in the string , make an array out of the string
+    //     let result = removebrackets.match(/[^,]+,[^,]+/g);
+    //     return result;
+    //   }
   }
 
   RemoveMenuItem(numero: number) {
     var url = 'http://localhost:5182/api/Order/Delete?id=' + numero;
 
     this.Http.delete(url).subscribe((value) =>
-      console.log('The delete should now work')
+      console.log('The delete was succesful')
     );
   }
 
-  getCartSize(): number {
-    //check in local storage for correct number of items ordered
-    // if (localStorage.getItem('myItemList') !== null) {
-    //   let x = localStorage.getItem('myItemList')!;
-    //   const split_string = x.split(',');
-    //   return Math.floor(split_string.length / 2);
-    // }
-    // return 0;
+  getCartSize(): Observable<any> {
+    var guid = localStorage.getItem('myGuid');
+    var url =
+      'http://localhost:5182/api/Order/GetMenuItemByGuid?guidId=' + guid;
 
-    return 0;
+    return this.Http.get(url);
   }
+
+  getCartSizeLength(): Observable<any> {
+    var guid = localStorage.getItem('myGuid');
+    var url =
+      'http://localhost:5182/api/Order/GetMenuItemByGuidSize?guidId=' + guid;
+
+    return this.Http.get(url);
+  }
+
+  // getCartVariable() {
+  //   this.CartCount.subscribe(console.log);
+  // }
 }

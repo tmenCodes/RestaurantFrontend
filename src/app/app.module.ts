@@ -25,6 +25,8 @@ import { BookingCompleteComponent } from './booking-complete/booking-complete.co
 import { ContactCompleteComponent } from './contact-complete/contact-complete.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { SavedInformationComponent } from './saved-information/saved-information.component';
+import { CartCountComponent } from './cart-count/cart-count.component';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,7 +45,9 @@ import { SavedInformationComponent } from './saved-information/saved-information
     BookingCompleteComponent,
     ContactCompleteComponent,
     ErrorPageComponent,
-    SavedInformationComponent, 
+    SavedInformationComponent,
+    CartCountComponent,
+    NavBarComponent, 
   ],
   imports: [
     BrowserModule,
