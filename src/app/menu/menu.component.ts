@@ -20,6 +20,8 @@ export class MenuComponent {
     this.cartService
       .putCart2(item)
       .pipe(
+        //impelement slight delay-because on the backend it will be a post-then reveal the size of the array
+        delay(100),
         tap((value) => {
           this.cartService
             .getCartSizeLength()

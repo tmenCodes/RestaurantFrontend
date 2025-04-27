@@ -156,12 +156,10 @@ export class CartService {
     //   }
   }
 
-  RemoveMenuItem(numero: number) {
+  RemoveMenuItem(numero: number): Observable<any> {
     var url = 'http://localhost:5182/api/Order/Delete?id=' + numero;
 
-    this.Http.delete(url).subscribe((value) =>
-      console.log('The delete was succesful')
-    );
+    return this.Http.delete(url);
   }
 
   getCartSize(): Observable<any> {

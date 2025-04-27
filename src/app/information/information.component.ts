@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { FormControl, FormGroup, FormControlName, Validators, FormArray, Form }from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HttpService } from '../http.service';
-import { catchError, throwError, pipe } from 'rxjs';
+import { catchError, throwError, pipe, tap, delay } from 'rxjs';
 
 @Component({
   selector: 'app-information',
@@ -128,21 +128,33 @@ export class InformationComponent {
   }
 
   cartSize: number = 0;
+
   removeIndex(i: number) {
-    this.cartService.RemoveMenuItem(i);
+    this.cartService
+      .RemoveMenuItem(i)
+      .pipe(
+        delay(100),
+        tap((value) => {
+          this.cartService
+            .getCartSizeLength()
+            .pipe(
+              tap((value) => {
+                this.cartService.CartCount.next(value);
+                console.log('this is the value inside ' + value);
+                if (value == 0) {
+                  //navigat back to menu
+                  this.Router.navigate(['/menu']);
+                  //  window.location.reload;
+                }
+              })
+            )
+            .subscribe();
+        })
+      )
+      .subscribe();
 
     var item_index = this.displayArray.findIndex((value) => value.id == i);
-    //console.log('The item at this index has been removed ' + item_index);
-
     this.displayArray.splice(item_index, 1);
-    let value = this.cartSize--;
-    console.log(value);
-    this.cartService.CartCount.next(value);
-    console.log(value);
-    if (value == 0) {
-      console.log('come on bro  ');
-      window.location.reload;
-    }
   }
 
   cartgreaterthenzero: boolean = false;
