@@ -104,7 +104,7 @@ export class InformationComponent {
       prices: parseFloat('10'),
     };
 
-    console.log(this.cartItems);
+
 
     //gets submitted in the for loop, but if an error is thrown break it
     this.HttpService.MenuForm(this.cartItems).subscribe({
@@ -138,9 +138,16 @@ export class InformationComponent {
           this.cartService
             .getCartSizeLength()
             .pipe(
+              // delay(100),
               tap((value) => {
                 this.cartService.CartCount.next(value);
                 console.log('this is the value inside ' + value);
+
+                this.cartService.getTotalPrice().subscribe((value) => {
+                  this.finalpricestring = value.totalPrice;
+                  console.log(this.finalpricestring);
+                });
+
                 if (value == 0) {
                   //navigat back to menu
                   this.Router.navigate(['/menu']);
@@ -162,6 +169,14 @@ export class InformationComponent {
   cartItems: any = {};
 
   ngOnInit(): void {
+
+
+    this.cartService
+      .getTotalPrice()
+      .subscribe((value) => (this.finalpricestring = value.totalPrice));
+
+
+
     this.cartService.getAllCartItems().subscribe((value) => {
       this.cartSize = value.length - 1;
       if (value.length > 0) {

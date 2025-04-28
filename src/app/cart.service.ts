@@ -156,8 +156,16 @@ export class CartService {
     //   }
   }
 
+  getTotalPrice(): Observable<any> {
+    let guid = localStorage.getItem('myGuid');
+    let url = 'http://localhost:5182/api/Order/GetTotalPrice?guid=' + guid;
+    return this.Http.get(url);
+  }
+
   RemoveMenuItem(numero: number): Observable<any> {
-    var url = 'http://localhost:5182/api/Order/Delete?id=' + numero;
+    let guid = localStorage.getItem('myGuid');
+  //  var url = 'http://localhost:5182/api/Order/Deletemenuitem?id=' + numero;
+    var url = 'http://localhost:5182/api/Order/DeleteMenuItem?id='+numero+'&guidId='+guid; 
 
     return this.Http.delete(url);
   }

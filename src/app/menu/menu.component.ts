@@ -9,14 +9,10 @@ import { switchMap, tap, delay, of, mergeMap } from 'rxjs';
 })
 export class MenuComponent {
   constructor(private cartService: CartService) {}
-  //for each cart we only want the guid and the item is needed
 
   PutIntoCart(item: string) {
-    console.log('this is the item' + item);
+
     //  this.cartService.putCart(item);
-
-    //wait fo the above observable to fnishi
-
     this.cartService
       .putCart2(item)
       .pipe(
@@ -27,7 +23,7 @@ export class MenuComponent {
             .getCartSizeLength()
             .pipe(
               tap((value) => {
-                console.log('this is teh value within the tappppp');
+
                 console.log(value);
                 this.cartService.CartCount.next(value);
               })
