@@ -2,30 +2,21 @@
 
    
 
-        <div class="container" data-aos="fade-up" *ngIf="cartiszero">
+        <div class="container" data-aos="fade-up" *ngIf="!cartgreaterthenzero">
   
           <div class="section-header">
             <h2>Cart</h2>
             <p>Shopping<span> Cart</span></p>
           </div>
-  
                 <div class="testimonial-item">
-                 
                   <div class="row gy-4 justify-content-center">
-
                     <div class="col-lg-6">
                       <div class="testimonial-content">
-                        You don't have any items in your cart.
-                        Check out menu!
+                        You don't have any items in your cart. (or Ya just paid bro)
+                        Check out the menu!
                       </div>
-
                         <div class="addpadding"></div>
                     </div>
-                
-                
-  
-             
-  
             </div>
             <div class="swiper-pagination"></div>
           </div>
@@ -33,18 +24,6 @@
         </div>
 
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-
-
     <div class="container" *ngIf="cartgreaterthenzero">
       <div class="py-5 text-center">
         <img class="d-block mx-auto mb-4" src="./assets/img/yum.jpg" alt="" width="72" height="72">

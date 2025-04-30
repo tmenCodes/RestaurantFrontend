@@ -164,10 +164,19 @@ export class CartService {
 
   RemoveMenuItem(numero: number): Observable<any> {
     let guid = localStorage.getItem('myGuid');
-  //  var url = 'http://localhost:5182/api/Order/Deletemenuitem?id=' + numero;
-    var url = 'http://localhost:5182/api/Order/DeleteMenuItem?id='+numero+'&guidId='+guid; 
+    //  var url = 'http://localhost:5182/api/Order/Deletemenuitem?id=' + numero;
+    var url =
+      'http://localhost:5182/api/Order/DeleteMenuItem?id=' +
+      numero +
+      '&guidId=' +
+      guid;
 
     return this.Http.delete(url);
+  }
+
+  makePayment(PaymentInformation: any): Observable<any> {
+    var url = 'http://localhost:5182/api/Payment/PaymentInformation';
+    return this.Http.post<any>(url, PaymentInformation);
   }
 
   getCartSize(): Observable<any> {

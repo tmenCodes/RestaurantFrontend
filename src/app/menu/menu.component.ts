@@ -11,7 +11,7 @@ export class MenuComponent {
   constructor(private cartService: CartService) {}
 
   PutIntoCart(item: string) {
-
+    console.log(item);
     //  this.cartService.putCart(item);
     this.cartService
       .putCart2(item)
@@ -23,7 +23,6 @@ export class MenuComponent {
             .getCartSizeLength()
             .pipe(
               tap((value) => {
-
                 console.log(value);
                 this.cartService.CartCount.next(value);
               })

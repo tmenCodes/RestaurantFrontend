@@ -183,14 +183,7 @@ export class HttpService {
     });
   }
 
-  MenuForm(body: any): Observable<any> {
-    //   let urlconcat = this.url + '' + 'api/Order/postInfo';
-    let urlconcat = this.url + '' + 'api/Order/action';
-    return this.Http.post(urlconcat, body).pipe(
-      retry(2),
-      catchError(this.handleBackendDownError)
-    );
-  }
+
 
   ContactForm(body: any) {
     let urlconcat = this.url + '' + 'api/Order/ContactInformation';

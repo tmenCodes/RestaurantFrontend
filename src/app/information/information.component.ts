@@ -12,9 +12,6 @@ import { catchError, throwError, pipe, tap, delay } from 'rxjs';
   styleUrls: ['./information.component.css'],
 })
 export class InformationComponent {
-  toggleButton: boolean = false;
-  oppositetogglebutton: boolean = !this.toggleButton;
-
   InformationForm = new FormGroup({
     Credit: new FormControl('true', Validators.required),
     Debit: new FormControl('false'),
@@ -35,12 +32,9 @@ export class InformationComponent {
       Validators.minLength(3),
     ]),
     // CartItems: new FormControl(localStorage.getItem('myItemList')),
-    CartItems: new FormArray([]),
+    //CartItems: new FormArray([]),
     UserName: new FormControl(localStorage.getItem('user')),
   });
-
-  Token: string = localStorage.getItem('id_token')!;
-  Username: string = localStorage.getItem('user')!;
 
   get Credit() {
     return this.InformationForm.get('Credit');
@@ -60,74 +54,50 @@ export class InformationComponent {
   get CVV() {
     return this.InformationForm.get('CVV');
   }
-  get CartItems() {
-    return this.InformationForm.get('CartItems');
-  }
+
   get UserName() {
     return this.InformationForm.get('UserName');
   }
-  constructor(
-    private cartService: CartService,
-    private Router: Router,
-    private Http: HttpClient,
-    private HttpService: HttpService
-  ) {}
-  displayArray: any[] = [];
-  priceArray: any[] = [];
-  finalprice: number = 0;
-  finalpricestring: string = '0';
-  conversion: any[] = [];
-  UserNameFrontend: string = localStorage.getItem('user')!;
+  constructor(private cartService: CartService, private Router: Router) {}
 
-  Items: string[] = [];
+  displayArray: any[] = [];
+  finalpricestring: string = '0';
+
+  UserNameFrontend: string = localStorage.getItem('user')!;
+  Token: string = localStorage.getItem('id_token')!;
+  Username: string = localStorage.getItem('user')!;
+
+  toggleButton: boolean = false;
+  oppositetogglebutton: boolean = !this.toggleButton;
+
+  cartSize: number = 0;
+  paymentInformation: any = {};
 
   submitInformation() {
-    this.displayArray = this.cartService
-      .getCartItems()
-      .map((x: any) => JSON.parse(x));
-    let displayItem = this.displayArray.map((p: any) => Object.values(p));
+    var guid = localStorage.getItem('myGuid');
 
-    for (var i = 0; i < displayItem.length; i++) {
-      let price = displayItem[i][1];
-      let item = displayItem[i][0];
-      //populate the formarray
-      let cart = this.InformationForm.get('CartItems') as FormArray;
-      cart.push(new FormControl({ item: item, price: price }));
-      this.Items.push(cart.value[i].item);
-      //  let formarrayPrice = cart.value[i].price;
-      console.log(this.Items);
-    }
-
-    this.cartItems = {
-      name: this.InformationForm.value.NameonCard,
-      items: this.Items,
-      prices: parseFloat('10'),
+    this.paymentInformation = {
+      credit: this.InformationForm.value.NameonCard,
+      NameonCard: this.InformationForm.value.NameonCard,
+      CreditCardNumber: this.InformationForm.value.CreditCardNumber,
+      Expiration: this.InformationForm.value.Expiration,
+      CVV: this.InformationForm.value.CVV,
+      //for now use the Nameoncard as the username
+      UserName: this.InformationForm.value.NameonCard,
+      GuidId: guid,
     };
 
-
-
-    //gets submitted in the for loop, but if an error is thrown break it
-    this.HttpService.MenuForm(this.cartItems).subscribe({
-      next: (data) => {
-        this.displayArray = [];
-        this.priceArray = [];
-        this.finalprice = 0;
-        this.finalpricestring = '0';
-        this.conversion = [];
-        localStorage.removeItem('myItemList');
-        localStorage.removeItem('myItemSize');
-        localStorage.clear();
-        //   window.location.reload();
-        //  this.Router.navigate(['complete']);
+    this.cartService.makePayment(this.paymentInformation).subscribe({
+      next(value) {
+        console.log(value);
+        localStorage.removeItem('myGuid');
+        window.location.reload();
       },
-
-      error: (error) => {
-        console.log('it has errors!');
+      error(err) {
+        console.log(err);
       },
     });
   }
-
-  cartSize: number = 0;
 
   removeIndex(i: number) {
     this.cartService
@@ -141,12 +111,11 @@ export class InformationComponent {
               // delay(100),
               tap((value) => {
                 this.cartService.CartCount.next(value);
-                console.log('this is the value inside ' + value);
 
                 this.cartService.getTotalPrice().subscribe((value) => {
-                  this.finalpricestring = value.totalPrice;
-                  console.log(this.finalpricestring);
-                });
+        this.finalpricestring = value.totalPrice;
+        console.log(this.finalpricestring);
+      });
 
                 if (value == 0) {
                   //navigat back to menu
@@ -165,44 +134,35 @@ export class InformationComponent {
   }
 
   cartgreaterthenzero: boolean = false;
-  cartiszero: boolean = true;
-  cartItems: any = {};
 
   ngOnInit(): void {
-
-
     this.cartService
       .getTotalPrice()
       .subscribe((value) => (this.finalpricestring = value.totalPrice));
 
-
-
     this.cartService.getAllCartItems().subscribe((value) => {
-      this.cartSize = value.length - 1;
+      this.cartSize = value.length;
       if (value.length > 0) {
         this.cartgreaterthenzero = true;
-        this.cartiszero = false;
         this.displayArray = value;
-        console.log(this.displayArray);
       }
     });
 
     if (!this.Token) {
-      console.log('not logged in');
       this.oppositetogglebutton = false;
     }
-    //if the user is logged in
-    if (this.Token && this.UserName) {
-      this.HttpService.GetUserInformationByEmail(
-        this.InformationForm,
-        this.Token,
-        this.Username
-      ).subscribe({
-        next: (data) => {
-          console.log(this.toggleButton);
-          this.toggleButton = data;
-        },
-      });
-    }
+    //   if the user is logged in
+    // if (this.Token && this.UserName) {
+    //   this.HttpService.GetUserInformationByEmail(
+    //     this.InformationForm,
+    //     this.Token,
+    //     this.Username
+    //   ).subscribe({
+    //     next: (data) => {
+    //       console.log(this.toggleButton);
+    //       this.toggleButton = data;
+    //     },
+    //   });
+    // }
   }
 }
