@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { FormControl, FormGroup, FormControlName, Validators, FormArray, Form }from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HttpService } from '../http.service';
-import { catchError, throwError, pipe, tap, delay } from 'rxjs';
+import { catchError, throwError, pipe, tap, delay, of } from 'rxjs';
 
 @Component({
   selector: 'app-information',
@@ -73,8 +73,11 @@ export class InformationComponent {
   cartSize: number = 0;
   paymentInformation: any = {};
 
+  GuidValue: any = '';
+
   submitInformation() {
-    var guid = localStorage.getItem('myGuid');
+    // console.log('this is the value of the guid' + guid);
+    // console.log(typeof guid);
 
     this.paymentInformation = {
       credit: this.InformationForm.value.NameonCard,
@@ -84,7 +87,7 @@ export class InformationComponent {
       CVV: this.InformationForm.value.CVV,
       //for now use the Nameoncard as the username
       UserName: this.InformationForm.value.NameonCard,
-      GuidId: guid,
+      CartsIdentity: this.GuidValue,
     };
 
     this.cartService.makePayment(this.paymentInformation).subscribe({
@@ -108,18 +111,28 @@ export class InformationComponent {
           this.cartService
             .getCartSizeLength()
             .pipe(
+              catchError((error) => {
+                console.error(
+                  'THIS IS THE ERROR FROM THE BACKEND:',
+                  error.message
+                );
+                return of(0); // Return a fallback observable
+              }),
               // delay(100),
               tap((value) => {
                 this.cartService.CartCount.next(value);
 
                 this.cartService.getTotalPrice().subscribe((value) => {
-        this.finalpricestring = value.totalPrice;
-        console.log(this.finalpricestring);
-      });
+                  this.finalpricestring = value.totalPrice;
+                  console.log(this.finalpricestring);
+                });
+
+                //
 
                 if (value == 0) {
                   //navigat back to menu
                   this.Router.navigate(['/menu']);
+
                   //  window.location.reload;
                 }
               })
@@ -136,6 +149,8 @@ export class InformationComponent {
   cartgreaterthenzero: boolean = false;
 
   ngOnInit(): void {
+    this.GuidValue = localStorage.getItem('myGuid');
+
     this.cartService
       .getTotalPrice()
       .subscribe((value) => (this.finalpricestring = value.totalPrice));

@@ -14,9 +14,11 @@ export class MenuComponent {
     console.log(item);
     //  this.cartService.putCart(item);
     this.cartService
-      .putCart2(item)
+      .putItemsIntoCart(item)
       .pipe(
         //impelement slight delay-because on the backend it will be a post-then reveal the size of the array
+
+        //correct way is NOT implement a delay though...
         delay(100),
         tap((value) => {
           this.cartService

@@ -18,24 +18,35 @@ import { ContactCompleteComponent } from './contact-complete/contact-complete.co
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { SavedInformationComponent } from './saved-information/saved-information.component';
 const routes: Routes = [
-  {path:"", component: HomeComponent},
-  {path:"home", component: HomeComponent},
-  {path: "menu", component: MenuComponent}, 
-  {path: "about", component: AboutComponent}, 
-  {path: "contact", component: ContactComponent},
-  {path: "chefs", component: ChefsComponent}, 
-  {path: "book", component: BookComponent}, 
- // {path: "order", component: OrderComponent}, 
-  {path: "login", component: LoginComponent}, 
-  {path: "signup", component: SignupComponent}, 
-  {path: "information", component: InformationComponent}, 
-  {path: "userinfo",   canActivate: [DashboardService], component: UserInformationComponent},
-   {path: "complete",  canActivate: [DashboardService], component: CompleteCheckoutComponent },
-   {path: "bookingcomplete", component: BookingCompleteComponent},
-   {path: "contactcomplete", component: ContactCompleteComponent}, 
-   {path: "errors", component: ErrorPageComponent},
-   {path: "saved", canActivate: [DashboardService], component: SavedInformationComponent}
-   
+  { path: '', component: HomeComponent },
+  { path: 'home', component: HomeComponent },
+  { path: 'menu', component: MenuComponent },
+  { path: 'about', component: AboutComponent },
+  { path: 'contact', component: ContactComponent },
+  { path: 'chefs', component: ChefsComponent },
+  { path: 'book', component: BookComponent },
+  // {path: "order", component: OrderComponent},
+  { path: 'login', component: LoginComponent },
+  { path: 'signup', component: SignupComponent },
+  { path: 'cart', component: InformationComponent },
+  {
+    path: 'userinfo',
+    canActivate: [DashboardService],
+    component: UserInformationComponent,
+  },
+  {
+    path: 'complete',
+    canActivate: [DashboardService],
+    component: CompleteCheckoutComponent,
+  },
+  { path: 'bookingcomplete', component: BookingCompleteComponent },
+  { path: 'contactcomplete', component: ContactCompleteComponent },
+  { path: 'errors', component: ErrorPageComponent },
+  {
+    path: 'saved',
+    canActivate: [DashboardService],
+    component: SavedInformationComponent,
+  },
 ];
 
 @NgModule({
