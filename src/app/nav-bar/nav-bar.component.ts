@@ -20,7 +20,11 @@ export class NavBarComponent {
   ngOnInit() {
     this.cartService
       .getCartSize()
-      .subscribe((value) => this.cartService.CartCount.next(value.length));
+
+      .subscribe((value) => {
+        console.log('teh value ' + value);
+        this.cartService.CartCount.next(value.length);
+      });
 
     this.cartService.CartCount.subscribe((value) => {
       this.cartSize = value;

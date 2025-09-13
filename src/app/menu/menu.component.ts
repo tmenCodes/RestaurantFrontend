@@ -12,6 +12,17 @@ export class MenuComponent {
 
   sidebarOpen: boolean = false; // Initial state: sidebar closed
 
+  cartSize: number = 0;
+
+  //create event from child to parent
+
+  subtotal: string = '';
+  taxamount: string = '';
+  totalprice: string = '';
+
+  displayArray: any = [];
+  cartgreaterthenzero = false;
+
   toggleSidebar() {
     this.sidebarOpen = !this.sidebarOpen; // Toggle the state
   }
@@ -41,8 +52,10 @@ export class MenuComponent {
                 this.cartService.CartCount.next(value);
 
                 this.cartService.getTotalPrice().subscribe((value) => {
-                  this.finalpricestring = value.totalPrice;
-                  console.log(this.finalpricestring);
+                  console.log(value);
+                  this.subtotal = value.subTotal;
+                  this.taxamount = value.taxAmount;
+                  this.totalprice = value.totalPrice;
                 });
               })
             )
@@ -57,7 +70,7 @@ export class MenuComponent {
 
   PutIntoCart(item: string) {
     this.sidebarOpen = true;
-
+    console.log(item);
     this.cartService
       .putItemsIntoCart(item)
       .pipe(
@@ -70,8 +83,25 @@ export class MenuComponent {
             .getCartSizeLength()
             .pipe(
               tap((value) => {
+                console.log('thie is the value from the put');
                 console.log(value);
                 this.cartService.CartCount.next(value);
+
+                this.cartService.getTotalPrice().subscribe((value) => {
+                  this.subtotal = value.subTotal;
+                  this.taxamount = value.taxAmount;
+                  this.totalprice = value.totalPrice;
+                });
+
+                this.cartService.getAllCartItems().subscribe((value) => {
+                  this.cartSize = value.length;
+                  console.log('the value on inigt ');
+                  console.log(value);
+                  if (value.length > 0) {
+                    this.cartgreaterthenzero = true;
+                    this.displayArray = value;
+                  }
+                });
               })
             )
             .subscribe();
@@ -80,39 +110,32 @@ export class MenuComponent {
       .subscribe();
   }
 
-  callonMe() {
-    const firstObservable$ = this.cartService.getCartSizeLength().pipe(
-      tap((value) => {
-        console.log(value);
-        this.cartService.CartCount.next(value);
-      })
-    );
+  // callonMe() {
+  //   const firstObservable$ = this.cartService.getCartSizeLength().pipe(
+  //     tap((value) => {
+  //       console.log(value);
+  //       this.cartService.CartCount.next(value);
+  //     })
+  //   );
 
-    firstObservable$.subscribe({
-      next: (v) => console.log(v),
-      error: (e) => {
-        // console.error('this is the error');
-        console.log(e.error);
-      },
-      complete: () => console.info('complete'),
-    });
-  }
-
-  cartSize: number = 0;
-
-  //create event from child to parent
-
-  finalpricestring: string = '';
-  displayArray: any = [];
-  cartgreaterthenzero = false;
+  //   firstObservable$.subscribe({
+  //     next: (v) => console.log(v),
+  //     error: (e) => {
+  //       console.log(e.error);
+  //     },
+  //     complete: () => console.info('complete'),
+  //   });
+  // }
 
   ngOnInit(): void {
     this.cartService
       .getTotalPrice()
-      .subscribe((value) => (this.finalpricestring = value.totalPrice));
+      .subscribe((value) => (this.subtotal = value.totalPrice));
 
     this.cartService.getAllCartItems().subscribe((value) => {
       this.cartSize = value.length;
+      console.log('the value on inigt ');
+      console.log(value);
       if (value.length > 0) {
         this.cartgreaterthenzero = true;
         this.displayArray = value;

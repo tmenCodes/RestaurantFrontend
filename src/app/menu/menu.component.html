@@ -16,10 +16,28 @@
               </div>
               <span class="text-muted"><button class="btn btn-outline-dark btn-sm" [ngStyle]="{'maring': '10px'}" (click)="removeIndex(x.id)">Remove</button></span>   
             </li>       
-           <li class="list-group-item d-flex justify-content-between">
-              <span>SubTotal (USD)</span>
-              <strong>${{finalpricestring}}</strong>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>SubTotal:</span>
+              <strong>${{subtotal}}</strong>
+      
             </li>
+
+              <li class="list-group-item d-flex justify-content-between">
+                  <span>Tax:</span>
+              <strong>${{taxamount}}</strong>
+            </li>
+       <li class="list-group-item d-flex justify-content-between">
+                  <span>Total:</span>
+              <strong>${{totalprice}}</strong>
+            </li>
+
+
+
+             <li class="list-group-item d-flex justify-content-between">
+              <span><a href="/cart">Go To Checkout</a></span>
+            </li>
+
+
           </ul>
    </div>
   </div>

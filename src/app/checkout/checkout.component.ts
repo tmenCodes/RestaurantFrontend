@@ -19,6 +19,10 @@ import { catchError, throwError, pipe, tap, delay, of } from 'rxjs';
   styleUrls: ['./checkout.component.css'],
 })
 export class CheckoutComponent {
+  subtotal: string = '';
+  taxamount: string = '';
+  totalprice: string = '';
+
   InformationForm = new FormGroup({
     Credit: new FormControl('true', Validators.required),
     Debit: new FormControl('false'),
@@ -132,10 +136,11 @@ export class CheckoutComponent {
                 this.cartService.CartCount.next(value);
 
                 this.cartService.getTotalPrice().subscribe((value) => {
-                  this.finalpricestring = value.totalPrice;
-                  console.log(this.finalpricestring);
+                  console.log(value);
+                  this.subtotal = value.subTotal;
+                  this.taxamount = value.taxAmount;
+                  this.totalprice = value.totalPrice;
                 });
-
                 //
 
                 if (value == 0) {
@@ -160,9 +165,12 @@ export class CheckoutComponent {
   ngOnInit(): void {
     this.GuidValue = localStorage.getItem('myGuid');
 
-    this.cartService
-      .getTotalPrice()
-      .subscribe((value) => (this.finalpricestring = value.totalPrice));
+    this.cartService.getTotalPrice().subscribe((value) => {
+      console.log(value);
+      this.subtotal = value.subTotal;
+      this.taxamount = value.taxAmount;
+      this.totalprice = value.totalPrice;
+    });
 
     this.cartService.getAllCartItems().subscribe((value) => {
       this.cartSize = value.length;

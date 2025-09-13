@@ -142,7 +142,7 @@ export class CartService {
     return this.Http.get(url);
   }
 
-  // getCartVariable() {
-  //   this.CartCount.subscribe(console.log);
-  // }
+  getCartVariable() {
+    this.CartCount.subscribe(console.log);
+  }
 }
