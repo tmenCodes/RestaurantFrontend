@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CartService } from '../cart.service';
-import { switchMap, tap, delay, of, mergeMap } from 'rxjs';
+import { switchMap, tap, delay, of, mergeMap, catchError } from 'rxjs';
 
 @Component({
   selector: 'app-menu',
@@ -10,9 +10,54 @@ import { switchMap, tap, delay, of, mergeMap } from 'rxjs';
 export class MenuComponent {
   constructor(private cartService: CartService) {}
 
+  sidebarOpen: boolean = false; // Initial state: sidebar closed
+
+  toggleSidebar() {
+    this.sidebarOpen = !this.sidebarOpen; // Toggle the state
+  }
+
+  closeNav() {
+    this.sidebarOpen = false;
+  }
+
+  removeIndex(i: number) {
+    this.cartService
+      .RemoveMenuItem(i)
+      .pipe(
+        delay(100),
+        tap((value) => {
+          this.cartService
+            .getCartSizeLength()
+            .pipe(
+              catchError((error) => {
+                console.error(
+                  'THIS IS THE ERROR FROM THE BACKEND:',
+                  error.message
+                );
+                return of(0); // Return a fallback observable
+              }),
+              // delay(100),
+              tap((value) => {
+                this.cartService.CartCount.next(value);
+
+                this.cartService.getTotalPrice().subscribe((value) => {
+                  this.finalpricestring = value.totalPrice;
+                  console.log(this.finalpricestring);
+                });
+              })
+            )
+            .subscribe();
+        })
+      )
+      .subscribe();
+
+    var item_index = this.displayArray.findIndex((value: any) => value.id == i);
+    this.displayArray.splice(item_index, 1);
+  }
+
   PutIntoCart(item: string) {
-    console.log(item);
-    //  this.cartService.putCart(item);
+    this.sidebarOpen = true;
+
     this.cartService
       .putItemsIntoCart(item)
       .pipe(
@@ -33,22 +78,9 @@ export class MenuComponent {
         })
       )
       .subscribe();
-
-    //get the value of the original
-    // this.cartService.CartCount.subscribe((value) => {
-    //   this.cartSize = value;
-    // });
-
-    // this.cartService.CartCount.next(this.cartSize + 1);
-    //pout cart is void so can't return a value ???
-
-    // this.callonMe();
-
-    //would have to combine all three values
   }
 
   callonMe() {
-    //get size is inisitally not zero though
     const firstObservable$ = this.cartService.getCartSizeLength().pipe(
       tap((value) => {
         console.log(value);
@@ -66,43 +98,25 @@ export class MenuComponent {
     });
   }
 
-  breakfeastTime: boolean = false;
-  lunchTime: boolean = false;
-  dinnerTime: boolean = false;
   cartSize: number = 0;
 
   //create event from child to parent
 
+  finalpricestring: string = '';
+  displayArray: any = [];
+  cartgreaterthenzero = false;
+
   ngOnInit(): void {
-    let date = new Date();
-    let hours = date.getHours();
+    this.cartService
+      .getTotalPrice()
+      .subscribe((value) => (this.finalpricestring = value.totalPrice));
 
-    if (hours <= 11) {
-      this.breakfeastTime = true;
-      this.lunchTime = false;
-      this.dinnerTime = false;
-    }
-    if (hours >= 12 && hours <= 14) {
-      this.breakfeastTime = false;
-      this.lunchTime = true;
-      this.dinnerTime = false;
-    }
-    if (hours >= 15) {
-      this.breakfeastTime = false;
-      this.lunchTime = false;
-      this.dinnerTime = true;
-    }
-
-    //this should work because on each page reload..the cart array will be zero. so refill cart from localstorage
-    // if (this.cartService.getCartSize() > 0) {
-    //   let x = this.cartService.getCartItems().map((x: any) => JSON.parse(x));
-    //   let p = x.map((p: any) => Object.values(p));
-    //   //put all values that were in cart, backinto the cart...
-    //   for (var i = 0; i < p.length; i++) {
-    //     let item = p[i][0];
-    //     let price = p[i][1];
-    //     this.cartService.putCart(item);
-    //   }
-    // }
+    this.cartService.getAllCartItems().subscribe((value) => {
+      this.cartSize = value.length;
+      if (value.length > 0) {
+        this.cartgreaterthenzero = true;
+        this.displayArray = value;
+      }
+    });
   }
 }

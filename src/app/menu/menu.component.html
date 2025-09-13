@@ -1,15 +1,33 @@
 
  <!-- ======= Menu Section ======= -->
-
-
-
-
  <section id="menu" class="menu">
     <div class="container" data-aos="fade-up">
 
+
+<div class="sidebar" [class.open]="sidebarOpen">
+   <div class="container"> 
+    <a href="menu" class="closebtn" onclick="closeNav()">&times;</a>
+
+    <div class="title">Your pickup order</div>
+       <ul class="list-group mb-3" >
+            <li class="list-group-item d-flex justify-content-between lh-condensed" *ngFor="let x of displayArray; index as i">
+              <div>
+                   <h6 class="my-1">{{i+1}}.) {{x.name}} ${{x.price | number: '1.2-2'}}</h6>
+              </div>
+              <span class="text-muted"><button class="btn btn-outline-dark btn-sm" [ngStyle]="{'maring': '10px'}" (click)="removeIndex(x.id)">Remove</button></span>   
+            </li>       
+           <li class="list-group-item d-flex justify-content-between">
+              <span>SubTotal (USD)</span>
+              <strong>${{finalpricestring}}</strong>
+            </li>
+          </ul>
+   </div>
+  </div>
+
       <div class="section-header">
         <h2>Our Menu</h2>
-        <p>Check Our <span>Yummy Menu</span></p>
+   
+        <p>Yummy Menu</p>
       </div>
 
       <ul class="nav nav-tabs d-flex justify-content-center" data-aos="fade-up" data-aos-delay="200">
@@ -20,18 +38,18 @@
           </a>
         </li><!-- End tab nav item -->
 
-        <li class="nav-item" *ngIf="breakfeastTime">
+        <li class="nav-item" >
           <a class="nav-link" data-bs-toggle="tab" data-bs-target="#menu-breakfast">
             <h4>Breakfast</h4>
           </a><!-- End tab nav item -->
 
-        <li class="nav-item" *ngIf="lunchTime">
+        <li class="nav-item" >
           <a class="nav-link" data-bs-toggle="tab" data-bs-target="#menu-lunch">
             <h4>Lunch</h4>
           </a>
         </li><!-- End tab nav item -->
 
-        <li class="nav-item" *ngIf="dinnerTime">
+        <li class="nav-item">
           <a class="nav-link" data-bs-toggle="tab" data-bs-target="#menu-dinner">
             <h4>Dinner</h4>
           </a>

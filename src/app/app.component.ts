@@ -35,6 +35,7 @@ export class AppComponent {
   ngOnInit(): void {
     this.cartService.getCartSize().subscribe((value) => {
       this.cartSize = value.length;
+
     });
 
     this.showLogOut = this.Dash.showingLogout;

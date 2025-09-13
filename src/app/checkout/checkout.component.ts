@@ -1,17 +1,24 @@
-import { Component, ErrorHandler } from '@angular/core';
+import { Component } from '@angular/core';
+import { ErrorHandler } from '@angular/core';
 import { CartService } from '../cart.service';
 import { Router } from '@angular/router';
-import { FormControl, FormGroup, FormControlName, Validators, FormArray, Form }from '@angular/forms';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { HttpService } from '../http.service';
+import {
+  FormControl,
+  FormGroup,
+  FormControlName,
+  Validators,
+  FormArray,
+  Form,
+} from '@angular/forms';
+
 import { catchError, throwError, pipe, tap, delay, of } from 'rxjs';
 
 @Component({
-  selector: 'app-information',
-  templateUrl: './information.component.html',
-  styleUrls: ['./information.component.css'],
+  selector: 'app-checkout',
+  templateUrl: './checkout.component.html',
+  styleUrls: ['./checkout.component.css'],
 })
-export class InformationComponent {
+export class CheckoutComponent {
   InformationForm = new FormGroup({
     Credit: new FormControl('true', Validators.required),
     Debit: new FormControl('false'),
@@ -58,6 +65,7 @@ export class InformationComponent {
   get UserName() {
     return this.InformationForm.get('UserName');
   }
+
   constructor(private cartService: CartService, private Router: Router) {}
 
   displayArray: any[] = [];
@@ -87,6 +95,7 @@ export class InformationComponent {
       CVV: this.InformationForm.value.CVV,
       //for now use the Nameoncard as the username
       UserName: this.InformationForm.value.NameonCard,
+
       CartsIdentity: this.GuidValue,
     };
 

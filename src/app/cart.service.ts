@@ -31,60 +31,6 @@ export class CartService {
     return this.Cart;
   }
 
-  // putCart(items: string) {
-  //   //initally null, then add a new guid
-  //   if (localStorage.getItem('myGuid') == null) {
-  //     this.Http.get('http://localhost:5182/api/Order/CreateGuide').subscribe(
-  //       (value) => {
-  //         this.Guid = value.toString();
-
-  //         //store guid in localstorage
-  //         localStorage.setItem('myGuid', this.Guid);
-
-  //         var object = {
-  //           guidId: this.Guid,
-  //           name: items,
-  //         };
-
-  //         this.Http.post<any>(
-  //           'http://localhost:5182/api/Order/ShoppingCartItems',
-  //           object
-  //         ).subscribe({
-  //           next: (data) => {
-  //             data;
-  //           },
-  //           error: (error) => console.log(error),
-  //         });
-
-  //         var guid = localStorage.getItem('myGuid');
-  //         var url =
-  //           'http://localhost:5182/api/Order/GetMenuItemByGuid?guidId=' + guid;
-
-  //         this.Http.get(url).subscribe((data) => {});
-  //       }
-  //     );
-  //   } else {
-  //     var x = localStorage.getItem('myGuid');
-
-  //     var object1 = {
-  //       guidId: x,
-  //       name: items,
-  //     };
-  //     console.log(object1);
-
-  //     this.Http.post<any>(
-  //       'http://localhost:5182/api/Order/ShoppingCartItems',
-  //       object1
-  //     ).subscribe({
-  //       next: (data) => {
-  //         // console.log('the post is working');
-  //         this.TempItems = { Item: data.name, Price: data.price };
-  //       },
-  //       error: (error) => console.log(error),
-  //     });
-  //   }
-  // }
-
   putItemsIntoCart(items: string): Observable<any> {
     //initially thea value is null
     //check local storage each time

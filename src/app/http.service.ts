@@ -36,23 +36,17 @@ export class HttpService {
   }
 
   MakeUser(body: any, email: string) {
-    let url = this.url + '' + 'api/Auth/SignUp';
+
+    let url = this.url + '' + 'api/RegisterUser/CreateUser';
 
     return this.Http.post<JSON>(url, body)
       .pipe(retry(2), catchError(this.handleBackendDownError))
       .subscribe({
         next: (data) => {
           //if the backend returns an error
-          var backenderror = Object.keys(data);
 
-          if (backenderror[0] == 'error') {
-            console.log(data);
-          } else {
-            console.log(data);
-            //change this code in the future
-            this.Login(body, email);
-            //  this.router.navigate(['home']);
-          }
+          console.log(data);
+          this.router.navigate(['home']);
         },
         error: (error) => {
           console.log('this is the error: ');
@@ -81,9 +75,8 @@ export class HttpService {
   //returns an obersvable???
   CheckEmailExist(email: string) {
     let urlconcat =
-      this.url + '' + 'api/Auth/CheckDuplicateEmail?email=' + email;
+      this.url + '' + 'api/RegisterUser/CheckDuplicateEmail?email=' + email;
     console.log(urlconcat);
-
     //return obsevable boolean
     return this.Http.get<boolean>(urlconcat);
   }

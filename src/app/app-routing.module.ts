@@ -9,7 +9,7 @@ import { BookComponent } from './book/book.component';
 import { OrderComponent } from './order/order.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
-import { InformationComponent } from './information/information.component';
+
 import { UserInformationComponent } from './user-information/user-information.component';
 import { DashboardService } from './dashboard.service';
 import { CompleteCheckoutComponent } from './complete-checkout/complete-checkout.component';
@@ -17,8 +17,9 @@ import { BookingCompleteComponent } from './booking-complete/booking-complete.co
 import { ContactCompleteComponent } from './contact-complete/contact-complete.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { SavedInformationComponent } from './saved-information/saved-information.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { CheckoutComponent } from './checkout/checkout.component';
 const routes: Routes = [
-  { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },
   { path: 'menu', component: MenuComponent },
   { path: 'about', component: AboutComponent },
@@ -28,7 +29,7 @@ const routes: Routes = [
   // {path: "order", component: OrderComponent},
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
-  { path: 'cart', component: InformationComponent },
+  { path: 'cart', component: CheckoutComponent },
   {
     path: 'userinfo',
     canActivate: [DashboardService],
@@ -47,6 +48,8 @@ const routes: Routes = [
     canActivate: [DashboardService],
     component: SavedInformationComponent,
   },
+  { path: '', component: HomeComponent },
+  { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({

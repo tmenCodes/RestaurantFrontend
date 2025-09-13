@@ -12,7 +12,6 @@ import { BookComponent } from './book/book.component';
 import { OrderComponent } from './order/order.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
-import { InformationComponent } from './information/information.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -27,6 +26,8 @@ import { ErrorPageComponent } from './error-page/error-page.component';
 import { SavedInformationComponent } from './saved-information/saved-information.component';
 import { CartCountComponent } from './cart-count/cart-count.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { CheckoutComponent } from './checkout/checkout.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +40,7 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
     OrderComponent,
     LoginComponent,
     SignupComponent,
-    InformationComponent,
+
     UserInformationComponent,
     CompleteCheckoutComponent,
     BookingCompleteComponent,
@@ -47,16 +48,18 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
     ErrorPageComponent,
     SavedInformationComponent,
     CartCountComponent,
-    NavBarComponent, 
+    NavBarComponent,
+    PageNotFoundComponent,
+    CheckoutComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule, 
-    FormsModule, 
-    HttpClientModule
+    ReactiveFormsModule,
+    FormsModule,
+    HttpClientModule,
   ],
   providers: [CookieService, DashboardService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
