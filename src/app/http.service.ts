@@ -36,7 +36,6 @@ export class HttpService {
   }
 
   MakeUser(body: any, email: string) {
-
     let url = this.url + '' + 'api/RegisterUser/CreateUser';
 
     return this.Http.post<JSON>(url, body)
@@ -143,40 +142,43 @@ export class HttpService {
     );
   }
 
-  Login(body: Object, email: string) {
-    let urlconcat = this.url + '' + 'api/Auth/login/';
+  Login(body: Object) {
+    let urlconcat = this.url + '' + 'api/RegisterUser/Login';
+
     //   let options = { headers: h, withCredentials: false };
 
     //, {...options, responseType: 'text'}
-    this.Http.post(urlconcat, body, { responseType: 'text' }).subscribe({
+    this.Http.post(urlconcat, body, {
+      observe: 'response',
+      withCredentials: true,
+    }).subscribe({
       next: (response) => {
-        //         this.Dash.showLogOut(true);
+        console.log('the response');
+        console.log(response);
+        //this.Dash.showLogOut(true);
 
         //you cannot progress to the next screen without the correct credentials
-        localStorage.setItem('id_token', response);
-        //if you get to this point then the username is legitimate
-        localStorage.setItem('user', email);
+        //localStorage.setItem('id_token', response);
 
-        if (response == 'Invalid Email' || response == 'Invalid Password') {
-          localStorage.removeItem('id_token');
-          localStorage.removeItem('user');
-        }
+        // if (response == 'Invalid Email' || response == 'Invalid Password') {
+        //   localStorage.removeItem('id_token');
+        //   localStorage.removeItem('user');
+        // }
 
         //redirect if there are no errors
         //   this.Router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['userinfo']);
+
+        //  this.router.navigate(['userinfo']);
         // });
         // this.Router.navigate(['userinfo']);
       },
 
       error: (error) => {
-        console.log('this is the error');
+        console.log('this is the login error');
         console.log(error);
       },
     });
   }
-
-
 
   ContactForm(body: any) {
     let urlconcat = this.url + '' + 'api/Order/ContactInformation';
