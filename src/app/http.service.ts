@@ -2,10 +2,18 @@ import { ErrorHandler, Injectable, Pipe } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { catchError, retry, throwError, pipe, map, Observable, delay, concatWith} from 'rxjs';
+import {
+  catchError,
+  retry,
+  throwError,
+  pipe,
+  map,
+  tap,
+  Observable,
+  delay,
+  concatWith,
+} from 'rxjs';
 import { ValidationErrors } from '@angular/forms';
-
-
 
 @Injectable({
   providedIn: 'root',
@@ -103,45 +111,6 @@ export class HttpService {
     });
   }
 
-  GetUserInformationByEmail(
-    InformationForm: any,
-    Token: string,
-    Email: string
-  ) {
-    //after logging in the user should have a token  from the local storage
-    //use token and add it to the header in order to access this restricted route
-    const header = { Authorization: 'bearer' + ' ' + Token };
-    //  if (InformationForm.value.creditCardNumber == null) console.log("it's nulllll")
-    //will restrict access to only the email that is being used in the frontend, also verify in backend
-
-    let urlconcant = this.url + '' + 'api/Auth/getusers?email=' + Email;
-    //  let url = 'https://localhost:7004/api/Auth/getusers?email='+Email;
-
-    return this.Http.get<any>(urlconcant, { headers: header }).pipe(
-      map((data) => {
-        console.log(data.userInformation);
-        if (data.userInformation.creditCardNumber == null) {
-          return true;
-        }
-        if (data.userInformation.creditCardNumber != null) {
-          //send values from the database to the frontend end forms, but does it autofill even if you do touch the form???
-          InformationForm.patchValue({
-            CartItems: [],
-            CreditCardNumber: data.userInformation.creditCardNumber,
-            NameonCard: data.userInformation.nameonCard,
-            Expiration: data.userInformation.expiration,
-            CVV: data.userInformation.cvv,
-          });
-          return false;
-        }
-
-        //set values within patchvalue
-
-        return false;
-      })
-    );
-  }
-
   Login(body: Object) {
     let urlconcat = this.url + '' + 'api/RegisterUser/Login';
 
@@ -157,20 +126,13 @@ export class HttpService {
         console.log(response);
         //this.Dash.showLogOut(true);
 
-        //you cannot progress to the next screen without the correct credentials
-        //localStorage.setItem('id_token', response);
-
-        // if (response == 'Invalid Email' || response == 'Invalid Password') {
-        //   localStorage.removeItem('id_token');
-        //   localStorage.removeItem('user');
-        // }
-
         //redirect if there are no errors
-        //   this.Router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-
-        //  this.router.navigate(['userinfo']);
-        // });
-        // this.Router.navigate(['userinfo']);
+        // this.router
+        //   .navigateByUrl('/userinfo', { skipLocationChange: true })
+        //   .then(() => {
+        //     this.router.navigate(['userinfo']);
+        //   });
+        this.router.navigate(['userinfo']);
       },
 
       error: (error) => {
@@ -201,6 +163,19 @@ export class HttpService {
         this.router.navigate(['errors']);
       },
     });
+  }
+
+  public CheckIfLoggedIn(): Observable<boolean> {
+    let urlconcat = this.url + '' + 'api/RegisterUser/GetTheCurrentUser';
+
+    return this.Http.get<boolean>(urlconcat, {
+      withCredentials: true,
+    });
+  }
+
+  public CheckIfLoggedIn1() {
+    let urlconcat = this.url + '' + 'api/RegisterUser/user';
+    return this.Http.get<any>(urlconcat, { withCredentials: true });
   }
 }
 

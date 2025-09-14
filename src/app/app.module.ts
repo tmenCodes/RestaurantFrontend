@@ -18,7 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { UserInformationComponent } from './user-information/user-information.component';
 
-import { DashboardService } from './dashboard.service';
+
 import { CompleteCheckoutComponent } from './complete-checkout/complete-checkout.component';
 import { BookingCompleteComponent } from './booking-complete/booking-complete.component';
 import { ContactCompleteComponent } from './contact-complete/contact-complete.component';
@@ -59,7 +59,7 @@ import { CheckoutComponent } from './checkout/checkout.component';
     FormsModule,
     HttpClientModule,
   ],
-  providers: [CookieService, DashboardService],
+  providers: [CookieService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

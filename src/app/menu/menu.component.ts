@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CartService } from '../cart.service';
 import { switchMap, tap, delay, of, mergeMap, catchError } from 'rxjs';
+import { HttpService } from '../http.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-menu',
@@ -8,7 +10,11 @@ import { switchMap, tap, delay, of, mergeMap, catchError } from 'rxjs';
   styleUrls: ['./menu.component.css'],
 })
 export class MenuComponent {
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private HttpService: HttpService,
+    private CookieService: CookieService
+  ) {}
 
   sidebarOpen: boolean = false; // Initial state: sidebar closed
 
@@ -128,14 +134,24 @@ export class MenuComponent {
   // }
 
   ngOnInit(): void {
+    this.HttpService.CheckIfLoggedIn();
+
     this.cartService
       .getTotalPrice()
       .subscribe((value) => (this.subtotal = value.totalPrice));
 
+    this.HttpService.CheckIfLoggedIn1().subscribe(
+      (value) => {
+        console.log(value);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+
     this.cartService.getAllCartItems().subscribe((value) => {
       this.cartSize = value.length;
-      console.log('the value on inigt ');
-      console.log(value);
+
       if (value.length > 0) {
         this.cartgreaterthenzero = true;
         this.displayArray = value;

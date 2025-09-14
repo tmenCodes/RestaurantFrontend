@@ -5,7 +5,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { jwtDecode } from "jwt-decode";
-import { DashboardService } from '../dashboard.service';
+
 import { CheckEmailExistsValidator } from '../check-email-exists.validator';
 import { HttpService } from '../http.service';
 
@@ -17,7 +17,7 @@ import { HttpService } from '../http.service';
 export class LoginComponent {
   constructor(
     private HttpService: HttpService,
-    private Dash: DashboardService,
+
     private Http: HttpClient,
     private cookieService: CookieService,
     private Router: Router
