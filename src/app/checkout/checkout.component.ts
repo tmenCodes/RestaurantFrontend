@@ -88,9 +88,6 @@ export class CheckoutComponent {
   GuidValue: any = '';
 
   submitInformation() {
-    // console.log('this is the value of the guid' + guid);
-    // console.log(typeof guid);
-
     this.paymentInformation = {
       credit: this.InformationForm.value.NameonCard,
       NameonCard: this.InformationForm.value.NameonCard,
@@ -105,14 +102,14 @@ export class CheckoutComponent {
 
     this.cartService.makePayment(this.paymentInformation).subscribe({
       next(value) {
-        console.log(value);
         localStorage.removeItem('myGuid');
-        window.location.reload();
       },
       error(err) {
         console.log(err);
       },
     });
+
+    this.Router.navigate(['/complete']);
   }
 
   removeIndex(i: number) {
@@ -183,18 +180,5 @@ export class CheckoutComponent {
     if (!this.Token) {
       this.oppositetogglebutton = false;
     }
-    //   if the user is logged in
-    // if (this.Token && this.UserName) {
-    //   this.HttpService.GetUserInformationByEmail(
-    //     this.InformationForm,
-    //     this.Token,
-    //     this.Username
-    //   ).subscribe({
-    //     next: (data) => {
-    //       console.log(this.toggleButton);
-    //       this.toggleButton = data;
-    //     },
-    //   });
-    // }
   }
 }

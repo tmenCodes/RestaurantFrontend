@@ -5,6 +5,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { jwtDecode } from "jwt-decode";
+import { map, tap } from 'rxjs';
 
 import { CheckEmailExistsValidator } from '../check-email-exists.validator';
 import { HttpService } from '../http.service';
@@ -22,8 +23,6 @@ export class LoginComponent {
     private cookieService: CookieService,
     private Router: Router
   ) {}
-
-  //Url: string = "https://localhost:7004/api/Auth/login/";
 
   LogInForm = new FormGroup({
     Email: new FormControl(
@@ -43,20 +42,6 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    // let headers = new HttpHeaders({
-    //   'Content-Type': 'Authorization',
-    //   'Access-Control-Allow-Origin': '*',
-    //   "Access-Control-Allow-Credentials": 'true'
-    //   });
-
-    // let headers = new HttpHeaders({
-    // "access-control-allow-origin": "*",
-    // 'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    //'Access-Control-Allow-Methods': '*',
-    // })
-
-    // let options = { headers: headers, withCredentials: false };
-
     let username = this.LogInForm.value.Email!;
     let password = this.LogInForm.value.Password;
 
@@ -64,40 +49,28 @@ export class LoginComponent {
       email: username,
       password: password,
     };
-    console.log(LoginInformation);
 
     this.HttpService.Login(LoginInformation);
-    //   //, {...options, responseType: 'text'}
-    //   this.Http.post(this.Url, body,{responseType: 'text'}).subscribe({
-    //     next: response => {
-    //           //         this.Dash.showLogOut(true);
-    //                  console.log("the response says " + response)
-    //                 //you cannot progress to the next screen without the correct credentials
-    //                  localStorage.setItem('id_token', response);
-    //                  //if you get to this point then the username is legitimate
-    //                  localStorage.setItem("user", email);
 
-    //                   if (response=='Invalid Email' || response == 'Invalid Password')
-    //                   {
-    //                   localStorage.removeItem("id_token");
-    //                   localStorage.removeItem("user");
-    //                   }
+    this.HttpService.updateTurnOnButton(true);
+  }
 
-    //                   //redirect if there are no errors
-    //                //   this.Router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-    //                     this.Router.navigate(['userinfo']);
-    //                // });
-    //                  // this.Router.navigate(['userinfo']);
+  ngOnInit() {
+    //load whatever from other pages
 
-    //                 },
-
-    //                 error: error=> {
-    //                   console.log('this is the error')
-    //                   console.log(error);
-
-    //                  }
-
-    // })
+    this.HttpService.CheckIfLoggedIn()
+      .pipe(
+        map((value) => {
+          if (value == true) {
+            this.Router.navigate(['/userinfo']);
+            return true;
+          } else {
+            return false;
+          }
+        }),
+        tap((x) => console.log(x))
+      )
+      .subscribe();
   }
 }
 

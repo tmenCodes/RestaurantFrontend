@@ -1,5 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CartService } from '../cart.service';
+import { HttpClient } from '@angular/common/http';
+import { HttpService } from '../http.service';
+import { Router } from '@angular/router';
+import { map, tap } from 'rxjs';
 
 @Component({
   selector: 'app-nav-bar',
@@ -8,26 +12,59 @@ import { CartService } from '../cart.service';
 })
 export class NavBarComponent {
   cartSize: number = 0;
-  //retrieve the child component
+  showLogin: boolean = true;
+  showUserInfolink: boolean = false;
+  showLogOut: boolean = false;
 
+  //retrieve the child component
   @Output() addCartItemEvent = new EventEmitter<number>();
 
-  /**
-   *
-   */
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private Httpservice: HttpService,
+    private Router: Router
+  ) {}
+
+  SignOut(event: Event): void {
+    console.log('from the signout');
+    this.Httpservice.SignOut().subscribe((value) => {
+      this.showLogin = true;
+      this.showUserInfolink = false;
+      this.Httpservice.updateTurnOnButton(false);
+      this.Router.navigate(['/home']);
+    });
+  }
 
   ngOnInit() {
-    this.cartService
-      .getCartSize()
-
-      .subscribe((value) => {
-        console.log('teh value ' + value);
-        this.cartService.CartCount.next(value.length);
-      });
+    this.cartService.getCartSize().subscribe((value) => {
+      this.cartService.CartCount.next(value.length);
+    });
 
     this.cartService.CartCount.subscribe((value) => {
       this.cartSize = value;
+    });
+
+    this.Httpservice.CheckIfLoggedIn()
+      .pipe(
+        map((value) => {
+          if (value == true) {
+            //  this.Router.navigate(['/userinfo']);
+            this.showLogin = false;
+            this.showUserInfolink = true;
+            this.Httpservice.updateTurnOnButton(true);
+            return true;
+          } else {
+            return false;
+          }
+        }),
+        tap((x) => console.log(x))
+      )
+      .subscribe();
+
+    this.Httpservice.TurnonSignOutButton.subscribe((value) => {
+      this.showLogOut = value;
+      console.log('this is the value for the button');
+      console.log(value);
     });
   }
 }

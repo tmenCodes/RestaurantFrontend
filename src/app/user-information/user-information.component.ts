@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup,FormControl, Validators, FormArray } from '@angular/forms';
-import { concatWith } from 'rxjs';
+import { map } from 'rxjs';
 import { HttpService } from '../http.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-information',
@@ -10,7 +11,11 @@ import { HttpService } from '../http.service';
   styleUrls: ['./user-information.component.css'],
 })
 export class UserInformationComponent {
-  constructor(private Http: HttpClient, private HttpService: HttpService) {}
+  constructor(
+    private Http: HttpClient,
+    private HttpService: HttpService,
+    private router: Router
+  ) {}
 
   InformationForm = new FormGroup({
     Credit: new FormControl('true', Validators.required),
@@ -76,5 +81,17 @@ export class UserInformationComponent {
     //  this.HttpService.EditUserInformation(this.Username, this.InformationForm);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.HttpService.updateTurnOnButton(true);
+    this.HttpService.CheckIfLoggedIn().pipe(
+      map((value) => {
+        if (value == true) {
+          return true;
+        } else {
+          this.router.navigate(['/home']);
+          return false;
+        }
+      })
+    );
+  }
 }
