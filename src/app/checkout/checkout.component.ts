@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { ErrorHandler } from '@angular/core';
+import { Component, inject } from '@angular/core';
+
 import { CartService } from '../cart.service';
 import { Router } from '@angular/router';
+import { Inject } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -70,7 +71,10 @@ export class CheckoutComponent {
     return this.InformationForm.get('UserName');
   }
 
-  constructor(private cartService: CartService, private Router: Router) {}
+  constructor() {}
+
+  cartService = inject(CartService);
+  Router = inject(Router);
 
   displayArray: any[] = [];
   finalpricestring: string = '0';
