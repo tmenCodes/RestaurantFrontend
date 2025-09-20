@@ -70,7 +70,7 @@ export class MenuComponent {
           return value;
         })
       )
-      .subscribe((value) => console.log('this is the ifnal value' + value));
+      .subscribe((value) => console.log('this is the final value' + value));
   }
 
   PutIntoCart(item: string) {
@@ -79,42 +79,74 @@ export class MenuComponent {
     this.cartService
       .putItemsIntoCart(item)
       .pipe(
-        //correct way is NOT implement a delay though...USE MERGEMAP
-        delay(100),
-        tap((value) => {
-          this.cartService
-            .getCartSizeLength()
-            .pipe(
-              tap((value) => {
-                this.cartService.CartCount.next(value);
+        mergeMap((_) => {
+          return this.cartService.getCartSizeLength();
+        }),
+        mergeMap((value) => {
+          this.cartService.CartCount.next(value);
 
-                this.cartService.getTotalPrice().subscribe((value) => {
-                  this.subtotal = value.subTotal;
-                  this.taxamount = value.taxAmount;
-                  this.totalprice = value.totalPrice;
-                });
+          this.cartService.getTotalPrice().subscribe((values) => {
+            this.subtotal = values.subTotal;
+            this.taxamount = values.taxAmount;
+            this.totalprice = values.totalPrice;
+          });
 
-                this.cartService.getAllCartItems().subscribe((value) => {
-                  this.cartSize = value.length;
+          this.cartService.getAllCartItems().subscribe((values) => {
+            this.cartSize = values.length;
 
-                  if (value.length > 0) {
-                    this.cartgreaterthenzero = true;
-                    this.displayArray = value;
-                  }
-                });
-              })
-            )
-            .subscribe({
-              next: (value) => console.log(value),
-              //   error: (error) => console.log(error),
-            });
+            if (values.length > 0) {
+              this.cartgreaterthenzero = true;
+              this.displayArray = values;
+            }
+          });
+          return value;
         })
       )
-      .subscribe({
-        next: (value) => console.log(value),
-        //  error: (error) => console.log('from the menu' + error),
-      });
+      .subscribe();
   }
+
+  // PutIntoCart(item: string) {
+  //   this.sidebarOpen = true;
+
+  //   this.cartService
+  //     .putItemsIntoCart(item)
+  //     .pipe(
+  //       //correct way is NOT implement a delay though...USE MERGEMAP
+  //       delay(100),
+  //       tap((value) => {
+  //         this.cartService
+  //           .getCartSizeLength()
+  //           .pipe(
+  //             tap((value) => {
+  //               this.cartService.CartCount.next(value);
+
+  //               this.cartService.getTotalPrice().subscribe((value) => {
+  //                 this.subtotal = value.subTotal;
+  //                 this.taxamount = value.taxAmount;
+  //                 this.totalprice = value.totalPrice;
+  //               });
+
+  //               this.cartService.getAllCartItems().subscribe((value) => {
+  //                 this.cartSize = value.length;
+
+  //                 if (value.length > 0) {
+  //                   this.cartgreaterthenzero = true;
+  //                   this.displayArray = value;
+  //                 }
+  //               });
+  //             })
+  //           )
+  //           .subscribe({
+  //             next: (value) => console.log(value),
+  //             //   error: (error) => console.log(error),
+  //           });
+  //       })
+  //     )
+  //     .subscribe({
+  //       next: (value) => console.log(value),
+  //       //  error: (error) => console.log('from the menu' + error),
+  //     });
+  // }
 
   ngOnInit(): void {
     this.HttpService.CheckIfLoggedIn();
