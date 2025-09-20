@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { CartService } from './cart.service';
 
 import { Router } from '@angular/router';
+import { concatWith } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +18,7 @@ export class AppComponent {
 
   constructor(
     private cartService: CartService,
-
+    private Zone: NgZone,
     private router: Router
   ) {}
 
@@ -29,8 +31,13 @@ export class AppComponent {
   }
 
   ngOnInit(): void {
-    this.cartService.getCartSize().subscribe((value) => {
-      this.cartSize = value.length;
+    this.cartService.getCartSize().subscribe({
+      next: (value) => {
+        this.cartSize = value.length;
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error.message);
+      },
     });
   }
 }

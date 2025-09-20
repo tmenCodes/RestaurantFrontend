@@ -36,12 +36,22 @@ export class NavBarComponent {
   }
 
   ngOnInit() {
-    this.cartService.getCartSize().subscribe((value) => {
-      this.cartService.CartCount.next(value.length);
+    this.cartService.getCartSize().subscribe({
+      next: (value) => {
+        this.cartService.CartCount.next(value.length);
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
     });
 
-    this.cartService.CartCount.subscribe((value) => {
-      this.cartSize = value;
+    this.cartService.CartCount.subscribe({
+      next: (value) => {
+        this.cartSize = value;
+      },
+      error: (error) => {
+        console.log(error);
+      },
     });
 
     this.Httpservice.CheckIfLoggedIn()
@@ -59,7 +69,10 @@ export class NavBarComponent {
         }),
         tap((x) => console.log(x))
       )
-      .subscribe();
+      .subscribe({
+        next: () => console.log("waht's the problem"),
+        error: (error) => console.log(error),
+      });
 
     this.Httpservice.TurnonSignOutButton.subscribe((value) => {
       this.showLogOut = value;

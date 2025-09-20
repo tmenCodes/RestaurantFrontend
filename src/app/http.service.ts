@@ -125,15 +125,17 @@ import { ValidationErrors } from '@angular/forms';
         this.Http.post(urlconcat, body, {
           observe: 'response',
           withCredentials: true,
-        }).subscribe({
-          next: (response) => {
-            this.router.navigate(['userinfo']);
-          },
-          error: (error) => {
-            //   console.log('this is the login error');
-            console.log(error);
-          },
-        });
+        })
+          .pipe(catchError(() => []))
+          .subscribe({
+            next: (response) => {
+              this.router.navigate(['userinfo']);
+            },
+            error: (error) => {
+              //   console.log('this is the login error');
+              console.log(error);
+            },
+          });
       }
 
       ContactForm(body: any) {

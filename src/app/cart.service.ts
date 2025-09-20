@@ -1,6 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  Observable,
+  of,
+  tap,
+  throwError,
+} from 'rxjs';
 
 interface MenuItems {
   item: string;
@@ -67,7 +74,6 @@ export class CartService {
         guidId: x,
         name: items,
       };
-      console.log(object1);
 
       return this.Http.post<any>(
         'http://localhost:5182/api/Order/ShoppingCartItems',
@@ -85,9 +91,9 @@ export class CartService {
 
   getAllCartItems(): Observable<any> {
     var guid = localStorage.getItem('myGuid');
+
     var url =
       'http://localhost:5182/api/Order/GetMenuItemByGuid?guidId=' + guid;
-
     return this.Http.get(url);
   }
 
@@ -131,7 +137,7 @@ export class CartService {
     var url =
       'http://localhost:5182/api/Order/GetMenuItemByGuid?guidId=' + guid;
 
-    return this.Http.get(url);
+    return this.Http.get<Observable<any>>(url);
   }
 
   getCartSizeLength(): Observable<any> {
@@ -143,6 +149,6 @@ export class CartService {
   }
 
   getCartVariable() {
-    this.CartCount.subscribe(console.log);
+    this.CartCount.subscribe((value) => console.log(value));
   }
 }

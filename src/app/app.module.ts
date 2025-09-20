@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { ErrorHandler } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MenuComponent } from './menu/menu.component';
@@ -14,10 +14,9 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { UserInformationComponent } from './user-information/user-information.component';
-
 
 import { CompleteCheckoutComponent } from './complete-checkout/complete-checkout.component';
 import { BookingCompleteComponent } from './booking-complete/booking-complete.component';
@@ -28,6 +27,8 @@ import { CartCountComponent } from './cart-count/cart-count.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { CheckoutComponent } from './checkout/checkout.component';
+import { AuthInterceptorService } from './auth-interceptor.service';
+import { GlobalErrorHandlerService } from './global-error-handler.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,7 +60,15 @@ import { CheckoutComponent } from './checkout/checkout.component';
     FormsModule,
     HttpClientModule,
   ],
-  providers: [CookieService],
+  providers: [
+    CookieService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true,
+    },
+    { provide: ErrorHandler, useClass: GlobalErrorHandlerService },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

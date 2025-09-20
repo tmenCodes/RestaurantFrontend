@@ -152,10 +152,16 @@ export class CheckoutComponent {
                 }
               })
             )
-            .subscribe();
+            .subscribe({
+              next: () => console.log,
+              error: (error) => console.log(error),
+            });
         })
       )
-      .subscribe();
+      .subscribe({
+        next: () => console.log,
+        error: (error) => console.log(error),
+      });
 
     var item_index = this.displayArray.findIndex((value) => value.id == i);
     this.displayArray.splice(item_index, 1);
@@ -174,6 +180,7 @@ export class CheckoutComponent {
     });
 
     this.cartService.getAllCartItems().subscribe((value) => {
+      console.log(value.length);
       this.cartSize = value.length;
       if (value.length > 0) {
         this.cartgreaterthenzero = true;

@@ -1,6 +1,15 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CartService } from '../cart.service';
-import { switchMap, tap, delay, of, mergeMap, catchError } from 'rxjs';
+import {
+  switchMap,
+  map,
+  tap,
+  delay,
+  of,
+  mergeMap,
+  catchError,
+  throwError,
+} from 'rxjs';
 import { HttpService } from '../http.service';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -37,60 +46,46 @@ export class MenuComponent {
     this.sidebarOpen = false;
   }
 
-  removeIndex(i: number) {
+  removeIndex(index: number) {
     this.cartService
-      .RemoveMenuItem(i)
+      .RemoveMenuItem(index)
       .pipe(
-        delay(100),
-        tap((value) => {
-          this.cartService
-            .getCartSizeLength()
-            .pipe(
-              catchError((error) => {
-                console.error(
-                  'THIS IS THE ERROR FROM THE BACKEND:',
-                  error.message
-                );
-                return of(0); // Return a fallback observable
-              }),
-              // delay(100),
-              tap((value) => {
-                this.cartService.CartCount.next(value);
+        mergeMap((_) => {
+          return this.cartService.getCartSizeLength();
+        }),
+        mergeMap((value) => {
+          console.log(value);
+          this.cartService.CartCount.next(value);
 
-                this.cartService.getTotalPrice().subscribe((value) => {
-                  console.log(value);
-                  this.subtotal = value.subTotal;
-                  this.taxamount = value.taxAmount;
-                  this.totalprice = value.totalPrice;
-                });
-              })
-            )
-            .subscribe();
+          this.cartService.getTotalPrice().subscribe((value) => {
+            this.subtotal = value.subTotal;
+            this.taxamount = value.taxAmount;
+            this.totalprice = value.totalPrice;
+
+            var item_index = this.displayArray.findIndex(
+              (value: any) => value.id == index
+            );
+            this.displayArray.splice(item_index, 1);
+          });
+          return value;
         })
       )
-      .subscribe();
-
-    var item_index = this.displayArray.findIndex((value: any) => value.id == i);
-    this.displayArray.splice(item_index, 1);
+      .subscribe((value) => console.log('this is the ifnal value' + value));
   }
 
   PutIntoCart(item: string) {
     this.sidebarOpen = true;
-    console.log(item);
+
     this.cartService
       .putItemsIntoCart(item)
       .pipe(
-        //impelement slight delay-because on the backend it will be a post-then reveal the size of the array
-
-        //correct way is NOT implement a delay though...
+        //correct way is NOT implement a delay though...USE MERGEMAP
         delay(100),
         tap((value) => {
           this.cartService
             .getCartSizeLength()
             .pipe(
               tap((value) => {
-                console.log('thie is the value from the put');
-                console.log(value);
                 this.cartService.CartCount.next(value);
 
                 this.cartService.getTotalPrice().subscribe((value) => {
@@ -101,8 +96,7 @@ export class MenuComponent {
 
                 this.cartService.getAllCartItems().subscribe((value) => {
                   this.cartSize = value.length;
-                  console.log('the value on inigt ');
-                  console.log(value);
+
                   if (value.length > 0) {
                     this.cartgreaterthenzero = true;
                     this.displayArray = value;
@@ -110,28 +104,17 @@ export class MenuComponent {
                 });
               })
             )
-            .subscribe();
+            .subscribe({
+              next: (value) => console.log(value),
+              //   error: (error) => console.log(error),
+            });
         })
       )
-      .subscribe();
+      .subscribe({
+        next: (value) => console.log(value),
+        //  error: (error) => console.log('from the menu' + error),
+      });
   }
-
-  // callonMe() {
-  //   const firstObservable$ = this.cartService.getCartSizeLength().pipe(
-  //     tap((value) => {
-  //       console.log(value);
-  //       this.cartService.CartCount.next(value);
-  //     })
-  //   );
-
-  //   firstObservable$.subscribe({
-  //     next: (v) => console.log(v),
-  //     error: (e) => {
-  //       console.log(e.error);
-  //     },
-  //     complete: () => console.info('complete'),
-  //   });
-  // }
 
   ngOnInit(): void {
     this.HttpService.CheckIfLoggedIn();
@@ -140,22 +123,18 @@ export class MenuComponent {
       .getTotalPrice()
       .subscribe((value) => (this.subtotal = value.totalPrice));
 
-    this.HttpService.CheckIfLoggedIn1().subscribe(
-      (value) => {
-        console.log(value);
+    this.cartService.getAllCartItems().subscribe({
+      next: (value) => {
+        this.cartSize = value.length;
+
+        if (value.length > 0) {
+          this.cartgreaterthenzero = true;
+          this.displayArray = value;
+        }
       },
-      (error) => {
-        console.log(error);
-      }
-    );
-
-    this.cartService.getAllCartItems().subscribe((value) => {
-      this.cartSize = value.length;
-
-      if (value.length > 0) {
-        this.cartgreaterthenzero = true;
-        this.displayArray = value;
-      }
+      //  error: (error) => {
+      //  console.log(error);
+      // },
     });
   }
 }
