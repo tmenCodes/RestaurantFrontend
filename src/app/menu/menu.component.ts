@@ -12,6 +12,7 @@ import {
 } from 'rxjs';
 import { HttpService } from '../http.service';
 import { CookieService } from 'ngx-cookie-service';
+import { Subscription, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-menu',
@@ -19,30 +20,24 @@ import { CookieService } from 'ngx-cookie-service';
   styleUrls: ['./menu.component.css'],
 })
 export class MenuComponent {
+  public GettotalPrice: Observable<any> = this.cartService.getTotalPrice();
+  public DisplayCartItems: Observable<any> = this.cartService.getAllCartItems();
+
   constructor(
     private cartService: CartService,
     private HttpService: HttpService,
     private CookieService: CookieService
   ) {}
 
-  sidebarOpen: boolean = false; // Initial state: sidebar closed
-
+  sidebarOpen: boolean = false;
   cartSize: number = 0;
-
-  //create event from child to parent
-
-  subtotal: string = '';
-  taxamount: string = '';
-  totalprice: string = '';
-
-  displayArray: any = [];
   cartgreaterthenzero = false;
 
   toggleSidebar() {
-    this.sidebarOpen = !this.sidebarOpen; // Toggle the state
+    this.sidebarOpen = !this.sidebarOpen;
   }
 
-  closeNav() {
+  closeSideBar() {
     this.sidebarOpen = false;
   }
 
@@ -54,23 +49,14 @@ export class MenuComponent {
           return this.cartService.getCartSizeLength();
         }),
         mergeMap((value) => {
-          console.log(value);
           this.cartService.CartCount.next(value);
+          //update the async pipe
+          this.GettotalPrice = this.cartService.getTotalPrice();
 
-          this.cartService.getTotalPrice().subscribe((value) => {
-            this.subtotal = value.subTotal;
-            this.taxamount = value.taxAmount;
-            this.totalprice = value.totalPrice;
-
-            var item_index = this.displayArray.findIndex(
-              (value: any) => value.id == index
-            );
-            this.displayArray.splice(item_index, 1);
-          });
           return value;
         })
       )
-      .subscribe((value) => console.log('this is the final value' + value));
+      .subscribe();
   }
 
   PutIntoCart(item: string) {
@@ -79,94 +65,25 @@ export class MenuComponent {
     this.cartService
       .putItemsIntoCart(item)
       .pipe(
-        mergeMap((_) => {
+        mergeMap(() => {
           return this.cartService.getCartSizeLength();
         }),
         mergeMap((value) => {
+          //update for the navbar
           this.cartService.CartCount.next(value);
+          // update async pipe
+          this.GettotalPrice = this.cartService.getTotalPrice();
 
-          this.cartService.getTotalPrice().subscribe((values) => {
-            this.subtotal = values.subTotal;
-            this.taxamount = values.taxAmount;
-            this.totalprice = values.totalPrice;
-          });
+          //update async pipe
+          this.DisplayCartItems = this.cartService.getAllCartItems();
 
-          this.cartService.getAllCartItems().subscribe((values) => {
-            this.cartSize = values.length;
-
-            if (values.length > 0) {
-              this.cartgreaterthenzero = true;
-              this.displayArray = values;
-            }
-          });
           return value;
         })
       )
       .subscribe();
   }
 
-  // PutIntoCart(item: string) {
-  //   this.sidebarOpen = true;
-
-  //   this.cartService
-  //     .putItemsIntoCart(item)
-  //     .pipe(
-  //       //correct way is NOT implement a delay though...USE MERGEMAP
-  //       delay(100),
-  //       tap((value) => {
-  //         this.cartService
-  //           .getCartSizeLength()
-  //           .pipe(
-  //             tap((value) => {
-  //               this.cartService.CartCount.next(value);
-
-  //               this.cartService.getTotalPrice().subscribe((value) => {
-  //                 this.subtotal = value.subTotal;
-  //                 this.taxamount = value.taxAmount;
-  //                 this.totalprice = value.totalPrice;
-  //               });
-
-  //               this.cartService.getAllCartItems().subscribe((value) => {
-  //                 this.cartSize = value.length;
-
-  //                 if (value.length > 0) {
-  //                   this.cartgreaterthenzero = true;
-  //                   this.displayArray = value;
-  //                 }
-  //               });
-  //             })
-  //           )
-  //           .subscribe({
-  //             next: (value) => console.log(value),
-  //             //   error: (error) => console.log(error),
-  //           });
-  //       })
-  //     )
-  //     .subscribe({
-  //       next: (value) => console.log(value),
-  //       //  error: (error) => console.log('from the menu' + error),
-  //     });
-  // }
-
   ngOnInit(): void {
-    this.HttpService.CheckIfLoggedIn();
-
-    this.cartService
-      .getTotalPrice()
-      .subscribe((value) => (this.subtotal = value.totalPrice));
-
-    this.cartService.getAllCartItems().subscribe({
-      next: (value) => {
-        this.cartSize = value.length;
-
-        if (value.length > 0) {
-          this.cartgreaterthenzero = true;
-          this.displayArray = value;
-        }
-      },
-      //  error: (error) => {
-      //  console.log(error);
-      // },
-    });
+    // this.HttpService.CheckIfLoggedIn();
   }
 }

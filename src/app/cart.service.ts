@@ -112,7 +112,7 @@ export class CartService {
   getTotalPrice(): Observable<any> {
     let guid = localStorage.getItem('myGuid');
     let url = 'http://localhost:5182/api/Order/GetTotalPrice?guid=' + guid;
-    return this.Http.get(url);
+    return this.Http.get<Observable<any>>(url);
   }
 
   RemoveMenuItem(numero: number): Observable<any> {

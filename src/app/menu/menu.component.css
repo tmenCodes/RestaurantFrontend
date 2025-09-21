@@ -10,6 +10,9 @@
   /* box-sizing: border-box; */
 }
 
+.section-header {
+  margin: 0px;
+}
 
 .sidebar.open {
   right: 0; /* Visible when 'open' class is applied */

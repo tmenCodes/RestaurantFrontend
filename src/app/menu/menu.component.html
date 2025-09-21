@@ -5,30 +5,32 @@
 
 
 <div class="sidebar" [class.open]="sidebarOpen">
-   <div class="container"> 
-    <a href="menu" class="closebtn" onclick="closeNav()">&times;</a>
+   <div class="container" *ngIf="GettotalPrice | async as total"> 
+    <a href="menu" class="closebtn" onclick="closeSideBar()">&times;</a>
 
     <div class="title">Your pickup order</div>
-       <ul class="list-group mb-3" >
-            <li class="list-group-item d-flex justify-content-between lh-condensed" *ngFor="let x of displayArray; index as i">
+       <ul class="list-group mb-3"  >
+
+      <li class="list-group-item d-flex justify-content-between lh-condensed" *ngFor="let cartItems of DisplayCartItems | async">
+
               <div>
-                   <h6 class="my-1">{{i+1}}.) {{x.name}} ${{x.price | number: '1.2-2'}}</h6>
+                   <h6 class="my-1">{{cartItems.id}}.) {{cartItems.name}} ${{cartItems.price | number: '1.2-2'}}</h6>
               </div>
-              <span class="text-muted"><button class="btn btn-outline-dark btn-sm" [ngStyle]="{'maring': '10px'}" (click)="removeIndex(x.id)">Remove</button></span>   
+              <span class="text-muted"><button class="btn btn-outline-dark btn-sm" [ngStyle]="{'maring': '10px'}" (click)="removeIndex(cartItems.id)">Remove</button></span>   
             </li>       
-            <li class="list-group-item d-flex justify-content-between">
+            <li class="list-group-item d-flex justify-content-between" >
               <span>SubTotal:</span>
-              <strong>${{subtotal}}</strong>
+              <strong>${{total.subTotal}}</strong>
       
             </li>
 
               <li class="list-group-item d-flex justify-content-between">
                   <span>Tax:</span>
-              <strong>${{taxamount}}</strong>
+              <strong>${{total.taxAmount}}</strong>
             </li>
        <li class="list-group-item d-flex justify-content-between">
                   <span>Total:</span>
-              <strong>${{totalprice}}</strong>
+              <strong>${{total.totalPrice}}</strong>
             </li>
 
 
