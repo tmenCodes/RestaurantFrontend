@@ -138,6 +138,12 @@ export class CartService {
       'http://localhost:5182/api/Order/GetMenuItemByGuid?guidId=' + guid;
 
     return this.Http.get<Observable<any>>(url);
+    // .pipe(
+    //   catchError((error) => {
+    //     console.log(error);
+    //     return of(0);
+    //   })
+    // );
   }
 
   getCartSizeLength(): Observable<any> {

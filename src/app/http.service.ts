@@ -14,7 +14,7 @@ import {
   concatWith,
 } from 'rxjs';
 import { ValidationErrors } from '@angular/forms';
-    import { BehaviorSubject } from 'rxjs';
+    import { BehaviorSubject, of } from 'rxjs';
 
     @Injectable({
       providedIn: 'root',
@@ -161,12 +161,17 @@ import { ValidationErrors } from '@angular/forms';
         });
       }
 
-      public CheckIfLoggedIn(): Observable<boolean> {
+      public CheckIfLoggedIn(): Observable<any> {
         let urlconcat = this.url + '' + 'api/RegisterUser/GetTheCurrentUser';
 
-        return this.Http.get<boolean>(urlconcat, {
+        return this.Http.get<any>(urlconcat, {
           withCredentials: true,
-        });
+        }).pipe(
+          catchError((value) => {
+            console.log('the value' + value);
+            return of('this is the value', value);
+          })
+        );
       }
 
       public CheckIfLoggedIn1() {

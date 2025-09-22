@@ -38,11 +38,13 @@ export class NavBarComponent {
   ngOnInit() {
     this.cartService.getCartSize().subscribe({
       next: (value) => {
-        this.cartService.CartCount.next(value.length);
+        if (value > 0) {
+          this.cartService.CartCount.next(value.length);
+        }
       },
-      error: (error: any) => {
-        console.log(error);
-      },
+      // error: (error: any) => {
+      //   //  console.log(error);
+      // },
     });
 
     this.cartService.CartCount.subscribe({
@@ -66,17 +68,16 @@ export class NavBarComponent {
           } else {
             return false;
           }
-        }),
-        tap((x) => console.log(x))
+        })
       )
       .subscribe({
-        next: () => console.log("waht's the problem"),
-        error: (error) => console.log(error),
+        next: (value) => console.log('this is the return value' + value),
+        // error: (error) => console.log(error),
       });
 
     this.Httpservice.TurnonSignOutButton.subscribe((value) => {
       this.showLogOut = value;
-      console.log('this is the value for the button');
+
       console.log(value);
     });
   }

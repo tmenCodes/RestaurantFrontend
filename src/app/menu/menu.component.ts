@@ -83,7 +83,5 @@ export class MenuComponent {
       .subscribe();
   }
 
-  ngOnInit(): void {
-    // this.HttpService.CheckIfLoggedIn();
-  }
+  ngOnInit(): void {}
 }

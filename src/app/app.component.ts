@@ -24,9 +24,7 @@ export class AppComponent {
 
   LogOut() {
     localStorage.removeItem('id_token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('myItemList');
-    localStorage.removeItem('myItemSize');
+
     location.reload();
   }
 

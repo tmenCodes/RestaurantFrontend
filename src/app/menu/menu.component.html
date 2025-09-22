@@ -11,10 +11,10 @@
     <div class="title">Your pickup order</div>
        <ul class="list-group mb-3"  >
 
-      <li class="list-group-item d-flex justify-content-between lh-condensed" *ngFor="let cartItems of DisplayCartItems | async">
+      <li class="list-group-item d-flex justify-content-between lh-condensed" *ngFor="let cartItems of DisplayCartItems | async; index as i">
 
               <div>
-                   <h6 class="my-1">{{cartItems.id}}.) {{cartItems.name}} ${{cartItems.price | number: '1.2-2'}}</h6>
+                   <h6 class="my-1">{{i+1}}.) {{cartItems.name}} ${{cartItems.price | number: '1.2-2'}}</h6>
               </div>
               <span class="text-muted"><button class="btn btn-outline-dark btn-sm" [ngStyle]="{'maring': '10px'}" (click)="removeIndex(cartItems.id)">Remove</button></span>   
             </li>       
