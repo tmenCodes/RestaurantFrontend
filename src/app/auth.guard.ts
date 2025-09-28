@@ -7,7 +7,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   const service = inject(HttpService); // Inject AuthService
     const router = inject(Router);
 
-    let observable$ = service.CheckIfLoggedIn().pipe(
+    let observable$ = service.CheckIfUserLoggedIn().pipe(
       map((value) => {
         if (value == true) {
           return true;

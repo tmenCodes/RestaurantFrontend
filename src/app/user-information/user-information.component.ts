@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup,FormControl, Validators, FormArray } from '@angular/forms';
-import { map } from 'rxjs';
+import { map, Observable, pipe, tap } from 'rxjs';
 import { HttpService } from '../http.service';
 import { Router } from '@angular/router';
 
@@ -16,6 +16,8 @@ export class UserInformationComponent {
     private HttpService: HttpService,
     private router: Router
   ) {}
+
+  username: string = '';
 
   InformationForm = new FormGroup({
     Credit: new FormControl('true', Validators.required),
@@ -77,21 +79,30 @@ export class UserInformationComponent {
 
   editInformation() {
     console.log('edit some information here bro ');
+    this.InformationForm.enable();
     // console.log(this.InformationForm.value)
     //  this.HttpService.EditUserInformation(this.Username, this.InformationForm);
   }
 
   ngOnInit() {
-    this.HttpService.updateTurnOnButton(true);
-    this.HttpService.CheckIfLoggedIn().pipe(
-      map((value) => {
-        if (value == true) {
-          return true;
-        } else {
-          this.router.navigate(['/home']);
-          return false;
-        }
-      })
-    );
+    //user may not have information at first
+    this.HttpService.GetUserPaymentInformation()
+      .pipe(
+        tap((value) => {
+          console.log(value);
+
+          this.username = value.nameonCard;
+          this.InformationForm.patchValue({
+            NameonCard: value.nameonCard,
+            CreditCardNumber: value.creditCardNumber,
+            Expiration: value.expiration,
+            CVV: value.cvv,
+          }),
+            takeUntilDestroyed();
+
+          this.InformationForm.disable();
+        })
+      )
+      .subscribe();
   }
 }

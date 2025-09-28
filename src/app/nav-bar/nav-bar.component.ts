@@ -2,8 +2,10 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CartService } from '../cart.service';
 import { HttpClient } from '@angular/common/http';
 import { HttpService } from '../http.service';
-import { Router } from '@angular/router';
-import { map, tap } from 'rxjs';
+import { Router, NavigationEnd } from '@angular/router';
+import { map, tap, filter, Subscription } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
+import { Observable, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-nav-bar',
@@ -13,38 +15,56 @@ import { map, tap } from 'rxjs';
 export class NavBarComponent {
   cartSize: number = 0;
   showLogin: boolean = true;
-  showUserInfolink: boolean = false;
+  showUserInfo: boolean = false;
   showLogOut: boolean = false;
 
   //retrieve the child component
   @Output() addCartItemEvent = new EventEmitter<number>();
+  // private routerSubscription: Subscription = this.Router.events
+  //   .pipe(filter((event) => event instanceof NavigationEnd))
+  //   .subscribe();
+
+  public LoginInCheck: Observable<boolean> = this.Httpservice.CheckIfLoggedIn;
 
   constructor(
     private cartService: CartService,
     private Httpservice: HttpService,
     private Router: Router
-  ) {}
+  ) {
+    this.Router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        // Update navbar elements based on the new route or state
+
+        this.LoginInCheck.subscribe();
+        let loggedIn = localStorage.getItem('login');
+        console.log('the current status of the loggin ' + loggedIn);
+
+        if (loggedIn === 'true') {
+          this.showLogOut = true;
+          this.showUserInfo = true;
+          this.showLogin = false;
+        }
+        //  this.updateNavbar();
+      }
+    });
+  }
 
   SignOut(event: Event): void {
     console.log('from the signout');
     this.Httpservice.SignOut().subscribe((value) => {
       this.showLogin = true;
-      this.showUserInfolink = false;
-      this.Httpservice.updateTurnOnButton(false);
-      this.Router.navigate(['/home']);
+      this.showUserInfo = false;
+      localStorage.removeItem('login');
+      window.location.reload();
+      //   this.Router.navigate(['/home']);
     });
   }
 
   ngOnInit() {
     this.cartService.getCartSize().subscribe({
       next: (value) => {
-        if (value > 0) {
-          this.cartService.CartCount.next(value.length);
-        }
+        this.cartService.CartCount.next(value.length);
       },
-      // error: (error: any) => {
-      //   //  console.log(error);
-      // },
     });
 
     this.cartService.CartCount.subscribe({
@@ -54,31 +74,6 @@ export class NavBarComponent {
       error: (error) => {
         console.log(error);
       },
-    });
-
-    this.Httpservice.CheckIfLoggedIn()
-      .pipe(
-        map((value) => {
-          if (value == true) {
-            //  this.Router.navigate(['/userinfo']);
-            this.showLogin = false;
-            this.showUserInfolink = true;
-            this.Httpservice.updateTurnOnButton(true);
-            return true;
-          } else {
-            return false;
-          }
-        })
-      )
-      .subscribe({
-        next: (value) => console.log('this is the return value' + value),
-        // error: (error) => console.log(error),
-      });
-
-    this.Httpservice.TurnonSignOutButton.subscribe((value) => {
-      this.showLogOut = value;
-
-      console.log(value);
     });
   }
 }

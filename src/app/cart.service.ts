@@ -94,7 +94,7 @@ export class CartService {
 
     var url =
       'http://localhost:5182/api/Order/GetMenuItemByGuid?guidId=' + guid;
-    return this.Http.get(url);
+    return this.Http.get(url); 
   }
 
   getCartItems(): any {

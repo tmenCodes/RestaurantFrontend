@@ -5,7 +5,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { jwtDecode } from "jwt-decode";
-import { map, tap } from 'rxjs';
+import { map, tap, pipe, mergeMap } from 'rxjs';
 
 import { CheckEmailExistsValidator } from '../check-email-exists.validator';
 import { HttpService } from '../http.service';
@@ -18,7 +18,6 @@ import { HttpService } from '../http.service';
 export class LoginComponent {
   constructor(
     private HttpService: HttpService,
-
     private Http: HttpClient,
     private cookieService: CookieService,
     private Router: Router
@@ -50,28 +49,23 @@ export class LoginComponent {
       password: password,
     };
 
-    this.HttpService.Login(LoginInformation);
-
-    this.HttpService.updateTurnOnButton(true);
-  }
-
-  ngOnInit() {
-    //load whatever from other pages
-
-    this.HttpService.CheckIfLoggedIn()
+    this.HttpService.Login(LoginInformation)
       .pipe(
-        map((value) => {
-          if (value == true) {
-            this.Router.navigate(['/userinfo']);
-            return true;
-          } else {
-            return false;
-          }
-        }),
-        tap((x) => console.log(x))
+        mergeMap((value) => {
+          //  console.log(value.body.succeeded);
+          this.HttpService.updateCheckIfLoggedIn(value.body.succeded);
+          //send this value onto
+          localStorage.setItem('login', value.body.succeeded);
+
+          this.Router.navigateByUrl('/userinfo');
+          //   this.Router.navigate(['userinfo']);
+          return value.body.succeeded;
+        })
       )
       .subscribe();
   }
+
+  ngOnInit() {}
 }
 
 

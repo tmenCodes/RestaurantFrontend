@@ -83,5 +83,5 @@ export class MenuComponent {
       .subscribe();
   }
 
-  ngOnInit(): void {}
+  ngOnInit() {}
 }

@@ -4,9 +4,12 @@
 <div class="row"> 
   
         <div class="col-md-8 order-md-1" [formGroup]="InformationForm" [ngStyle]="{'margin': '100px'}">
-          <h2>Welcome,</h2>
-          <h4 class="mb-3">Add Payment Information</h4>
-          <div class="d-block my-3">
+          <h2>Welcome, {{username}}</h2>
+      
+    
+        <h4 class="mb-3">Add Payment Information</h4>
+          
+       <div class="d-block my-3">
             <div class="custom-control custom-radio">
               <input id="credit" name="Credit" type="radio" class="custom-control-input" value=true formControlName="Credit" checked required>
               <label class="custom-control-label" for="credit">Credit card</label>
@@ -15,23 +18,16 @@
               <input id="debit" name="Debit" type="radio" class="custom-control-input" value=true formControlName="Debit">
               <label class="custom-control-label" for="debit">Debit card</label>
             </div>
-            <!--
-            <div class="custom-control custom-radio">
-              <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input"formControlName="PaymentType"required>
-              <label class="custom-control-label" for="paypal">PayPal</label>
-            </div>
-          -->
-
           </div>
           <div class="row">
             <div class="col-md-6 mb-3">
               <label for="cc-name">Name on card</label>
-              <input type="text" class="form-control" id="cc-name" placeholder="John Doe" formControlName="NameonCard" required>
+              <input type="text" class="form-control" id="cc-name" placeholder="name"formControlName="NameonCard" required>
               <span *ngIf="NameonCard && NameonCard?.invalid && NameonCard?.touched">Please enter a (correct) Name</span>
             </div>
             <div class="col-md-6 mb-3">
               <label for="cc-number">Credit card number</label>
-              <input type="text" class="form-control" id="cc-number" placeholder="000-000-0000" formControlName="CreditCardNumber" >
+              <input type="text" class="form-control" id="cc-number" placeholder="value" formControlName="CreditCardNumber" >
               <span *ngIf="CreditCardNumber && CreditCardNumber?.invalid && CreditCardNumber?.touched">Please enter a valid Credit Card Number</span>
             </div>
           </div>
@@ -47,11 +43,16 @@
               <span *ngIf=" CVV && CVV?.invalid && CVV?.touched">Please enter an CVV</span>
             </div>
           </div>
+
           <hr class="mb-4">
-          <button class="btn btn-primary btn-lg btn-block" *ngIf="this.togglebutton" type="submit" [disabled]="InformationForm.invalid" (click)="submitInformation()">Add Info</button>
-          <button class="btn btn-primary btn-lg btn-block" *ngIf="this.oppositetogglebutton" type="submit"  (click)="editInformation()">Save</button>
+            <button class="btn btn-primary btn-lg btn-block" *ngIf="!username" type="submit" (click)="submitInformation()">Save Info</button>
+          <button class="btn btn-primary btn-lg btn-block"   *ngIf="username" type="submit"  (click)="editInformation()">Edit Info</button>
       </div>
+
+
     </div>
+
+
 
         </div>
         
