@@ -60,10 +60,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "Resturant:build:production"
+              "buildTarget": "Resturant:build:production"
             },
             "development": {
-              "browserTarget": "Resturant:build:development"
+              "buildTarget": "Resturant:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -71,7 +71,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Resturant:build"
+            "buildTarget": "Resturant:build"
           }
         },
         "test": {
