@@ -15,9 +15,10 @@ import {
 import { catchError, throwError, pipe, tap, delay, of } from 'rxjs';
 
 @Component({
-  selector: 'app-checkout',
-  templateUrl: './checkout.component.html',
-  styleUrls: ['./checkout.component.css'],
+    selector: 'app-checkout',
+    templateUrl: './checkout.component.html',
+    styleUrls: ['./checkout.component.css'],
+    standalone: false
 })
 export class CheckoutComponent {
   subtotal: string = '';

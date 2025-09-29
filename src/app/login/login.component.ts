@@ -11,9 +11,10 @@ import { CheckEmailExistsValidator } from '../check-email-exists.validator';
 import { HttpService } from '../http.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css'],
+    standalone: false
 })
 export class LoginComponent {
   constructor(

@@ -8,9 +8,10 @@ import { map, tap, filter, Subscription } from 'rxjs';
 import { Observable, debounceTime } from 'rxjs';
 
 @Component({
-  selector: 'app-nav-bar',
-  templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.css'],
+    selector: 'app-nav-bar',
+    templateUrl: './nav-bar.component.html',
+    styleUrls: ['./nav-bar.component.css'],
+    standalone: false
 })
 export class NavBarComponent {
   cartSize: number = 0;

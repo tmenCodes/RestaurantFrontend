@@ -6,9 +6,10 @@ import { HttpService } from '../http.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-user-information',
-  templateUrl: './user-information.component.html',
-  styleUrls: ['./user-information.component.css'],
+    selector: 'app-user-information',
+    templateUrl: './user-information.component.html',
+    styleUrls: ['./user-information.component.css'],
+    standalone: false
 })
 export class UserInformationComponent {
   constructor(

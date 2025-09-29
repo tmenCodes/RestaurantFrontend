@@ -4,9 +4,10 @@ import { HttpClient } from '@angular/common/http';
 import { HttpService } from '../http.service';
 import { Router } from '@angular/router';
 @Component({
-  selector: 'app-contact',
-  templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.css']
+    selector: 'app-contact',
+    templateUrl: './contact.component.html',
+    styleUrls: ['./contact.component.css'],
+    standalone: false
 })
 export class ContactComponent {
 

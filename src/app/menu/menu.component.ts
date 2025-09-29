@@ -15,9 +15,10 @@ import { HttpService } from '../http.service';
 import { Subscription, Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-menu',
-  templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.css'],
+    selector: 'app-menu',
+    templateUrl: './menu.component.html',
+    styleUrls: ['./menu.component.css'],
+    standalone: false
 })
 export class MenuComponent {
   public GettotalPrice: Observable<any> = this.cartService.getTotalPrice();

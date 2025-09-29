@@ -3,9 +3,10 @@ import { HttpService } from '../http.service';
 import { FormGroup, FormControlName, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 @Component({
-  selector: 'app-book',
-  templateUrl: './book.component.html',
-  styleUrls: ['./book.component.css']
+    selector: 'app-book',
+    templateUrl: './book.component.html',
+    styleUrls: ['./book.component.css'],
+    standalone: false
 })
 export class BookComponent {
   constructor(private Http: HttpService, private Router: Router) {}
