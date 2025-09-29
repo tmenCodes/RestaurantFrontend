@@ -15,7 +15,7 @@ import { SignupComponent } from './signup/signup.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { CookieService } from 'ngx-cookie-service';
+
 import { UserInformationComponent } from './user-information/user-information.component';
 
 import { CompleteCheckoutComponent } from './complete-checkout/complete-checkout.component';
@@ -61,7 +61,6 @@ import { GlobalErrorHandlerService } from './global-error-handler.service';
     HttpClientModule,
   ],
   providers: [
-    CookieService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,

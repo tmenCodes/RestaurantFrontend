@@ -11,7 +11,7 @@ import {
   throwError,
 } from 'rxjs';
 import { HttpService } from '../http.service';
-import { CookieService } from 'ngx-cookie-service';
+
 import { Subscription, Observable } from 'rxjs';
 
 @Component({
@@ -25,8 +25,7 @@ export class MenuComponent {
 
   constructor(
     private cartService: CartService,
-    private HttpService: HttpService,
-    private CookieService: CookieService
+    private HttpService: HttpService
   ) {}
 
   sidebarOpen: boolean = false;

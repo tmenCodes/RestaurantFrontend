@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpService } from '../http.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { map, tap, filter, Subscription } from 'rxjs';
-import { CookieService } from 'ngx-cookie-service';
+
 import { Observable, debounceTime } from 'rxjs';
 
 @Component({
