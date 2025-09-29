@@ -98,9 +98,7 @@ export class UserInformationComponent {
             Expiration: value.expiration,
             CVV: value.cvv,
           }),
-            takeUntilDestroyed();
-
-          this.InformationForm.disable();
+            this.InformationForm.disable();
         })
       )
       .subscribe();
