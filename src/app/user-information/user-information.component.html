@@ -1,58 +1,90 @@
 
 
 <div class="container" >
-<div class="row"> 
-  
-        <div class="col-md-8 order-md-1" [formGroup]="InformationForm" [ngStyle]="{'margin': '100px'}">
-          <h2>Welcome, {{username}}</h2>
-      
-    
-        <h4 class="mb-3">Add Payment Information</h4>
-          
-       <div class="d-block my-3">
-            <div class="custom-control custom-radio">
-              <input id="credit" name="Credit" type="radio" class="custom-control-input" value=true formControlName="Credit" checked required>
-              <label class="custom-control-label" for="credit">Credit card</label>
-            </div>
-            <div class="custom-control custom-radio">
-              <input id="debit" name="Debit" type="radio" class="custom-control-input" value=true formControlName="Debit">
-              <label class="custom-control-label" for="debit">Debit card</label>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="cc-name">Name on card</label>
-              <input type="text" class="form-control" id="cc-name" placeholder="name"formControlName="NameonCard" required>
-              <span *ngIf="NameonCard && NameonCard?.invalid && NameonCard?.touched">Please enter a (correct) Name</span>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="cc-number">Credit card number</label>
-              <input type="text" class="form-control" id="cc-number" placeholder="value" formControlName="CreditCardNumber" >
-              <span *ngIf="CreditCardNumber && CreditCardNumber?.invalid && CreditCardNumber?.touched">Please enter a valid Credit Card Number</span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-3 mb-3">
-              <label for="cc-expiration">Expiration</label>
-              <input type="text" class="form-control" id="cc-expiration"  placeholder="12/30"  formControlName="Expiration" required>
-              <span *ngIf=" Expiration && Expiration?.invalid && Expiration?.touched">Please enter an expiration</span>
-            </div>
-            <div class="col-md-3 mb-3">
-              <label for="cc-cvv">CVV</label>
-              <input type="text" class="form-control" id="cc-cvv" placeholder="000"  formControlName="CVV" required>
-              <span *ngIf=" CVV && CVV?.invalid && CVV?.touched">Please enter an CVV</span>
-            </div>
-          </div>
+  <div class="row">
+   <button [routerLink]="['/']">click on me</button>
 
-          <hr class="mb-4">
-            <button class="btn btn-primary btn-lg btn-block" *ngIf="!username" type="submit" (click)="submitInformation()">Save Info</button>
-          <button class="btn btn-primary btn-lg btn-block"   *ngIf="username" type="submit"  (click)="editInformation()">Edit Info</button>
+    <div class="col-md-8 order-md-1" [formGroup]="InformationForm" [ngStyle]="{'margin': '100px'}">
+      <h2>Welcome, {{username}}</h2>
+      <h4 class="mb-3">Add Payment Information</h4>
+    
+      <div class="d-block my-3">
+        <div class="custom-control custom-radio">
+          <input id="cardType" name="cardType" type="radio" class="custom-control-input" value="credit" formControlName="cardType" checked required>
+          <label class="custom-control-label" for="credit">Credit card</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input id="cardType" name="cardType" type="radio" class="custom-control-input" value="debit" formControlName="cardType">
+          <label class="custom-control-label" for="debit">Debit card</label>
+        </div>
       </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="cc-name">Name on card</label>
+          <input type="text" class="form-control" id="cc-name" placeholder="name"formControlName="nameonCard" required>
+          @if (NameonCard && NameonCard.invalid && NameonCard.touched) {
+            <span>Please enter a (correct) Name</span>
+          }
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="cc-number">Credit card number</label>
+          <input type="text" class="form-control" id="cc-number" placeholder="value" formControlName="creditCardNumber" >
+          @if (CreditCardNumber && CreditCardNumber.invalid && CreditCardNumber.touched) {
+            <span>Please enter a valid Credit Card Number</span>
+          }
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3 mb-3">
+          <label for="cc-expiration">Expiration</label>
+          <input type="text" class="form-control" id="cc-expiration"  placeholder="12/30"  formControlName="expiration" required>
+          @if ( Expiration && Expiration.invalid && Expiration.touched) {
+            <span>Please enter an expiration</span>
+          }
+        </div>
+        <div class="col-md-3 mb-3">
+          <label for="cc-cvv">CVV</label>
+          <input type="text" class="form-control" id="cc-cvv" placeholder="000"  formControlName="cvv" required>
+          @if ( CVV && CVV.invalid && CVV.touched) {
+            <span>Please enter an CVV</span>
+          }
+        </div>
+      </div>
+
+      <hr class="mb-4">
+      @if (!username) {
+        <button class="btn btn-primary btn-lg btn-block" type="submit" (click)="submitInformation()">Save Info</button>
+      }
+      @if (username) {
+        <button class="btn btn-primary btn-lg btn-block"   type="submit"  (click)="editInformation()">Edit Info</button>
+      }
+      @if (updatePayMentInfo) {
+           <button class="btn btn-primary btn-lg btn-block"   type="submit"  (click)="updateUserPayment()">Save Changesw</button>
+      }
+
+    </div>
+
+
+  </div>
+
+
+     
+    <div class="col-md-8 order-md-1" [formGroup]="InformationForm" [ngStyle]="{'margin': '100px'}">
+       <hr class="mb-4">
+       
+      <h4 class="mb-3">Past Orders</h4>
+      <ul>
+        <tr>hi</tr>
+           <tr>hi</tr>   <tr>hi</tr>   <tr>hi</tr>   <tr>hi</tr>   <tr>hi</tr>   <tr>hi</tr>   <tr>hi</tr>   <tr>hi</tr>
+
+      </ul>
 
 
     </div>
 
 
 
-        </div>
-        
+
+
+
+</div>

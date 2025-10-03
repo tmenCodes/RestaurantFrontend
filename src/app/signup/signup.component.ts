@@ -13,10 +13,10 @@ import { CheckEmailExistsValidator } from '../check-email-exists.validator';
   PasswordConfirm?: string
 }
 @Component({
-    selector: 'app-signup',
-    templateUrl: './signup.component.html',
-    styleUrls: ['./signup.component.css'],
-    standalone: false
+  selector: 'app-signup',
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.css'],
+  standalone: false,
 })
 export class SignupComponent {
   constructor(
@@ -37,7 +37,7 @@ export class SignupComponent {
         CheckEmailExistsValidator.createValidator(this.Http)
       ),
       // Password: new FormControl('', Validators.required),
-      Password: new FormControl('', Validators.required),
+      Password: new FormControl(null, Validators.required),
       //   PasswordConfirm: new FormControl('', Validators.required),
     }
     // {

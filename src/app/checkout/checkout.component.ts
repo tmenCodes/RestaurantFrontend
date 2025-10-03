@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { CartService } from '../cart.service';
 import { Router } from '@angular/router';
 import { Inject } from '@angular/core';
+import { HttpService } from '../http.service';
 import {
   FormControl,
   FormGroup,
@@ -15,10 +16,10 @@ import {
 import { catchError, throwError, pipe, tap, delay, of } from 'rxjs';
 
 @Component({
-    selector: 'app-checkout',
-    templateUrl: './checkout.component.html',
-    styleUrls: ['./checkout.component.css'],
-    standalone: false
+  selector: 'app-checkout',
+  templateUrl: './checkout.component.html',
+  styleUrls: ['./checkout.component.css'],
+  standalone: false,
 })
 export class CheckoutComponent {
   subtotal: string = '';
@@ -26,8 +27,9 @@ export class CheckoutComponent {
   totalprice: string = '';
 
   InformationForm = new FormGroup({
-    Credit: new FormControl('true', Validators.required),
-    Debit: new FormControl('false'),
+    // Credit: new FormControl('true', Validators.required),
+    // Debit: new FormControl('false'),
+    CardType: new FormControl(''),
     NameonCard: new FormControl('John Doe', [
       Validators.required,
       Validators.pattern('^[a-zA-z\\s]*$'),
@@ -49,12 +51,7 @@ export class CheckoutComponent {
     UserName: new FormControl(localStorage.getItem('user')),
   });
 
-  get Credit() {
-    return this.InformationForm.get('Credit');
-  }
-  get Debit() {
-    return this.InformationForm.get('Debit');
-  }
+  //getter type is used for the forntend forms
   get NameonCard() {
     return this.InformationForm.get('NameonCard');
   }
@@ -67,7 +64,6 @@ export class CheckoutComponent {
   get CVV() {
     return this.InformationForm.get('CVV');
   }
-
   get UserName() {
     return this.InformationForm.get('UserName');
   }
@@ -76,6 +72,7 @@ export class CheckoutComponent {
 
   cartService = inject(CartService);
   Router = inject(Router);
+  HttpService = inject(HttpService);
 
   displayArray: any[] = [];
   finalpricestring: string = '0';
@@ -93,6 +90,8 @@ export class CheckoutComponent {
   GuidValue: any = '';
 
   submitInformation() {
+    console.log(this.InformationForm.value);
+
     this.paymentInformation = {
       credit: this.InformationForm.value.NameonCard,
       NameonCard: this.InformationForm.value.NameonCard,
@@ -192,5 +191,24 @@ export class CheckoutComponent {
     if (!this.Token) {
       this.oppositetogglebutton = false;
     }
+
+    this.HttpService.GetUserPaymentInformation()
+      .pipe(
+        tap((value) => {
+          console.log('this is the value');
+          console.log(value);
+
+          //   this.username = value.nameonCard;
+          this.InformationForm.patchValue({
+            NameonCard: value.nameonCard,
+            CreditCardNumber: value.creditCardNumber,
+            Expiration: value.expiration,
+            CVV: value.cvv,
+          }),
+            this.InformationForm.disable();
+        })
+        // takeUntilDestroyed()
+      )
+      .subscribe();
   }
 }

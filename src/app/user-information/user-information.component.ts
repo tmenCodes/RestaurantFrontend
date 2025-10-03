@@ -1,15 +1,25 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup,FormControl, Validators, FormArray } from '@angular/forms';
-import { map, Observable, pipe, tap } from 'rxjs';
+import {
+  map,
+  Observable,
+  pipe,
+  tap,
+  of,
+  Subject,
+  takeUntil,
+  interval,
+} from 'rxjs';
 import { HttpService } from '../http.service';
 import { Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
-    selector: 'app-user-information',
-    templateUrl: './user-information.component.html',
-    styleUrls: ['./user-information.component.css'],
-    standalone: false
+  selector: 'app-user-information',
+  templateUrl: './user-information.component.html',
+  styleUrls: ['./user-information.component.css'],
+  standalone: false,
 })
 export class UserInformationComponent {
   constructor(
@@ -19,31 +29,31 @@ export class UserInformationComponent {
   ) {}
 
   username: string = '';
+  subject: Subject<void> = new Subject();
 
   InformationForm = new FormGroup({
-    Credit: new FormControl('true', Validators.required),
-    Debit: new FormControl('false'),
-    NameonCard: new FormControl(null, [
+    cardType: new FormControl(''),
+    nameonCard: new FormControl(null, [
       Validators.required,
       Validators.pattern('^[a-zA-z\\s]*$'),
     ]),
-    CreditCardNumber: new FormControl(
+    creditCardNumber: new FormControl(
       null,
       Validators.pattern('^[0-9]{3}(-)[0-9]{3}(-)[0-9]{4}')
     ),
-    Expiration: new FormControl(
+    expiration: new FormControl(
       null,
       Validators.pattern('^[0-9]{2}(/)[0-9]{2}')
     ),
-    CVV: new FormControl(null, [
+    cvv: new FormControl(null, [
       Validators.pattern('^[0-9]{3}'),
       Validators.minLength(3),
     ]),
     // CartItems: new FormControl(localStorage.getItem('myItemList')),
     //set form array to null?
-    CartItems: new FormArray([]),
+    //  CartItems: new FormArray([]),
     //get the email or username from local storage becuase now you should be logged in
-    Email: new FormControl(localStorage.getItem('user')),
+    // Email: new FormControl(localStorage.getItem('user')),
   });
 
   get Credit() {
@@ -77,31 +87,54 @@ export class UserInformationComponent {
 
   togglebutton: boolean = false;
   oppositetogglebutton: boolean = !this.togglebutton;
-
+  updatePayMentInfo: boolean = false;
   editInformation() {
-    console.log('edit some information here bro ');
     this.InformationForm.enable();
-    // console.log(this.InformationForm.value)
-    //  this.HttpService.EditUserInformation(this.Username, this.InformationForm);
+    this.updatePayMentInfo = true;
+  }
+
+  updateUserPayment() {
+    console.log(this.InformationForm.value);
+    this.HttpService.UpdateUserPaymentInformation(
+      this.InformationForm.value
+    ).subscribe({
+      next: (value) => console.log(value),
+      error: (error) => console.log(error),
+    });
   }
 
   ngOnInit() {
-    //user may not have information at first
+    //preload user informatoin
     this.HttpService.GetUserPaymentInformation()
       .pipe(
         tap((value) => {
+          
           console.log(value);
 
           this.username = value.nameonCard;
           this.InformationForm.patchValue({
-            NameonCard: value.nameonCard,
-            CreditCardNumber: value.creditCardNumber,
-            Expiration: value.expiration,
-            CVV: value.cvv,
+            nameonCard: value.nameonCard,
+            creditCardNumber: value.creditCardNumber,
+            expiration: value.expiration,
+            cvv: value.cvv,
           }),
             this.InformationForm.disable();
-        })
+        }),
+        takeUntil(this.subject)
+        //  pipe(tap((_) => console.log('whathathhtthhh')))
+        // takeUntilDestroyed()
       )
-      .subscribe();
+      .subscribe({
+        next: (value) => console.log(value),
+        error: (error) => console.log(error),
+        complete: () => console.log('complttttttttted'),
+      });
+  }
+
+  ngOnDestroy() {
+    /** a trick to continue until the component no longer recieves any values!??? */
+    this.subject.next(console.error('borrororo'));
+    this.subject.unsubscribe();
+    console.log('the obsevable has now be destroyed by using taikeuntil');
   }
 }

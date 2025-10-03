@@ -186,7 +186,23 @@ export class HttpService {
       headers: headers,
       withCredentials: true,
     });
-  }
+}
+
+ public UpdateUserPaymentInformation(body: any) {
+  let urlconcat =
+    this.url + '' + 'api/UserInformation/UpdateUserPaymentInformation';
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+      // Or 'text/plain' if sending plain text
+  });
+
+  return this.Http.put(urlconcat, body, {
+    headers: headers,
+    withCredentials: true,
+  });
+
+ }
+
 }
 
 
