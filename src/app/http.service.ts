@@ -41,7 +41,7 @@ export class HttpService {
     );
   }
 
-  MakeUser(body: any, email: string) {
+  CreateNewUser(body: any, email: string) {
     let url = this.url + '' + 'api/RegisterUser/CreateUser';
 
     return this.Http.post<JSON>(url, body)
@@ -81,9 +81,15 @@ export class HttpService {
   CheckEmailExist(email: string) {
     let urlconcat =
       this.url + '' + 'api/RegisterUser/CheckDuplicateEmail?email=' + email;
-    console.log(urlconcat);
+
     //return obsevable boolean
     return this.Http.get<boolean>(urlconcat);
+  }
+
+  CheckIfUserExists(username: string) {
+    let urlconcant =
+      this.url + '' + 'api/RegisterUser/FindByUser?username=' + username;
+    return this.Http.get<boolean>(urlconcant);
   }
 
   AddUserInformation(body: any) {
@@ -154,13 +160,13 @@ export class HttpService {
     );
   }
 
-  // public GetUserInformation(): Observable<any> {
-  //   let urlconcat = this.url + '' + 'api/RegisterUser/GetTheCurrentUsers';
+  public GetCurrentUser(): Observable<any> {
+    let urlconcat = this.url + '' + 'api/RegisterUser/GetTheCurrentUser';
 
-  //   return this.Http.get<any>(urlconcat, {
-  //     withCredentials: true,
-  //   });
-  // }
+    return this.Http.get<any>(urlconcat, {
+      withCredentials: true,
+    });
+  }
 
   public SignOut() {
     let urlconcat = this.url + '' + 'api/RegisterUser/SignOut';
@@ -186,23 +192,33 @@ export class HttpService {
       headers: headers,
       withCredentials: true,
     });
-}
+  }
 
- public UpdateUserPaymentInformation(body: any) {
-  let urlconcat =
-    this.url + '' + 'api/UserInformation/UpdateUserPaymentInformation';
-  const headers = new HttpHeaders({
-    'Content-Type': 'application/json',
+  public UpdateUserPaymentInformation(body: any) {
+    let urlconcat =
+      this.url + '' + 'api/UserInformation/UpdateUserPaymentInformation';
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
       // Or 'text/plain' if sending plain text
-  });
+    });
 
-  return this.Http.put(urlconcat, body, {
-    headers: headers,
-    withCredentials: true,
-  });
+    return this.Http.put(urlconcat, body, {
+      headers: headers,
+      withCredentials: true,
+    });
+  }
 
- }
+  public GetPastOrders() {
+    let urlconcat = this.url + '' + 'api/UserInformation/UserHistoryPayments';
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
 
+    return this.Http.get(urlconcat, {
+      headers: headers,
+      withCredentials: true,
+    });
+  }
 }
 
 

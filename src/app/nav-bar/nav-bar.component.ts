@@ -38,7 +38,7 @@ export class NavBarComponent {
 
         this.LoginInCheck.subscribe();
         let loggedIn = localStorage.getItem('login');
-        console.log('the current status of the loggin ' + loggedIn);
+        //  console.log('the current status of the loggin ' + loggedIn);
 
         if (loggedIn === 'true') {
           this.showLogOut = true;

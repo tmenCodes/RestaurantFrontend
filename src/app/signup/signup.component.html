@@ -6,8 +6,12 @@
 
     <input type="fullname" id="fullName" class="form-control" placeholder="Full Name" formControlName="FullName" [ngStyle]="{'margin': '10px'}">
     <input type="username" id="username" class="form-control" placeholder="User Name" formControlName="UserName" [ngStyle]="{'margin': '10px'}">
+       @if (SignUpForm.get('UserName')?.hasError('UserNameDuplicate')) {
+      <div class>Email has already been taken!</div>
+    }
+    
     <input type="email" id="email" class="form-control" placeholder="Email" formControlName="Email" [ngStyle]="{'margin': '10px'}">
-    <!-- <span *ngIf="Email && Email?.invalid && Email?.touched">Email</span> -->
+  
     @if (SignUpForm.get('Email')?.hasError('EmailDuplicate')) {
       <div class>Email has already been taken!</div>
     }

@@ -2,7 +2,6 @@
 
 <div class="container" >
   <div class="row">
-   <button [routerLink]="['/']">click on me</button>
 
     <div class="col-md-8 order-md-1" [formGroup]="InformationForm" [ngStyle]="{'margin': '100px'}">
       <h2>Welcome, {{username}}</h2>
@@ -59,29 +58,21 @@
         <button class="btn btn-primary btn-lg btn-block"   type="submit"  (click)="editInformation()">Edit Info</button>
       }
       @if (updatePayMentInfo) {
-           <button class="btn btn-primary btn-lg btn-block"   type="submit"  (click)="updateUserPayment()">Save Changesw</button>
+           <button class="btn btn-primary btn-lg btn-block"   type="submit" [ngStyle]="{'margin': '10px'}" (click)="updateUserPayment()">Save Changes</button>
       }
-
     </div>
-
-
   </div>
 
-
-     
-    <div class="col-md-8 order-md-1" [formGroup]="InformationForm" [ngStyle]="{'margin': '100px'}">
+  <div class="row">
+    <div class="col-md-8 order-md-1" [formGroup]="InformationForm" >
        <hr class="mb-4">
-       
-      <h4 class="mb-3">Past Orders</h4>
-      <ul>
-        <tr>hi</tr>
-           <tr>hi</tr>   <tr>hi</tr>   <tr>hi</tr>   <tr>hi</tr>   <tr>hi</tr>   <tr>hi</tr>   <tr>hi</tr>   <tr>hi</tr>
-
+      <h4 class="mb-3">Recent Orders</h4>
+      <ul *ngFor="let history of PastHistory | async">
+        <tr>Total Price: {{history.totalPrice | number : '1.2-2'}}</tr>
+        <tr>Date: {{history.date}}</tr>      
       </ul>
-
-
     </div>
-
+</div>
 
 
 

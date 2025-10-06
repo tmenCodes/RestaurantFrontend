@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup,FormControl, Validators, FormArray } from '@angular/forms';
+import { AsyncPipe } from '@angular/common';
 import {
   map,
   Observable,
@@ -30,6 +31,8 @@ export class UserInformationComponent {
 
   username: string = '';
   subject: Subject<void> = new Subject();
+  PastHistory: Observable<any> = this.HttpService.GetPastOrders();
+  RandomNumbers = of(1, 2, 3, 4, 6);
 
   InformationForm = new FormGroup({
     cardType: new FormControl(''),
@@ -104,13 +107,14 @@ export class UserInformationComponent {
   }
 
   ngOnInit() {
+    // this.HttpService.GetPastOrders()
+    //   .pipe(tap((value) => console.log(value)))
+    //   .subscribe();
+
     //preload user informatoin
     this.HttpService.GetUserPaymentInformation()
       .pipe(
         tap((value) => {
-          
-          console.log(value);
-
           this.username = value.nameonCard;
           this.InformationForm.patchValue({
             nameonCard: value.nameonCard,
@@ -125,9 +129,9 @@ export class UserInformationComponent {
         // takeUntilDestroyed()
       )
       .subscribe({
-        next: (value) => console.log(value),
+        //   next: (value) => console.log(value),
         error: (error) => console.log(error),
-        complete: () => console.log('complttttttttted'),
+        //     complete: () => console.log('complttttttttted'),
       });
   }
 
@@ -135,6 +139,5 @@ export class UserInformationComponent {
     /** a trick to continue until the component no longer recieves any values!??? */
     this.subject.next(console.error('borrororo'));
     this.subject.unsubscribe();
-    console.log('the obsevable has now be destroyed by using taikeuntil');
   }
 }

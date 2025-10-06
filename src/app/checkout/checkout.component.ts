@@ -86,23 +86,22 @@ export class CheckoutComponent {
 
   cartSize: number = 0;
   paymentInformation: any = {};
-
+  username: string = '';
   GuidValue: any = '';
 
   submitInformation() {
-    console.log(this.InformationForm.value);
-
     this.paymentInformation = {
       credit: this.InformationForm.value.NameonCard,
       NameonCard: this.InformationForm.value.NameonCard,
       CreditCardNumber: this.InformationForm.value.CreditCardNumber,
       Expiration: this.InformationForm.value.Expiration,
       CVV: this.InformationForm.value.CVV,
-      //for now use the Nameoncard as the username
-      UserName: this.InformationForm.value.NameonCard,
-
+      //username comes from ngonint better to put into mergemap????
+      UserName: this.username,
       CartsIdentity: this.GuidValue,
     };
+
+    console.log(this.paymentInformation);
 
     this.cartService.makePayment(this.paymentInformation).subscribe({
       next(value) {
@@ -171,6 +170,14 @@ export class CheckoutComponent {
 
   ngOnInit(): void {
     this.GuidValue = localStorage.getItem('myGuid');
+
+    this.HttpService.GetCurrentUser()
+      .pipe(
+        tap((value) => {
+          this.username = value.userName;
+        })
+      )
+      .subscribe();
 
     this.cartService.getTotalPrice().subscribe((value) => {
       console.log(value);
