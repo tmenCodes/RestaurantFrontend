@@ -3,7 +3,7 @@ import { CartService } from '../cart.service';
 import { HttpClient } from '@angular/common/http';
 import { HttpService } from '../http.service';
 import { Router, NavigationEnd } from '@angular/router';
-import { map, tap, filter, Subscription } from 'rxjs';
+import { map, tap, pipe, filter, Subscription, mergeMap } from 'rxjs';
 
 import { Observable, debounceTime } from 'rxjs';
 
@@ -14,7 +14,7 @@ import { Observable, debounceTime } from 'rxjs';
     standalone: false
 })
 export class NavBarComponent {
-  cartSize: number = 0;
+  cartSize: number = 20;
   showLogin: boolean = true;
   showUserInfo: boolean = false;
   showLogOut: boolean = false;
@@ -62,19 +62,31 @@ export class NavBarComponent {
   }
 
   ngOnInit() {
-    this.cartService.getCartSize().subscribe({
-      next: (value) => {
-        this.cartService.CartCount.next(value.length);
-      },
-    });
+    this.cartService.getCartSizeLength().pipe(tap(value => {
 
-    this.cartService.CartCount.subscribe({
-      next: (value) => {
-        this.cartSize = value;
-      },
-      error: (error) => {
-        console.log(error);
-      },
-    });
+        this.cartService.CartCount.next(value)
+        return this.cartService.CartCount.subscribe({
+          next: (value) => {
+       
+            this.cartSize = value; 
+          },
+          error: (error) => {
+            console.log(error);
+          },
+        });
+    })).subscribe({
+   //   next: (value)=>console.log(value), 
+   //   error: (error)=>console.log(error)
+
+    }); 
+ 
+
+
+
   }
+
+
+
+
+
 }

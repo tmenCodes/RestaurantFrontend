@@ -66,7 +66,7 @@ export class UserInformationComponent {
     return this.InformationForm.get('Debit');
   }
   get NameonCard() {
-    return this.InformationForm.get('NameonCard');
+    return this.InformationForm.get('nameonCard');
   }
   get CreditCardNumber() {
     return this.InformationForm.get('CreditCardNumber');
@@ -130,14 +130,14 @@ export class UserInformationComponent {
       )
       .subscribe({
         //   next: (value) => console.log(value),
-        error: (error) => console.log(error),
+        //  error: (error) => console.log(error),
         //     complete: () => console.log('complttttttttted'),
       });
   }
 
   ngOnDestroy() {
     /** a trick to continue until the component no longer recieves any values!??? */
-    this.subject.next(console.error('borrororo'));
+    this.subject.next();
     this.subject.unsubscribe();
   }
 }

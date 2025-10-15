@@ -20,7 +20,7 @@
       <div class="row">
         <div class="col-md-6 mb-3">
           <label for="cc-name">Name on card</label>
-          <input type="text" class="form-control" id="cc-name" placeholder="name"formControlName="nameonCard" required>
+          <input type="text" class="form-control" id="cc-name" placeholder="name" formControlName="nameonCard" required>
           @if (NameonCard && NameonCard.invalid && NameonCard.touched) {
             <span>Please enter a (correct) Name</span>
           }
@@ -66,7 +66,7 @@
   <div class="row">
     <div class="col-md-8 order-md-1" [formGroup]="InformationForm" >
        <hr class="mb-4">
-      <h4 class="mb-3">Recent Orders</h4>
+      <h4 class="mb-3">Last 5 Orders</h4>
       <ul *ngFor="let history of PastHistory | async">
         <tr>Total Price: {{history.totalPrice | number : '1.2-2'}}</tr>
         <tr>Date: {{history.date}}</tr>      

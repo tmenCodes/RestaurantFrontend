@@ -13,7 +13,7 @@ import {
   Form,
 } from '@angular/forms';
 
-import { catchError, throwError, pipe, tap, delay, of } from 'rxjs';
+import { catchError, pipe, tap, delay, of, mergeMap } from 'rxjs';
 
 @Component({
   selector: 'app-checkout',
@@ -89,30 +89,56 @@ export class CheckoutComponent {
   username: string = '';
   GuidValue: any = '';
 
+  /* prettier-ignore */
   submitInformation() {
-    this.paymentInformation = {
-      credit: this.InformationForm.value.NameonCard,
-      NameonCard: this.InformationForm.value.NameonCard,
-      CreditCardNumber: this.InformationForm.value.CreditCardNumber,
-      Expiration: this.InformationForm.value.Expiration,
-      CVV: this.InformationForm.value.CVV,
-      //username comes from ngonint better to put into mergemap????
-      UserName: this.username,
-      CartsIdentity: this.GuidValue,
-    };
+    this.HttpService.GetCurrentUser()
+      .pipe(
+        mergeMap((value) => {
+          //never goes in here
+          this.paymentInformation = {
+            credit: this.InformationForm.value.NameonCard,
+            NameonCard: this.InformationForm.value.NameonCard,
+            CreditCardNumber: this.InformationForm.value.CreditCardNumber,
+            Expiration: this.InformationForm.value.Expiration,
+            CVV: this.InformationForm.value.CVV,
+            UserName: value.userName,
+            CartsIdentity: this.GuidValue,
+          };
+          console.log('IT SHOULD NOT BE GOING HERE!');
+          console.log(value.userName);
 
-    console.log(this.paymentInformation);
+          return this.cartService.makePayment(this.paymentInformation).pipe(
+            tap((value) => {
+              localStorage.removeItem('myGuid');
+              this.Router.navigate(['/complete']);
+            })
+          );
+        }),
+          //catches error from the first observable
+          catchError((_) => {
+            //never goes in here
+            this.paymentInformation = {
+              credit: this.InformationForm.value.NameonCard,
+              NameonCard: this.InformationForm.value.NameonCard,
+              CreditCardNumber: this.InformationForm.value.CreditCardNumber,
+              Expiration: this.InformationForm.value.Expiration,
+              CVV: this.InformationForm.value.CVV,
+              UserName: 'undefined',
+              CartsIdentity: this.GuidValue,
+            };
 
-    this.cartService.makePayment(this.paymentInformation).subscribe({
-      next(value) {
-        localStorage.removeItem('myGuid');
-      },
-      error(err) {
-        console.log(err);
-      },
-    });
-
-    this.Router.navigate(['/complete']);
+            return this.cartService.makePayment(this.paymentInformation).pipe(
+              tap((_) => {
+                localStorage.removeItem('myGuid');
+                this.Router.navigate(['/complete']);
+              })
+            );
+          })
+      )
+      .subscribe({
+        next: (value) => console.log(value),
+        error: (error) => console.log(error),
+      });
   }
 
   removeIndex(i: number) {
@@ -171,16 +197,7 @@ export class CheckoutComponent {
   ngOnInit(): void {
     this.GuidValue = localStorage.getItem('myGuid');
 
-    this.HttpService.GetCurrentUser()
-      .pipe(
-        tap((value) => {
-          this.username = value.userName;
-        })
-      )
-      .subscribe();
-
     this.cartService.getTotalPrice().subscribe((value) => {
-      console.log(value);
       this.subtotal = value.subTotal;
       this.taxamount = value.taxAmount;
       this.totalprice = value.totalPrice;
@@ -199,12 +216,10 @@ export class CheckoutComponent {
       this.oppositetogglebutton = false;
     }
 
+    //load user  payment info
     this.HttpService.GetUserPaymentInformation()
       .pipe(
         tap((value) => {
-          console.log('this is the value');
-          console.log(value);
-
           //   this.username = value.nameonCard;
           this.InformationForm.patchValue({
             NameonCard: value.nameonCard,

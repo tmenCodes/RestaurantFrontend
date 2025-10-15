@@ -23,20 +23,18 @@ export class AppComponent {
     private router: Router
   ) {}
 
-  LogOut() {
-    localStorage.removeItem('id_token');
 
-    location.reload();
-  }
 
   ngOnInit(): void {
-    this.cartService.getCartSize().subscribe({
-      next: (value) => {
-        this.cartSize = value.length;
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error.message);
-      },
-    });
+
+    // this.cartService.getCartSizeLength().subscribe({
+    //   next: (value) => {
+    //     console.log(value)
+    //     this.cartSize = value.length;
+    //   },
+    //   error: (error: HttpErrorResponse) => {
+    //     console.log(error.message);
+    //   },
+    // });
   }
 }

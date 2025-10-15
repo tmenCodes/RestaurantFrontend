@@ -4,15 +4,14 @@ import { HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { catchError, retry, throwError, Observable } from 'rxjs';
 import { BehaviorSubject, of, tap } from 'rxjs';
-
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class HttpService {
   constructor(private Http: HttpClient, private router: Router) {}
 
-  url: string = 'http://localhost:5182/';
-
+  url: any = environment.url;
   //url: string = 'http://34.224.64.48';
   //url: string = 'https://resturant.tonymdesigns.com/backend/'
 
@@ -95,9 +94,17 @@ export class HttpService {
   AddUserInformation(body: any) {
     let urlconcat =
       this.url + '' + 'api/UserInformation/AddUserPaymentInformation';
+    console.log('from inside the obsevable');
 
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json', // Or 'text/plain' if sending plain text
+    });
     console.log(body.value);
-    this.Http.post<any>(urlconcat, body.value).subscribe({
+
+    this.Http.post<any>(urlconcat, body.value, {
+      headers: headers,
+      withCredentials: true,
+    }).subscribe({
       next: (data) => this.router.navigate(['saved']),
       error: (error) => console.log(error),
     });
@@ -173,7 +180,6 @@ export class HttpService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json', // Or 'text/plain' if sending plain text
     });
-
     return this.Http.post(urlconcat, null, {
       headers: headers,
       responseType: 'text',

@@ -8,7 +8,7 @@ import {
   tap,
   throwError,
 } from 'rxjs';
-
+import { environment } from 'src/environments/environment';
 interface MenuItems {
   item: string;
   GuidId: string;
@@ -34,15 +34,18 @@ export class CartService {
 
   constructor(private Http: HttpClient) {}
 
+  url: string = environment.carturl;
+
   getCart(): MenuItems[] {
     return this.Cart;
   }
 
   putItemsIntoCart(items: string): Observable<any> {
-    //initially thea value is null
-    //check local storage each time
+    let urlconcat = this.url + '' + 'Misc/CreateGuideForFrontend';
+
+    //create guid initially, then add to cart
     if (localStorage.getItem('myGuid') == null) {
-      return this.Http.get('http://localhost:5182/CreateGuideForFrontend').pipe(
+      return this.Http.get(urlconcat).pipe(
         tap((value) => {
           this.Guid = value.toString();
           localStorage.setItem('myGuid', this.Guid);
@@ -51,7 +54,7 @@ export class CartService {
             name: items,
           };
           this.Http.post<any>(
-            'http://localhost:5182/api/Order/ShoppingCartItems',
+            this.url + '' + 'Order/ShoppingCartItems',
             object
           ).subscribe({
             next: (data) => {
@@ -61,8 +64,8 @@ export class CartService {
           });
 
           var guid = localStorage.getItem('myGuid');
-          var url =
-            'http://localhost:5182/api/Order/GetMenuItemByGuid?guidId=' + guid;
+
+          var url = this.url + '' + 'Order/GetMenuItemByGuid?guidId=' + guid;
 
           this.Http.get(url).subscribe((data) => {});
         })
@@ -76,7 +79,7 @@ export class CartService {
       };
 
       return this.Http.post<any>(
-        'http://localhost:5182/api/Order/ShoppingCartItems',
+        this.url + '' + 'Order/ShoppingCartItems',
         object1
       );
       // .subscribe({
@@ -92,9 +95,8 @@ export class CartService {
   getAllCartItems(): Observable<any> {
     var guid = localStorage.getItem('myGuid');
 
-    var url =
-      'http://localhost:5182/api/Order/GetMenuItemByGuid?guidId=' + guid;
-    return this.Http.get(url); 
+    var url = this.url + '' + 'Order/GetMenuItemByGuid?guidId=' + guid;
+    return this.Http.get(url);
   }
 
   getCartItems(): any {
@@ -111,7 +113,7 @@ export class CartService {
 
   getTotalPrice(): Observable<any> {
     let guid = localStorage.getItem('myGuid');
-    let url = 'http://localhost:5182/api/Order/GetTotalPrice?guid=' + guid;
+    let url = this.url + '' + 'Order/GetTotalPrice?guid=' + guid;
     return this.Http.get<Observable<any>>(url);
   }
 
@@ -119,23 +121,20 @@ export class CartService {
     let guid = localStorage.getItem('myGuid');
     //  var url = 'http://localhost:5182/api/Order/Deletemenuitem?id=' + numero;
     var url =
-      'http://localhost:5182/api/Order/DeleteMenuItem?id=' +
-      numero +
-      '&guidId=' +
-      guid;
+      this.url + '' + 'Order/DeleteMenuItem?id=' + numero + '&guidId=' + guid;
 
     return this.Http.delete(url);
   }
 
   makePayment(PaymentInformation: any): Observable<any> {
-    var url = 'http://localhost:5182/api/Payment/PaymentInformation';
+    var url = this.url + '' + 'Payment/PaymentInformation';
     return this.Http.post<any>(url, PaymentInformation);
   }
 
-  getCartSize(): Observable<any> {
+  
+  CartSize(): Observable<any> {
     var guid = localStorage.getItem('myGuid');
-    var url =
-      'http://localhost:5182/api/Order/GetMenuItemByGuid?guidId=' + guid;
+    var url = this.url + '' + 'Order/GetMenuItemByGuid?guidId=' + guid;
 
     return this.Http.get<Observable<any>>(url);
     // .pipe(
@@ -148,8 +147,7 @@ export class CartService {
 
   getCartSizeLength(): Observable<any> {
     var guid = localStorage.getItem('myGuid');
-    var url =
-      'http://localhost:5182/api/Order/GetMenuItemByGuidSize?guidId=' + guid;
+    var url = this.url + '' + 'Order/GetMenuItemByGuidSize?guidId=' + guid;
 
     return this.Http.get(url);
   }
