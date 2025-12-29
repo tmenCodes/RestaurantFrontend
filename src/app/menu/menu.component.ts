@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CartService } from '../cart.service';
+import { RouterModule } from '@angular/router';
 import {
   switchMap,
   map,
@@ -15,10 +16,10 @@ import { HttpService } from '../http.service';
 import { Subscription, Observable } from 'rxjs';
 
 @Component({
-    selector: 'app-menu',
-    templateUrl: './menu.component.html',
-    styleUrls: ['./menu.component.css'],
-    standalone: false
+  selector: 'app-menu',
+  templateUrl: './menu.component.html',
+  styleUrls: ['./menu.component.css'],
+  standalone: false,
 })
 export class MenuComponent {
   public GettotalPrice: Observable<any> = this.cartService.getTotalPrice();
@@ -49,6 +50,7 @@ export class MenuComponent {
           return this.cartService.getCartSizeLength();
         }),
         mergeMap((value) => {
+          console.log(value);
           this.cartService.CartCount.next(value);
           //update the async pipe
           this.GettotalPrice = this.cartService.getTotalPrice();

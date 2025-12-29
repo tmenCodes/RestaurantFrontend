@@ -27,14 +27,6 @@ export class AppComponent {
 
   ngOnInit(): void {
 
-    // this.cartService.getCartSizeLength().subscribe({
-    //   next: (value) => {
-    //     console.log(value)
-    //     this.cartSize = value.length;
-    //   },
-    //   error: (error: HttpErrorResponse) => {
-    //     console.log(error.message);
-    //   },
-    // });
+
   }
 }

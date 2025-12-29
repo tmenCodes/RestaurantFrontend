@@ -14,7 +14,7 @@ import { Observable, debounceTime } from 'rxjs';
     standalone: false
 })
 export class NavBarComponent {
-  cartSize: number = 20;
+  cartSize: number = 0; 
   showLogin: boolean = true;
   showUserInfo: boolean = false;
   showLogOut: boolean = false;
@@ -32,6 +32,7 @@ export class NavBarComponent {
     private Httpservice: HttpService,
     private Router: Router
   ) {
+    
     this.Router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         // Update navbar elements based on the new route or state

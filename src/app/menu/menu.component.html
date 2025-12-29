@@ -7,7 +7,7 @@
     <div class="sidebar" [class.open]="sidebarOpen">
       @if (GettotalPrice | async; as total) {
         <div class="container">
-          <a href="menu" class="closebtn" onclick="closeSideBar()">&times;</a>
+          <a [routerLink]="'/menu'" class="closebtn" (click)="closeSideBar()">&times;</a>
           <div class="title">Your pickup order</div>
           <ul class="list-group mb-3"  >
             @for (cartItems of DisplayCartItems | async; track cartItems; let i = $index) {
@@ -15,7 +15,7 @@
                 <div>
                   <h6 class="my-1">{{i+1}}.) {{cartItems.name}} ${{cartItems.price | number: '1.2-2'}}</h6>
                 </div>
-                <span class="text-muted"><button class="btn btn-outline-dark btn-sm" [ngStyle]="{'maring': '10px'}" (click)="removeIndex(cartItems.id)">Remove</button></span>
+                <span class="text-muted"><button class="btn btn-outline-dark btn-sm" [ngStyle]="{'margin': '10px'}" (click)="removeIndex(cartItems.id)">Remove</button></span>
               </li>
             }
             <li class="list-group-item d-flex justify-content-between" >
@@ -31,7 +31,7 @@
               <strong>${{total.totalPrice}}</strong>
             </li>
             <li class="list-group-item d-flex justify-content-between">
-              <span><a href="/cart">Go To Checkout</a></span>
+              <span><a [routerLink]="'/cart'">Go To Checkout</a></span>
             </li>
           </ul>
         </div>

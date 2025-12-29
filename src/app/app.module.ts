@@ -15,6 +15,7 @@ import { SignupComponent } from './signup/signup.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
 
 import { UserInformationComponent } from './user-information/user-information.component';
 
@@ -58,6 +59,7 @@ import { GlobalErrorHandlerService } from './global-error-handler.service';
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
+    RouterModule.forRoot([]),
     HttpClientModule,
   ],
   providers: [
