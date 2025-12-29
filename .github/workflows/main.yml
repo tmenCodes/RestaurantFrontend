@@ -22,4 +22,4 @@ jobs:
         REMOTE_USER: ${{ secrets.DEPLOY_USER }}
         REMOTE_PORT: ${{ secrets.DEPLOY_PORT }}
         SOURCE: "build/"
-        TARGET: ${{ secrets.DEPLOY_TARGET }}
+        TARGET: /var/www/resturant
