@@ -65,12 +65,12 @@ export class MenuComponent {
     this.sidebarOpen = true;
 
     this.cartService
-      .putItemsIntoCart(item)
+      ?.putItemsIntoCart(item)
       .pipe(
-        mergeMap(() => {
+        switchMap((_) => {
           return this.cartService.getCartSizeLength();
         }),
-        mergeMap((value) => {
+        switchMap((value) => {
           //update for the navbar
           this.cartService.CartCount.next(value);
           // update async pipe
@@ -84,6 +84,4 @@ export class MenuComponent {
       )
       .subscribe();
   }
-
-  ngOnInit() {}
 }

@@ -5,6 +5,7 @@ import {
   catchError,
   Observable,
   of,
+  switchMap,
   tap,
   throwError,
 } from 'rxjs';
@@ -45,50 +46,57 @@ export class CartService {
 
     //create guid initially, then add to cart
     if (localStorage.getItem('myGuid') == null) {
+      // return this.Http.get(urlconcat).pipe(
+      //   tap((value) => {
+      //     this.Guid = value.toString();
+      //     localStorage.setItem('myGuid', this.Guid);
+      //     var object = {
+      //       guidId: this.Guid,
+      //       name: items,
+      //     };
+      //     this.Http.post<any>(
+      //       this.url + '' + 'Order/ShoppingCartItems',
+      //       object
+      //     ).subscribe({
+      //       next: (data) => {
+      //         data;
+      //       },
+      //       error: (error) => console.log(error),
+      //     });
+
+      //     var guid = localStorage.getItem('myGuid');
+
+      //     var url = this.url + '' + 'Order/GetMenuItemByGuid?guidId=' + guid;
+
+      //     this.Http.get(url).subscribe((data) => {});
+      //   })
+
       return this.Http.get(urlconcat).pipe(
-        tap((value) => {
+        switchMap((value) => {
           this.Guid = value.toString();
           localStorage.setItem('myGuid', this.Guid);
           var object = {
             guidId: this.Guid,
             name: items,
           };
-          this.Http.post<any>(
+          return this.Http.post<any>(
             this.url + '' + 'Order/ShoppingCartItems',
             object
-          ).subscribe({
-            next: (data) => {
-              data;
-            },
-            error: (error) => console.log(error),
-          });
-
-          var guid = localStorage.getItem('myGuid');
-
-          var url = this.url + '' + 'Order/GetMenuItemByGuid?guidId=' + guid;
-
-          this.Http.get(url).subscribe((data) => {});
+          );
         })
       );
     } else {
-      var x = localStorage.getItem('myGuid');
-
-      var object1 = {
-        guidId: x,
+      //if guid already exists, just add to cart
+      var guid = localStorage.getItem('myGuid');
+      var object = {
+        guidId: guid,
         name: items,
       };
-
+      console.log(object);
       return this.Http.post<any>(
         this.url + '' + 'Order/ShoppingCartItems',
-        object1
+        object
       );
-      // .subscribe({
-      //   next: (data) => {
-      //     // console.log('the post is working');
-      //     this.TempItems = { Item: data.name, Price: data.price };
-      //   },
-      //   error: (error) => console.log(error),
-      // });
     }
   }
 
@@ -131,7 +139,6 @@ export class CartService {
     return this.Http.post<any>(url, PaymentInformation);
   }
 
-  
   CartSize(): Observable<any> {
     var guid = localStorage.getItem('myGuid');
     var url = this.url + '' + 'Order/GetMenuItemByGuid?guidId=' + guid;

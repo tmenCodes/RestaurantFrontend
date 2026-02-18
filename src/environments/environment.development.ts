@@ -4,5 +4,5 @@ export const environment = {
   // url: 'https://54.235.37.4/backend/',
   // carturl: 'https://54.235.37.4/backend/api/',
   url: 'https://yummy.tonymdesigns.com//backend/',
-  carturl: 'https://yummy.tonymdesigns.com/backend/api/',
+  carturl: 'https://yummy.tonymdesigns.com//backend/api/',
 };
