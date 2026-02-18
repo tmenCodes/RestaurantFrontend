@@ -46,10 +46,10 @@ export class MenuComponent {
     this.cartService
       .RemoveMenuItem(index)
       .pipe(
-        mergeMap((_) => {
+        switchMap((_) => {
           return this.cartService.getCartSizeLength();
         }),
-        mergeMap((value) => {
+        switchMap((value) => {
           console.log(value);
           this.cartService.CartCount.next(value);
           //update the async pipe
@@ -65,21 +65,15 @@ export class MenuComponent {
     this.sidebarOpen = true;
 
     this.cartService
-      ?.putItemsIntoCart(item)
+      .putItemsIntoCart(item)
       .pipe(
-        switchMap((_) => {
-          return this.cartService.getCartSizeLength();
-        }),
-        switchMap((value) => {
-          //update for the navbar
-          this.cartService.CartCount.next(value);
-          // update async pipe
+        switchMap(() => this.cartService.getCartSizeLength()),
+        tap((value) => {
+          // update async pipes
           this.GettotalPrice = this.cartService.getTotalPrice();
-
-          //update async pipe
           this.DisplayCartItems = this.cartService.getAllCartItems();
-
-          return value;
+          // update navbar
+          this.cartService.CartCount.next(value);
         })
       )
       .subscribe();

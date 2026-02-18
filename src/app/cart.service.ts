@@ -46,31 +46,6 @@ export class CartService {
 
     //create guid initially, then add to cart
     if (localStorage.getItem('myGuid') == null) {
-      // return this.Http.get(urlconcat).pipe(
-      //   tap((value) => {
-      //     this.Guid = value.toString();
-      //     localStorage.setItem('myGuid', this.Guid);
-      //     var object = {
-      //       guidId: this.Guid,
-      //       name: items,
-      //     };
-      //     this.Http.post<any>(
-      //       this.url + '' + 'Order/ShoppingCartItems',
-      //       object
-      //     ).subscribe({
-      //       next: (data) => {
-      //         data;
-      //       },
-      //       error: (error) => console.log(error),
-      //     });
-
-      //     var guid = localStorage.getItem('myGuid');
-
-      //     var url = this.url + '' + 'Order/GetMenuItemByGuid?guidId=' + guid;
-
-      //     this.Http.get(url).subscribe((data) => {});
-      //   })
-
       return this.Http.get(urlconcat).pipe(
         switchMap((value) => {
           this.Guid = value.toString();
@@ -86,7 +61,7 @@ export class CartService {
         })
       );
     } else {
-      //if guid already exists, just add to cart
+      //if guid already exists, just add to the current cart
       var guid = localStorage.getItem('myGuid');
       var object = {
         guidId: guid,
