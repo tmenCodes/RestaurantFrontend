@@ -1,64 +1,129 @@
 <!-- ======= Book A Table Section ======= -->
 <section id="book-a-table" class="book-a-table">
   <div class="container" data-aos="fade-up">
-
     <div class="section-header">
       <h2>Book A Table</h2>
       <p>Book <span>A</span> Table</p>
     </div>
 
     <div class="row g-0">
-
-      <div class="col-lg-4 reservation-img" style="background-image: url(./assets/img/reservation.jpg);" data-aos="zoom-out" data-aos-delay="200"></div>
+      <div
+        class="col-lg-4 reservation-img"
+        style="background-image: url(./assets/img/reservation.jpg)"
+        data-aos="zoom-out"
+        data-aos-delay="200"
+      ></div>
 
       <div class="col-lg-8 d-flex align-items-center reservation-form-bg">
-        <form  [formGroup]="BookForm" role="form" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
+        <form
+          [formGroup]="BookForm"
+          role="form"
+          class="php-email-form"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
           <div class="row gy-4">
             <div class="col-lg-4 col-md-6">
-              <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" formControlName="name">
+              <input
+                type="text"
+                name="name"
+                class="form-control"
+                id="name"
+                placeholder="Your Name"
+                formControlName="name"
+              />
               @if (name && name.invalid && name.touched) {
-                <span>Please fill out a name</span>
+              <span>Please fill out a name</span>
               }
             </div>
             <div class="col-lg-4 col-md-6">
-              <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" formControlName="email">
+              <input
+                type="email"
+                class="form-control"
+                name="email"
+                id="email"
+                placeholder="Your Email"
+                formControlName="email"
+              />
               @if (email && email.invalid && email.touched) {
-                <span>Please fill out an email</span>
+              <span>Please fill out an email</span>
               }
             </div>
             <div class="col-lg-4 col-md-6">
-              <input type="text" class="form-control" name="phone" id="phone" placeholder="Your Phone" formControlName="phone">
+              <input
+                type="text"
+                class="form-control"
+                name="phone"
+                id="phone"
+                placeholder="Your Phone"
+                formControlName="phone"
+              />
               @if (phone && phone.invalid && phone.touched) {
-                <span>Please fill out a phone number</span>
+              <span>Please fill out a phone number</span>
               }
             </div>
             <div class="col-lg-4 col-md-6">
-              <input type="text" name="date" class="form-control" id="date" placeholder="Date" formControlName="date">
+              <input
+                type="text"
+                name="date"
+                class="form-control"
+                id="date"
+                placeholder="Enter a date"
+                formControlName="date"
+              />
               <div class="validate"></div>
             </div>
             <div class="col-lg-4 col-md-6">
-              <input type="text" class="form-control" name="time" id="time" placeholder="Time" formControlName="time">
+              <input
+                type="text"
+                class="form-control"
+                name="time"
+                id="time"
+                placeholder="Time"
+                formControlName="time"
+              />
               <div class="validate"></div>
             </div>
             <div class="col-lg-4 col-md-6">
-              <input type="number" class="form-control" name="people" id="people" placeholder="# of people" formControlName="people">
+              <input
+                type="number"
+                class="form-control"
+                name="people"
+                id="people"
+                placeholder="Number of guests"
+                formControlName="people"
+              />
               @if (people && people.invalid && people.touched) {
-                <span>Please fill out the number of people</span>
+              <span>Please fill out the number of guests</span>
               }
             </div>
           </div>
           <div class="form-group mt-3">
-            <textarea class="form-control" name="message" rows="5" placeholder="Message" formControlName="message"></textarea>
+            <textarea
+              class="form-control"
+              name="message"
+              rows="5"
+              placeholder="Message"
+              formControlName="message"
+            ></textarea>
             @if (message && message.invalid && message.touched) {
-              <span>Please fill out a message</span>
+            <span>Please fill out a message</span>
             }
           </div>
 
-          <div class="text-center"><button type="submit" [disabled]="BookForm.invalid" (click)="FormSubmit()">Book a Table</button></div>
+          <div class="text-center">
+            <button
+              type="submit"
+              [disabled]="BookForm.invalid"
+              (click)="FormSubmit()"
+            >
+              Book a Table
+            </button>
+          </div>
         </form>
-      </div><!-- End Reservation Form -->
-
+      </div>
+      <!-- End Reservation Form -->
     </div>
-
   </div>
-</section><!-- End Book A Table Section -->
+</section>
+<!-- End Book A Table Section -->
