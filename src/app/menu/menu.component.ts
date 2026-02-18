@@ -22,8 +22,9 @@ import { Subscription, Observable } from 'rxjs';
   standalone: false,
 })
 export class MenuComponent {
-  public GettotalPrice: Observable<any> = this.cartService.getTotalPrice();
-  public DisplayCartItems: Observable<any> = this.cartService.getAllCartItems();
+  public GettotalPrice$: Observable<any> = this.cartService.getTotalPrice();
+  public DisplayCartItems$: Observable<any> =
+    this.cartService.getAllCartItems();
 
   constructor(
     private cartService: CartService,
@@ -53,7 +54,10 @@ export class MenuComponent {
           console.log(value);
           this.cartService.CartCount.next(value);
           //update the async pipe
-          this.GettotalPrice = this.cartService.getTotalPrice();
+          this.GettotalPrice$ = this.cartService.getTotalPrice();
+          if (value == 0) {
+            this.sidebarOpen = false;
+          }
 
           return value;
         })
@@ -62,16 +66,15 @@ export class MenuComponent {
   }
 
   PutIntoCart(item: string) {
-    this.sidebarOpen = true;
-
     this.cartService
       .putItemsIntoCart(item)
       .pipe(
         switchMap(() => this.cartService.getCartSizeLength()),
         tap((value) => {
+          this.sidebarOpen = true;
           // update async pipes
-          this.GettotalPrice = this.cartService.getTotalPrice();
-          this.DisplayCartItems = this.cartService.getAllCartItems();
+          this.GettotalPrice$ = this.cartService.getTotalPrice();
+          this.DisplayCartItems$ = this.cartService.getAllCartItems();
           // update navbar
           this.cartService.CartCount.next(value);
         })

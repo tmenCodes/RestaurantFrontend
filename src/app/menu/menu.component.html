@@ -1,40 +1,52 @@
-
 <!-- ======= Menu Section ======= -->
 <section id="menu" class="menu">
   <div class="container" data-aos="fade-up">
-
-
     <div class="sidebar" [class.open]="sidebarOpen">
-      @if (GettotalPrice | async; as total) {
-        <div class="container">
-          <a [routerLink]="'/menu'" class="closebtn" (click)="closeSideBar()">&times;</a>
-          <div class="title">Your pickup order</div>
-          <ul class="list-group mb-3"  >
-            @for (cartItems of DisplayCartItems | async; track cartItems; let i = $index) {
-              <li class="list-group-item d-flex justify-content-between lh-condensed">
-                <div>
-                  <h6 class="my-1">{{i+1}}.) {{cartItems.name}} ${{cartItems.price | number: '1.2-2'}}</h6>
-                </div>
-                <span class="text-muted"><button class="btn btn-outline-dark btn-sm" [ngStyle]="{'margin': '10px'}" (click)="removeIndex(cartItems.id)">Remove</button></span>
-              </li>
-            }
-            <li class="list-group-item d-flex justify-content-between" >
-              <span>SubTotal:</span>
-              <strong>${{total.subTotal}}</strong>
-            </li>
-            <li class="list-group-item d-flex justify-content-between">
-              <span>Tax:</span>
-              <strong>${{total.taxAmount}}</strong>
-            </li>
-            <li class="list-group-item d-flex justify-content-between">
-              <span>Total:</span>
-              <strong>${{total.totalPrice}}</strong>
-            </li>
-            <li class="list-group-item d-flex justify-content-between">
-              <span><a [routerLink]="'/cart'">Go To Checkout</a></span>
-            </li>
-          </ul>
-        </div>
+      @if (GettotalPrice$ | async; as total ) {
+      <div class="container">
+        <a [routerLink]="'/menu'" class="closebtn" (click)="closeSideBar()"
+          >&times;</a
+        >
+        <div class="title">Your pickup order</div>
+        <ul class="list-group mb-3">
+          @for (cartItems of DisplayCartItems$ | async; track cartItems; let i =
+          $index) {
+          <li
+            class="list-group-item d-flex justify-content-between lh-condensed"
+          >
+            <div>
+              <h6 class="my-1">
+                {{ cartItems.name }} ${{ cartItems.price | number : "1.2-2" }}
+              </h6>
+            </div>
+            <span class="text-muted"
+              ><button
+                class="btn btn-outline-dark btn-sm"
+                [ngStyle]="{ margin: '10px' }"
+                (click)="removeIndex(cartItems.id)"
+              >
+                Remove
+              </button></span
+            >
+          </li>
+          }
+          <li class="list-group-item d-flex justify-content-between">
+            <span>SubTotal:</span>
+            <strong>${{ total.subTotal }}</strong>
+          </li>
+          <li class="list-group-item d-flex justify-content-between">
+            <span>Tax:</span>
+            <strong>${{ total.taxAmount }}</strong>
+          </li>
+          <li class="list-group-item d-flex justify-content-between">
+            <span>Total:</span>
+            <strong>${{ total.totalPrice }}</strong>
+          </li>
+          <li class="list-group-item d-flex justify-content-between">
+            <span><a [routerLink]="'/cart'">Go To Checkout</a></span>
+          </li>
+        </ul>
+      </div>
       }
     </div>
 
@@ -44,447 +56,589 @@
       <p>Yummy Menu</p>
     </div>
 
-    <ul class="nav nav-tabs d-flex justify-content-center" data-aos="fade-up" data-aos-delay="200">
-
+    <ul
+      class="nav nav-tabs d-flex justify-content-center"
+      data-aos="fade-up"
+      data-aos-delay="200"
+    >
       <li class="nav-item">
-        <a class="nav-link active show" data-bs-toggle="tab" data-bs-target="#menu-starters">
+        <a
+          class="nav-link active show"
+          data-bs-toggle="tab"
+          data-bs-target="#menu-starters"
+        >
           <h4>Starters</h4>
         </a>
-      </li><!-- End tab nav item -->
+      </li>
+      <!-- End tab nav item -->
 
-      <li class="nav-item" >
-        <a class="nav-link" data-bs-toggle="tab" data-bs-target="#menu-breakfast">
-          <h4>Breakfast</h4>
-        </a><!-- End tab nav item -->
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          data-bs-toggle="tab"
+          data-bs-target="#menu-breakfast"
+        >
+          <h4>Breakfast</h4> </a
+        ><!-- End tab nav item -->
+      </li>
 
-        <li class="nav-item" >
-          <a class="nav-link" data-bs-toggle="tab" data-bs-target="#menu-lunch">
-            <h4>Lunch</h4>
-          </a>
-        </li><!-- End tab nav item -->
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" data-bs-target="#menu-lunch">
+          <h4>Lunch</h4>
+        </a>
+      </li>
+      <!-- End tab nav item -->
 
-        <li class="nav-item">
-          <a class="nav-link" data-bs-toggle="tab" data-bs-target="#menu-dinner">
-            <h4>Dinner</h4>
-          </a>
-        </li><!-- End tab nav item -->
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" data-bs-target="#menu-dinner">
+          <h4>Dinner</h4>
+        </a>
+      </li>
+      <!-- End tab nav item -->
+    </ul>
 
-      </ul>
-
-      <div class="tab-content" data-aos="fade-up" data-aos-delay="300">
-
-        <div class="tab-pane fade active show" id="menu-starters">
-
-          <div class="tab-header text-center">
-            <p>Menu</p>
-            <h3>Starters</h3>
-          </div>
-
-          <div class="row gy-5">
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-1.png" class="menu-img img-fluid" alt="">
-              <h4>Tofu Stir Fry</h4>
-              <p class="ingredients">
-                Tofu, bell peppers, green onion
-              </p>
-
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Tofu')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $10.95
-              </p>
-            </div>
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-2.png" class="menu-img img-fluid" alt="">
-              <h4>Egg Roll Platter</h4>
-              <p class="ingredients">
-                Carrots, Tamato, Lettuce
-              </p>
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Egg Roll Platter')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $14.95
-              </p>
-            </div>
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-3.png" class="menu-img img-fluid" alt="">
-              <h4>Papaya Salad</h4>
-              <p class="ingredients">
-                Green Papaya, snake beans, cherry tomatoe
-              </p>
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Papaya Salad')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $8.95
-              </p>
-            </div>
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-4.png" class="menu-img img-fluid" alt="">
-              <h4>Caesar Salad</h4>
-              <p class="ingredients">
-                Onion, lettuce, cheese
-              </p>
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Caesar Salad')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $12.95
-              </p>
-            </div>
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-5.png" class="menu-img img-fluid" alt="">
-              <h4>Chopped Beef</h4>
-              <p class="ingredients">
-                Mushrooms, Carrots, Okra
-              </p>
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Chopped Beef')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $12.95
-              </p>
-            </div>
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-6.png" class="menu-img img-fluid" alt="">
-              <h4>Veggie Platter</h4>
-              <p class="ingredients">
-                Edamame, Carrots, Avocado
-              </p>
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Veggie Platter')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $9.95
-              </p>
-            </div>
-          </div>
-
-
+    <div class="tab-content" data-aos="fade-up" data-aos-delay="300">
+      <div class="tab-pane fade active show" id="menu-starters">
+        <div class="tab-header text-center">
+          <p>Menu</p>
+          <h3>Starters</h3>
         </div>
 
-        <!-- End Starter Menu Content -->
+        <div class="row gy-5">
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-1.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Tofu Stir Fry</h4>
+            <p class="ingredients">Tofu, bell peppers, green onion</p>
 
-        <div class="tab-pane fade" id="menu-breakfast">
-
-          <div class="tab-header text-center">
-            <p>Menu</p>
-            <h3>Breakfast</h3>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Tofu')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$10.95</p>
           </div>
 
-          <div class="row gy-5">
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-1.png" class="menu-img img-fluid" alt="">
-              <h4>Tofu Stir Fry</h4>
-              <p class="ingredients">
-                Tofu, bell peppers, green onion
-              </p>
-
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Tofu')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $10.95
-              </p>
-            </div><!-- Menu Item -->
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-2.png" class="menu-img img-fluid" alt="">
-              <h4>Egg Roll Platter</h4>
-              <p class="ingredients">
-                Carrots, Tamato, Lettuce
-              </p>
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Egg Roll Platter')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $14.95
-              </p>
-            </div><!-- Menu Item -->
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-3.png" class="menu-img img-fluid" alt="">
-              <h4>Papaya Salad</h4>
-              <p class="ingredients">
-                Green Papaya, snake beans, cherry tomatoe
-              </p>
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Papaya Salad')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $8.95
-              </p>
-            </div><!-- Menu Item -->
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-4.png" class="menu-img img-fluid" alt="">
-              <h4>Caesar Salad</h4>
-              <p class="ingredients">
-                Onion, lettuce, cheese
-              </p>
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Caesar Salad')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $12.95
-              </p>
-            </div><!-- Menu Item -->
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-5.png" class="menu-img img-fluid" alt="">
-              <h4>Chopped Beef</h4>
-              <p class="ingredients">
-                Mushrooms, Carrots, Okra
-              </p>
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Chopped Beef')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $12.95
-              </p>
-            </div><!-- Menu Item -->
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-6.png" class="menu-img img-fluid" alt="">
-              <h4>Veggie Platter</h4>
-              <p class="ingredients">
-                Edamame, Carrots, Avocado
-              </p>
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Veggie Platter')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $9.95
-              </p>
-            </div><!-- Menu Item -->
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-2.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Egg Roll Platter</h4>
+            <p class="ingredients">Carrots, Tamato, Lettuce</p>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Egg Roll Platter')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$14.95</p>
           </div>
-        </div><!-- End Breakfast Menu Content -->
-
-        <div class="tab-pane fade" id="menu-lunch">
-
-          <div class="tab-header text-center">
-            <p>Menu</p>
-            <h3>Lunch</h3>
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-3.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Papaya Salad</h4>
+            <p class="ingredients">Green Papaya, snake beans, cherry tomatoe</p>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Papaya Salad')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$8.95</p>
           </div>
 
-          <div class="row gy-5">
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-1.png" class="menu-img img-fluid" alt="">
-              <h4>Tofu Stir Fry</h4>
-              <p class="ingredients">
-                Tofu, bell peppers, green onion
-              </p>
-
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Tofu')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $10.95
-              </p>
-            </div><!-- Menu Item -->
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-2.png" class="menu-img img-fluid" alt="">
-              <h4>Egg Roll Platter</h4>
-              <p class="ingredients">
-                Carrots, Tamato, Lettuce
-              </p>
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Egg Roll Platter')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $14.95
-              </p>
-            </div><!-- Menu Item -->
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-3.png" class="menu-img img-fluid" alt="">
-              <h4>Papaya Salad</h4>
-              <p class="ingredients">
-                Green Papaya, snake beans, cherry tomatoe
-              </p>
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Papaya Salad')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $8.95
-              </p>
-            </div><!-- Menu Item -->
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-4.png" class="menu-img img-fluid" alt="">
-              <h4>Caesar Salad</h4>
-              <p class="ingredients">
-                Onion, lettuce, cheese
-              </p>
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Caesar Salad')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $12.95
-              </p>
-            </div><!-- Menu Item -->
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-5.png" class="menu-img img-fluid" alt="">
-              <h4>Chopped Beef</h4>
-              <p class="ingredients">
-                Mushrooms, Carrots, Okra
-              </p>
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Chopped Beef')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $12.95
-              </p>
-            </div><!-- Menu Item -->
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-6.png" class="menu-img img-fluid" alt="">
-              <h4>Veggie Platter</h4>
-              <p class="ingredients">
-                Edamame, Carrots, Avocado
-              </p>
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Veggie Platter')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $9.95
-              </p>
-            </div><!-- Menu Item -->
-          </div>
-        </div><!-- End Lunch Menu Content -->
-
-        <div class="tab-pane fade" id="menu-dinner">
-
-          <div class="tab-header text-center">
-            <p>Menu</p>
-            <h3>Dinner</h3>
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-4.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Caesar Salad</h4>
+            <p class="ingredients">Onion, lettuce, cheese</p>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Caesar Salad')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$12.95</p>
           </div>
 
-          <div class="row gy-5">
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-5.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Chopped Beef</h4>
+            <p class="ingredients">Mushrooms, Carrots, Okra</p>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Chopped Beef')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$12.95</p>
+          </div>
 
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-1.png" class="menu-img img-fluid" alt="">
-              <h4>Tofu Stir Fry</h4>
-              <p class="ingredients">
-                Tofu, bell peppers, green onion
-              </p>
-
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Tofu')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $10.95
-              </p>
-            </div><!-- Menu Item -->
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-2.png" class="menu-img img-fluid" alt="">
-              <h4>Egg Roll Platter</h4>
-              <p class="ingredients">
-                Carrots, Tamato, Lettuce
-              </p>
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Egg Roll Platter')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $14.95
-              </p>
-            </div><!-- Menu Item -->
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-3.png" class="menu-img img-fluid" alt="">
-              <h4>Papaya Salad</h4>
-              <p class="ingredients">
-                Green Papaya, snake beans, cherry tomatoe
-              </p>
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Papaya Salad')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $8.95
-              </p>
-            </div><!-- Menu Item -->
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-4.png" class="menu-img img-fluid" alt="">
-              <h4>Caesar Salad</h4>
-              <p class="ingredients">
-                Onion, lettuce, cheese
-              </p>
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Caesar Salad')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $12.95
-              </p>
-            </div><!-- Menu Item -->
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-5.png" class="menu-img img-fluid" alt="">
-              <h4>Chopped Beef</h4>
-              <p class="ingredients">
-                Mushrooms, Carrots, Okra
-              </p>
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Chopped Beef')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $12.95
-              </p>
-            </div><!-- Menu Item -->
-
-            <div class="col-lg-4 menu-item">
-              <img src="./assets/img/menu/menu-item-6.png" class="menu-img img-fluid" alt="">
-              <h4>Veggie Platter</h4>
-              <p class="ingredients">
-                Edamame, Carrots, Avocado
-              </p>
-              <button class="btn btn-outline-dark flex-shrink-0" type="button" fdprocessedid="lp9yp" (click)="PutIntoCart('Veggie Platter')">
-                <i class="bi-cart-fill me-1"></i>
-                Add to cart
-              </button>
-              <p class="price">
-                $9.95
-              </p>
-            </div><!-- Menu Item -->
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-6.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Veggie Platter</h4>
+            <p class="ingredients">Edamame, Carrots, Avocado</p>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Veggie Platter')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$9.95</p>
           </div>
         </div>
-
       </div>
 
+      <!-- End Starter Menu Content -->
+
+      <div class="tab-pane fade" id="menu-breakfast">
+        <div class="tab-header text-center">
+          <p>Menu</p>
+          <h3>Breakfast</h3>
+        </div>
+
+        <div class="row gy-5">
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-1.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Tofu Stir Fry</h4>
+            <p class="ingredients">Tofu, bell peppers, green onion</p>
+
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Tofu')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$10.95</p>
+          </div>
+          <!-- Menu Item -->
+
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-2.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Egg Roll Platter</h4>
+            <p class="ingredients">Carrots, Tamato, Lettuce</p>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Egg Roll Platter')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$14.95</p>
+          </div>
+          <!-- Menu Item -->
+
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-3.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Papaya Salad</h4>
+            <p class="ingredients">Green Papaya, snake beans, cherry tomatoe</p>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Papaya Salad')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$8.95</p>
+          </div>
+          <!-- Menu Item -->
+
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-4.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Caesar Salad</h4>
+            <p class="ingredients">Onion, lettuce, cheese</p>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Caesar Salad')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$12.95</p>
+          </div>
+          <!-- Menu Item -->
+
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-5.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Chopped Beef</h4>
+            <p class="ingredients">Mushrooms, Carrots, Okra</p>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Chopped Beef')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$12.95</p>
+          </div>
+          <!-- Menu Item -->
+
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-6.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Veggie Platter</h4>
+            <p class="ingredients">Edamame, Carrots, Avocado</p>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Veggie Platter')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$9.95</p>
+          </div>
+          <!-- Menu Item -->
+        </div>
+      </div>
+      <!-- End Breakfast Menu Content -->
+
+      <div class="tab-pane fade" id="menu-lunch">
+        <div class="tab-header text-center">
+          <p>Menu</p>
+          <h3>Lunch</h3>
+        </div>
+
+        <div class="row gy-5">
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-1.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Tofu Stir Fry</h4>
+            <p class="ingredients">Tofu, bell peppers, green onion</p>
+
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Tofu')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$10.95</p>
+          </div>
+          <!-- Menu Item -->
+
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-2.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Egg Roll Platter</h4>
+            <p class="ingredients">Carrots, Tamato, Lettuce</p>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Egg Roll Platter')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$14.95</p>
+          </div>
+          <!-- Menu Item -->
+
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-3.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Papaya Salad</h4>
+            <p class="ingredients">Green Papaya, snake beans, cherry tomatoe</p>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Papaya Salad')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$8.95</p>
+          </div>
+          <!-- Menu Item -->
+
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-4.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Caesar Salad</h4>
+            <p class="ingredients">Onion, lettuce, cheese</p>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Caesar Salad')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$12.95</p>
+          </div>
+          <!-- Menu Item -->
+
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-5.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Chopped Beef</h4>
+            <p class="ingredients">Mushrooms, Carrots, Okra</p>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Chopped Beef')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$12.95</p>
+          </div>
+          <!-- Menu Item -->
+
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-6.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Veggie Platter</h4>
+            <p class="ingredients">Edamame, Carrots, Avocado</p>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Veggie Platter')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$9.95</p>
+          </div>
+          <!-- Menu Item -->
+        </div>
+      </div>
+      <!-- End Lunch Menu Content -->
+
+      <div class="tab-pane fade" id="menu-dinner">
+        <div class="tab-header text-center">
+          <p>Menu</p>
+          <h3>Dinner</h3>
+        </div>
+
+        <div class="row gy-5">
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-1.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Tofu Stir Fry</h4>
+            <p class="ingredients">Tofu, bell peppers, green onion</p>
+
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Tofu')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$10.95</p>
+          </div>
+          <!-- Menu Item -->
+
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-2.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Egg Roll Platter</h4>
+            <p class="ingredients">Carrots, Tamato, Lettuce</p>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Egg Roll Platter')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$14.95</p>
+          </div>
+          <!-- Menu Item -->
+
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-3.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Papaya Salad</h4>
+            <p class="ingredients">Green Papaya, snake beans, cherry tomatoe</p>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Papaya Salad')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$8.95</p>
+          </div>
+          <!-- Menu Item -->
+
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-4.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Caesar Salad</h4>
+            <p class="ingredients">Onion, lettuce, cheese</p>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Caesar Salad')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$12.95</p>
+          </div>
+          <!-- Menu Item -->
+
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-5.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Chopped Beef</h4>
+            <p class="ingredients">Mushrooms, Carrots, Okra</p>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Chopped Beef')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$12.95</p>
+          </div>
+          <!-- Menu Item -->
+
+          <div class="col-lg-4 menu-item">
+            <img
+              src="./assets/img/menu/menu-item-6.png"
+              class="menu-img img-fluid"
+              alt=""
+            />
+            <h4>Veggie Platter</h4>
+            <p class="ingredients">Edamame, Carrots, Avocado</p>
+            <button
+              class="btn btn-outline-dark flex-shrink-0"
+              type="button"
+              fdprocessedid="lp9yp"
+              (click)="PutIntoCart('Veggie Platter')"
+            >
+              <i class="bi-cart-fill me-1"></i>
+              Add to cart
+            </button>
+            <p class="price">$9.95</p>
+          </div>
+          <!-- Menu Item -->
+        </div>
+      </div>
     </div>
-  </section><!-- End Menu Section -->
+  </div>
+</section>
+<!-- End Menu Section -->
