@@ -15,6 +15,12 @@ import { HttpService } from '../http.service';
 
 import { Subscription, Observable } from 'rxjs';
 
+interface MenuTotalPrice {
+  subTotal: string;
+  taxAmount: string;
+  totalPrice: string;
+}
+
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
@@ -51,7 +57,6 @@ export class MenuComponent {
           return this.cartService.getCartSizeLength();
         }),
         switchMap((value) => {
-          console.log(value);
           this.cartService.CartCount.next(value);
           //update the async pipe
           this.GettotalPrice$ = this.cartService.getTotalPrice();
@@ -74,6 +79,7 @@ export class MenuComponent {
           this.sidebarOpen = true;
           // update async pipes
           this.GettotalPrice$ = this.cartService.getTotalPrice();
+
           this.DisplayCartItems$ = this.cartService.getAllCartItems();
           // update navbar
           this.cartService.CartCount.next(value);

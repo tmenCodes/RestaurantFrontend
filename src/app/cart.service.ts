@@ -96,7 +96,7 @@ export class CartService {
 
   getTotalPrice(): Observable<any> {
     let guid = localStorage.getItem('myGuid');
-    console.log('total price guid: ' + guid);
+
     let url = this.url + '' + 'Order/GetTotalPrice?guid=' + guid;
     return this.Http.get<Observable<any>>(url);
   }

@@ -6,10 +6,10 @@ import { concatWith } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css'],
-    standalone: false
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
+  standalone: false,
 })
 export class AppComponent {
   title = 'Resturant';
@@ -23,10 +23,5 @@ export class AppComponent {
     private router: Router
   ) {}
 
-
-
-  ngOnInit(): void {
-
-
-  }
+  ngOnInit(): void {}
 }
