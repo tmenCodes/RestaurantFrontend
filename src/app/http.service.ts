@@ -144,8 +144,8 @@ export class HttpService {
     });
   }
 
-  BookForm(body: any): void {
-    let urlconcat = this.url + '' + 'api/Order/BookingInformation';
+  BookReservation(body: any): void {
+    let urlconcat = this.url + '' + 'api/Misc/BookingInformation';
     this.Http.post(urlconcat, body, { responseType: 'text' }).subscribe({
       next: (data) => this.router.navigate(['bookingcomplete']),
       error: (error) => {
@@ -161,7 +161,7 @@ export class HttpService {
     return this.Http.get<any>(urlconcat, {
       withCredentials: true,
     }).pipe(
-      tap(value=>console.log("from the checkuserloggin" + value)),
+      tap((value) => console.log('from the checkuserloggin' + value)),
       catchError((value) => {
         return of(value);
       })
@@ -227,5 +227,3 @@ export class HttpService {
     });
   }
 }
-
-

@@ -66,6 +66,6 @@ export class BookComponent {
   }
 
   FormSubmit() {
-    this.Http.BookForm(this.BookForm.value);
+    this.Http.BookReservation(this.BookForm.value);
   }
 }
