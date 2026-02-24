@@ -82,18 +82,6 @@ export class CartService {
     return this.Http.get(url);
   }
 
-  getCartItems(): any {
-    //   if (localStorage.getItem('myItemList') !== null) {
-    //     //remove brackets from the string(array)
-    //     let removebrackets = localStorage.getItem('myItemList')!;
-    //     removebrackets = removebrackets.substring(1);
-    //     removebrackets = removebrackets.slice(0, -1);
-    //     //remove after the second common in the string , make an array out of the string
-    //     let result = removebrackets.match(/[^,]+,[^,]+/g);
-    //     return result;
-    //   }
-  }
-
   getTotalPrice(): Observable<any> {
     let guid = localStorage.getItem('myGuid');
 
@@ -120,12 +108,6 @@ export class CartService {
     var url = this.url + '' + 'Order/GetMenuItemByGuid?guidId=' + guid;
 
     return this.Http.get<Observable<any>>(url);
-    // .pipe(
-    //   catchError((error) => {
-    //     console.log(error);
-    //     return of(0);
-    //   })
-    // );
   }
 
   getCartSizeLength(): Observable<any> {
