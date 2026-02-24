@@ -29,11 +29,10 @@ export class BookComponent {
       Validators.minLength(2),
     ]),
     phone: new FormControl('', Validators.required),
-    date: new FormControl(''),
+    date: new FormControl('', Validators.required),
     time: new FormControl('', Validators.required),
     people: new FormControl('', Validators.required),
     message: new FormControl('', [
-      Validators.required,
       Validators.maxLength(30),
       Validators.minLength(2),
     ]),
