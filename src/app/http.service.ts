@@ -226,4 +226,43 @@ export class HttpService {
       withCredentials: true,
     });
   }
+
+  public GetMenuItems(): Observable<any> {
+    let urlconcat = this.url + '' + 'api/Order/GetMenuItems';
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.Http.get(urlconcat, {
+      headers: headers,
+      withCredentials: true,
+    });
+  }
+
+  public GetMenuItemOptions(): Observable<any> {
+    let urlconcat = this.url + '' + 'api/Order/GetMenuItemOptions';
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.Http.get(urlconcat, {
+      headers: headers,
+      withCredentials: true,
+    });
+  }
+
+  public GetImageUrlPath(): Observable<any> {
+    //let urlconcat = this.url + '' + 'api/Order/GetImageUrlPath';
+    // let urlconcat = this.url + '' + 'api/Order/ImagePath?menuItemName=' + path;
+    let urlconcat = this.url + '' + 'api/Order/ImagePath';
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.Http.get(urlconcat, {
+      headers: headers,
+      withCredentials: true,
+    });
+  }
 }

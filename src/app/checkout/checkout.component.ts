@@ -13,7 +13,16 @@ import {
   Form,
 } from '@angular/forms';
 
-import { catchError, pipe, tap, delay, of, mergeMap } from 'rxjs';
+import {
+  catchError,
+  pipe,
+  tap,
+  delay,
+  of,
+  mergeMap,
+  switchMap,
+  combineLatest,
+} from 'rxjs';
 
 @Component({
   selector: 'app-checkout',
@@ -190,6 +199,7 @@ export class CheckoutComponent {
 
     var item_index = this.displayArray.findIndex((value) => value.id == i);
     this.displayArray.splice(item_index, 1);
+    console.log(this.displayArray);
   }
 
   cartgreaterthenzero: boolean = false;
@@ -208,9 +218,54 @@ export class CheckoutComponent {
       this.cartSize = value.length;
       if (value.length > 0) {
         this.cartgreaterthenzero = true;
-        this.displayArray = value;
+        // this.displayArray = value;
+        // console.log(value);
       }
     });
+
+    var obs1$ = this.cartService.getAllCartItems();
+    var obs2$ = this.HttpService.GetMenuItems();
+
+    combineLatest([obs1$, obs2$]).subscribe(([val1, val2]) => {
+      console.log(val1, val2);
+
+      var newObject = {};
+      //use map or filter
+      for (let i = 0; i < val1.length; i++) {
+        for (let z = 0; z < val2.length; z++) {
+          //   console.log(val1[i]);
+          if (val2[z].menuItemName == val1[i].name) {
+            // console.log(val1[i]);
+            //console.log(val2[z].menuItemBasePrice);
+            newObject = { ...val1[i], basePrice: val2[z].menuItemBasePrice };
+            //  console.log(newObject);
+            this.displayArray.push(newObject);
+            console.log(this.displayArray);
+          }
+        }
+      }
+
+      // let x = val1.filter((cartItem: any) => {
+      //   if (cartItem.menuItemName == val1.name) {
+      //     console.log(val1.name);
+      //   }
+      // });
+    });
+
+    //   this.cartService
+    //     .getAllCartItems()
+    //     .pipe(switchMap((value) => {this.HttpService.GetMenuItems()
+    //       .pipe(
+    //         tap((menuItems) => {
+    //           console.log(value)
+    //             console.log(menuItems)
+    //           })
+    //         })
+    //       )
+    //       })
+
+    //     .subscribe();
+    // });
 
     if (!this.Token) {
       this.oppositetogglebutton = false;
@@ -232,5 +287,18 @@ export class CheckoutComponent {
         // takeUntilDestroyed()
       )
       .subscribe();
+  }
+
+  checkBaseValue(name: string): string {
+    let nameString: string = '';
+    console.log('woah');
+    // this.HttpService.GetMenuItems().subscribe((value) => {
+    //   var item = value.find((value: any) => value.menuItemName == name);
+    //   console.log(item);
+    //   if (item) {
+    //     nameString = item.basePrice;
+    //   }
+    // });
+    return nameString;
   }
 }

@@ -20,6 +20,12 @@ interface TempMenuItems {
   Price: string;
 }
 
+interface CartItem {
+  name?: string;
+  quantity?: number;
+  options?: any[];
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -41,8 +47,10 @@ export class CartService {
     return this.Cart;
   }
 
-  putItemsIntoCart(items: string): Observable<any> {
+  putItemsIntoCart(item: CartItem): Observable<any> {
     let urlconcat = this.url + '' + 'Misc/CreateGuideForFrontend';
+
+    console.log(item);
 
     //create guid initially, then add to cart
     if (localStorage.getItem('myGuid') == null) {
@@ -52,7 +60,9 @@ export class CartService {
           localStorage.setItem('myGuid', this.Guid);
           var object = {
             guidId: this.Guid,
-            name: items,
+            name: item.name,
+            quantity: item.quantity,
+            options: item.options,
           };
           return this.Http.post<any>(
             this.url + '' + 'Order/ShoppingCartItems',
@@ -65,7 +75,9 @@ export class CartService {
       var guid = localStorage.getItem('myGuid');
       var object = {
         guidId: guid,
-        name: items,
+        name: item.name,
+        quantity: item.quantity,
+        options: item.options,
       };
       console.log(object);
       return this.Http.post<any>(

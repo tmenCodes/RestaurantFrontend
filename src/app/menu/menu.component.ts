@@ -1,4 +1,9 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Output,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { CartService } from '../cart.service';
 import { RouterModule } from '@angular/router';
 import {
@@ -12,6 +17,13 @@ import {
   throwError,
 } from 'rxjs';
 import { HttpService } from '../http.service';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  FormArray,
+  FormBuilder,
+} from '@angular/forms';
 
 import { Subscription, Observable } from 'rxjs';
 
@@ -19,6 +31,12 @@ interface MenuTotalPrice {
   subTotal: string;
   taxAmount: string;
   totalPrice: string;
+}
+
+interface CartItem {
+  name?: string;
+  quantity?: number;
+  options?: any[];
 }
 
 @Component({
@@ -34,12 +52,95 @@ export class MenuComponent {
 
   constructor(
     private cartService: CartService,
-    private HttpService: HttpService
+    private HttpService: HttpService,
+    private fb: FormBuilder,
+    private cdr: ChangeDetectorRef
   ) {}
+
+  //menuForm: FormBuilder;
 
   sidebarOpen: boolean = false;
   cartSize: number = 0;
   cartgreaterthenzero = false;
+
+  menuItems$: Observable<any> = this.HttpService.GetMenuItems();
+  menuItemOptions$: Observable<any> = this.HttpService.GetMenuItemOptions();
+  seturlString: string = '';
+  allUrlPaths: string[] = [];
+  menuItemOptionsArray: string[] = [];
+
+  ngOnInit() {
+    //load menu options into the form array
+    this.HttpService.GetMenuItemOptions().subscribe((value) => {
+      for (let option of value) {
+        this.menuItemOptionsArray.push(option.menuOptionName);
+      }
+
+      //make array of same size as above with boolean values to represent if the option is selected or not
+      this.menuItemOptionsArray.forEach((_) => {
+        this.menuOptions.push(this.fb.control(false, Validators.required));
+      });
+    });
+
+    //  this.cartService.getAllCartItems().subscribe((value) => console.log(value));
+    // this.HttpService.GetMenuItems().subscribe((value) => console.log(value));
+  }
+
+  // Define the form structure with controls
+  menuForm = this.fb.group({
+    menuItemName: new FormControl('', Validators.required),
+    // quantity: new FormControl(
+    //   1,
+    //   [Validators.required, Validators.min(1)],
+    //   Validators.max(10),
+    // ),
+    quantity: new FormControl(1, {
+      nonNullable: true,
+      validators: [Validators.min(1), Validators.max(10)],
+    }),
+    menuOptions: this.fb.array([]), // Assuming you have an array of menu options
+  });
+
+  // Access form value
+  //helper to get the form array
+  get menuOptions(): FormArray {
+    return this.menuForm.get('menuOptions') as FormArray;
+  }
+
+  addItems(item: string) {
+    //  console.log(item);
+    this.menuOptions.push(this.fb.control(item, Validators.required));
+    console.log(this.menuForm.value);
+  }
+
+  removeItems(index: number) {
+    //we'll see bro
+  }
+
+  clearModalForm() {
+    //not working???
+    // this.menuOptions.clear();
+    // this.menuForm.reset();
+    // window.location.reload();
+
+    // const formArray = this.menuForm.get('menuOptions') as FormArray;
+    // console.log(formArray.length);
+    // while (formArray.length !== 0) {
+    //   formArray.removeAt(0);
+    // }
+    // this.menuForm.reset();
+    // console.log(this.menuForm.value);
+
+    this.menuForm.setControl('menuOptions', this.fb.array([]));
+    this.menuForm.reset();
+
+    this.menuForm.patchValue({
+      quantity: 1,
+    });
+
+    //HACK- not sure why the form array is not clearing out
+    window.location.reload();
+  }
 
   toggleSidebar() {
     this.sidebarOpen = !this.sidebarOpen;
@@ -70,19 +171,49 @@ export class MenuComponent {
       .subscribe();
   }
 
-  PutIntoCart(item: string) {
+  OpenModal(item: string) {
+    this.menuForm.patchValue({ menuItemName: item });
+    this.sidebarOpen = true;
+  }
+
+  SubmitCartItems() {
+    var menuObject = this.menuForm.value;
+    console.log(menuObject);
+
+    //reload an add only the items you choose here before submitting to the cart service
+    // if checked is true then add to the array otherwise ignore it and filter out the null values at the end
+    const selectedIndexes = (this.menuForm.value.menuOptions as
+      | any[]
+      | undefined)!
+      .map((checked: boolean, i: number) =>
+        checked ? this.menuItemOptionsArray[i] : null
+      )
+      .filter((v: string | null) => v !== null);
+    // .filter((v: number | null) => v !== null);
+
+    console.log(selectedIndexes);
+
+    let item: CartItem = {
+      name: menuObject.menuItemName as string,
+      quantity: menuObject.quantity ? Number(menuObject.quantity) : undefined,
+      options: selectedIndexes,
+    };
+
+    console.log(item);
     this.cartService
       .putItemsIntoCart(item)
       .pipe(
         switchMap(() => this.cartService.getCartSizeLength()),
         tap((value) => {
-          this.sidebarOpen = true;
+          //  this.sidebarOpen = true;
+          this.menuForm.reset();
           // update async pipes
           this.GettotalPrice$ = this.cartService.getTotalPrice();
 
           this.DisplayCartItems$ = this.cartService.getAllCartItems();
           // update navbar
           this.cartService.CartCount.next(value);
+          //close the modal
         })
       )
       .subscribe();
