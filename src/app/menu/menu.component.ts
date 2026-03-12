@@ -118,19 +118,6 @@ export class MenuComponent {
   }
 
   clearModalForm() {
-    //not working???
-    // this.menuOptions.clear();
-    // this.menuForm.reset();
-    // window.location.reload();
-
-    // const formArray = this.menuForm.get('menuOptions') as FormArray;
-    // console.log(formArray.length);
-    // while (formArray.length !== 0) {
-    //   formArray.removeAt(0);
-    // }
-    // this.menuForm.reset();
-    // console.log(this.menuForm.value);
-
     this.menuForm.setControl('menuOptions', this.fb.array([]));
     this.menuForm.reset();
 
@@ -199,7 +186,7 @@ export class MenuComponent {
       options: selectedIndexes,
     };
 
-    console.log(item);
+    // console.log(item);
     this.cartService
       .putItemsIntoCart(item)
       .pipe(
@@ -211,9 +198,11 @@ export class MenuComponent {
           this.GettotalPrice$ = this.cartService.getTotalPrice();
 
           this.DisplayCartItems$ = this.cartService.getAllCartItems();
-          // update navbar
+
+          //update navabar
           this.cartService.CartCount.next(value);
-          //close the modal
+
+          //the modal automatically closes becuase of the data-bs-dismiss="modal" on html-not via typescirpt
         })
       )
       .subscribe();

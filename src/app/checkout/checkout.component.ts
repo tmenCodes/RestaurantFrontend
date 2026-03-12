@@ -227,7 +227,7 @@ export class CheckoutComponent {
     var obs2$ = this.HttpService.GetMenuItems();
 
     combineLatest([obs1$, obs2$]).subscribe(([val1, val2]) => {
-      console.log(val1, val2);
+      //  console.log(val1, val2);
 
       var newObject = {};
       //use map or filter
