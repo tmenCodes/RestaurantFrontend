@@ -14,12 +14,13 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 20.x
+          cache: "npm"
 
       - name: Install Dependencies
         run: npm install
 
       - name: Run Unit Tests
-        run: npm test -- --watch=false --browsers=ChromeHeadless
+        run: npm run test:ci
 
       - name: Transfer Build Folder on EC2 Instance
         run: CI=true npm run build
