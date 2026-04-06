@@ -9,10 +9,12 @@ jobs:
     steps:
       - name: Checkout Repository
       - uses: actions/checkout@v4
+
       - name: Use Node.js 20.x to Build
         uses: actions/setup-node@v2
         with:
           node-version: 20.x
+          cache: "npm"
 
       - name: Install Dependencies
       - run: npm install
@@ -22,6 +24,8 @@ jobs:
 
       - name: Transfer Build Folder on EC2 Instance
       - run: CI=true npm run build
+
+      - name: Deploy to and EC2 Instance
         uses: easingthemes/ssh-deploy@v2.1.4
         env:
           SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_KEY }}
