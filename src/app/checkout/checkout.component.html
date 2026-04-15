@@ -1,214 +1,182 @@
-<body class="bg-light">
-  @if (!cartgreaterthenzero) {
-  <div class="container" data-aos="fade-up">
-    <div class="section-header">
-      <h2>Cart</h2>
-      <p>Shopping<span> Cart</span></p>
-    </div>
-    <div class="testimonial-item">
-      <div class="row gy-4 justify-content-center">
-        <div class="col-lg-6">
-          <div class="testimonial-content">
-            Your cart is currently empty. Please check out the menu!
-          </div>
-          <div class="addpadding"></div>
-        </div>
+<!-- Empty Cart State -->
+@if (!cartgreaterthenzero) {
+  <section class="checkout-empty">
+    <div class="empty-state">
+      <div class="empty-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+        </svg>
       </div>
-      <div class="swiper-pagination"></div>
+      <h2>Your cart is empty</h2>
+      <p>Looks like you haven't added anything yet. Check out our menu!</p>
+      <a routerLink="/menu" class="btn-back-to-menu">Browse Menu</a>
     </div>
-  </div>
-  } @if (cartgreaterthenzero) {
-  <div class="container">
-    <div class="py-5 text-center">
-      <img
-        class="d-block mx-auto mb-4"
-        src="./assets/img/yum.jpg"
-        alt=""
-        width="72"
-        height="72"
-      />
-      <h2>Checkout form</h2>
-      <p class="lead">Hello, complete your purchase for takeout here</p>
+  </section>
+}
 
-      <p class="lead">
-        <i
-          >This is a mock website, so please don't type in any real
-          information!</i
-        >
-      </p>
-    </div>
-    <div class="row">
-      <div class="col-md-4 order-md-2 mb-4">
-        <h4 class="d-flex justify-content-between align-items-center mb-3">
-          <h4 class="mb-3">Total Price</h4>
-          <span class="badge badge-secondary badge-pill">3</span>
-        </h4>
-        <ul class="list-group mb-3">
-          @for (x of displayArray; track x; let i = $index) {
-          <li
-            class="list-group-item d-flex justify-content-between lh-condensed"
-          >
-            <div>
-              <!-- <h6 class="my-1">{{x.name}} ${{x.price}}</h6> -->
-              <h6 class="my-1">
-                {{ i + 1 }}.) {{ x.name }} ${{ x.totalItemPrice }}
-              </h6>
-              <!-- <h3>{{ x.basePrice }}</h3> -->
-              @if(x.quantity > 1) {
-              <h6>Quantity: ${{ x.basePrice }} x {{ x.quantity }}</h6>
-              } @for(options of x.options; track options) {
-              <h6>{{ options.name }} ${{ options.price }}</h6>
-              }
-              <!--  <small class="text-muted">Brief description</small> -->
-            </div>
-            <!-- <span class="text-muted">${{x.price}}</span> -->
-            <span class="text-muted"
-              ><button
-                class="btn btn-outline-dark btn-sm"
-                [ngStyle]="{ 'margin-left': '5px' }"
-                (click)="removeIndex(x.id)"
-              >
-                Remove
-              </button></span
-            >
-          </li>
-          }
-          <li class="list-group-item d-flex justify-content-between">
-            <span>SubTotal</span>
-            <strong>${{ subtotal }}</strong>
-          </li>
-          <li class="list-group-item d-flex justify-content-between">
-            <span>Tax</span>
-            <strong>${{ taxamount }}</strong>
-          </li>
-          <li class="list-group-item d-flex justify-content-between">
-            <span>Total</span>
-            <strong>${{ totalprice }}</strong>
-          </li>
-        </ul>
-        <!--
-          <form class="card p-2">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Promo code">
-              <div class="input-group-append">
-                <button type="submit" class="btn btn-secondary">Redeem</button>
-              </div>
-            </div>
-          </form>
-          -->
+<!-- Checkout Layout -->
+@if (cartgreaterthenzero) {
+  <section class="checkout-section">
+    <div class="checkout-container">
+
+      <div class="checkout-page-header">
+        <p class="checkout-subtitle">Almost there</p>
+        <h1 class="checkout-title">Checkout</h1>
+        <div class="checkout-divider"></div>
+        <p class="checkout-disclaimer">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          This is a mock website — please don't enter real information.
+        </p>
       </div>
-      <div class="col-md-8 order-md-1" [formGroup]="InformationForm">
-        <h4 class="mb-3">Payment</h4>
-        <fieldset [disabled]="oppositetogglebutton">
-          <div class="d-block my-3">
-            <div class="custom-control custom-radio">
-              <input
-                id="credit"
-                name="CardType"
-                type="radio"
-                class="custom-control-input"
-                value="credit"
-                formControlName="CardType"
-                checked
-                required
-              />
-              <label class="custom-control-label" for="credit"
-                >Credit card</label
-              >
-            </div>
-            <div class="custom-control custom-radio">
-              <input
-                id="debit"
-                name="CardType"
-                type="radio"
-                class="custom-control-input"
-                value="debit"
-                formControlName="CardType"
-              />
-              <label class="custom-control-label" for="debit">Debit card</label>
-            </div>
-            <!--
-              <div class="custom-control custom-radio">
-                <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input"formControlName="PaymentType"required>
-                <label class="custom-control-label" for="paypal">PayPal</label>
+
+      <div class="checkout-grid">
+
+        <!-- Order Summary -->
+        <div class="order-summary">
+          <h3 class="summary-heading">Order Summary</h3>
+
+          <div class="summary-items">
+            @for (x of displayArray; track x; let i = $index) {
+              <div class="summary-item">
+                <div class="summary-item-info">
+                  <span class="summary-item-name">{{ x.name }}</span>
+                  @if (x.quantity > 1) {
+                    <span class="summary-item-qty">${{ x.basePrice }} × {{ x.quantity }}</span>
+                  }
+                  @for (option of x.options; track option) {
+                    <span class="summary-item-option">+ {{ option.name }} &nbsp; ${{ option.price }}</span>
+                  }
+                </div>
+                <div class="summary-item-right">
+                  <span class="summary-item-price">${{ x.totalItemPrice }}</span>
+                  <button class="summary-remove-btn" (click)="removeIndex(x.id)" title="Remove">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                  </button>
+                </div>
               </div>
-              -->
+            }
           </div>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="cc-name">Name on card</label>
+
+          <div class="summary-totals">
+            <div class="summary-total-row">
+              <span>Subtotal</span>
+              <span>${{ subtotal }}</span>
+            </div>
+            <div class="summary-total-row">
+              <span>Tax</span>
+              <span>${{ taxamount }}</span>
+            </div>
+            <div class="summary-total-row summary-total-final">
+              <span>Total</span>
+              <span>${{ totalprice }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Form -->
+        <div class="payment-form-card" [formGroup]="InformationForm">
+          <h3 class="payment-heading">Payment Details</h3>
+
+          <div class="card-type-group">
+            <label class="card-type-option">
+              <input type="radio" name="CardType" value="credit" formControlName="CardType" checked />
+              <span class="card-type-label">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                </svg>
+                Credit Card
+              </span>
+            </label>
+            <label class="card-type-option">
+              <input type="radio" name="CardType" value="debit" formControlName="CardType" />
+              <span class="card-type-label">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                </svg>
+                Debit Card
+              </span>
+            </label>
+          </div>
+
+          <fieldset [disabled]="oppositetogglebutton" class="payment-fields">
+
+            <div class="field-group">
+              <label class="field-label" for="cc-name">Name on Card</label>
               <input
                 type="text"
-                class="form-control"
+                class="field-input"
                 id="cc-name"
                 placeholder="John Doe"
                 formControlName="NameonCard"
               />
               @if (NameonCard && NameonCard.invalid && NameonCard.touched) {
-              <span>Please enter a (correct) Name</span>
+                <span class="field-error">Please enter a valid name</span>
               }
             </div>
-            <div class="col-md-6 mb-3">
-              <label for="cc-number">Credit card number</label>
+
+            <div class="field-group">
+              <label class="field-label" for="cc-number">Card Number</label>
               <input
                 type="text"
-                class="form-control"
+                class="field-input"
                 id="cc-number"
                 placeholder="000-000-0000"
                 formControlName="CreditCardNumber"
               />
-              @if (CreditCardNumber && CreditCardNumber.invalid &&
-              CreditCardNumber.touched) {
-              <span>Please enter a valid Credit Card Number</span>
+              @if (CreditCardNumber && CreditCardNumber.invalid && CreditCardNumber.touched) {
+                <span class="field-error">Please enter a valid card number</span>
               }
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-3 mb-3">
-              <label for="cc-expiration">Expiration</label>
-              <input
-                type="text"
-                class="form-control"
-                id="cc-expiration"
-                placeholder="12/30"
-                formControlName="Expiration"
-                required
-              />
-              @if ( Expiration && Expiration.invalid && Expiration.touched) {
-              <span>Please enter an expiration</span>
-              }
+
+            <div class="field-row">
+              <div class="field-group">
+                <label class="field-label" for="cc-expiration">Expiration</label>
+                <input
+                  type="text"
+                  class="field-input"
+                  id="cc-expiration"
+                  placeholder="MM/YY"
+                  formControlName="Expiration"
+                />
+                @if (Expiration && Expiration.invalid && Expiration.touched) {
+                  <span class="field-error">Invalid expiration</span>
+                }
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="cc-cvv">CVV</label>
+                <input
+                  type="text"
+                  class="field-input"
+                  id="cc-cvv"
+                  placeholder="000"
+                  formControlName="CVV"
+                />
+                @if (CVV && CVV.invalid && CVV.touched) {
+                  <span class="field-error">Invalid CVV</span>
+                }
+              </div>
             </div>
-            <div class="col-md-3 mb-3">
-              <label for="cc-cvv">CVV</label>
-              <input
-                type="text"
-                class="form-control"
-                id="cc-cvv"
-                placeholder="000"
-                formControlName="CVV"
-                required
-              />
-              @if ( CVV && CVV.invalid && CVV.touched) {
-              <span>Please enter an CVV</span>
-              }
-            </div>
-          </div>
-          <hr class="mb-4" />
-        </fieldset>
-        <button
-          class="btn btn-primary btn-lg btn-block"
-          type="submit"
-          [disabled]="InformationForm.invalid"
-          (click)="submitInformation()"
-        >
-          Complete Checkout
-        </button>
+
+          </fieldset>
+
+          <button
+            class="btn-complete-checkout"
+            type="button"
+            [disabled]="InformationForm.invalid"
+            (click)="submitInformation()"
+          >
+            Complete Order
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+          </button>
+
+        </div>
       </div>
     </div>
-    <footer class="my-5 pt-5 text-muted text-center text-small">
-      <p class="mb-1"></p>
-      <ul class="list-inline"></ul>
-    </footer>
-  </div>
-  }
-</body>
+  </section>
+}
