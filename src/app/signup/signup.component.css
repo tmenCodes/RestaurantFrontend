@@ -1,49 +1,162 @@
-html,
-body {
-  height: 100%;
-}
-
-body {
-  display: -ms-flexbox;
+/* ===== Page ===== */
+.signup-page {
+  min-height: 100vh;
+  background: #fafaf8;
   display: flex;
-  -ms-flex-align: center;
   align-items: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  background-color: #f5f5f5;
+  justify-content: center;
+  padding: 60px 5vw;
 }
 
-.form-signin {
+/* ===== Card ===== */
+.signup-card {
   width: 100%;
-  max-width: 330px;
-  padding: 15px;
-  margin: auto;
-}
-.form-signin .checkbox {
-  font-weight: 400;
-}
-.form-signin .form-control {
-  position: relative;
-  box-sizing: border-box;
-  height: auto;
-  padding: 10px;
-  font-size: 16px;
-}
-.form-signin .form-control:focus {
-  z-index: 2;
-}
-.form-signin input[type="email"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.form-signin input[type="password"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+  max-width: 420px;
+  padding: 48px 44px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
 }
 
-.btn btn-lg btn-primary btn-block {
-  margin: 10px important!; 
-  color: red; 
+@media (max-width: 480px) {
+  .signup-card {
+    padding: 36px 24px;
+  }
+}
+
+/* ===== Header ===== */
+.signup-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.signup-logo {
+  width: 72px;
+  height: 72px;
+  border-radius: 14px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto 20px;
+}
+
+.signup-eyebrow {
+  display: none;
+}
+
+.signup-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  letter-spacing: -0.3px;
+  font-family: var(--font-secondary, "Inter", sans-serif);
+  margin-bottom: 0;
+}
+
+.signup-divider {
+  display: none;
+}
+
+/* ===== Form ===== */
+.signup-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 14px;
+}
+
+.field-label {
+  display: none;
+}
+
+.field-input {
+  padding: 11px 14px;
+  border: 1.5px solid #e8e8e8;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  color: #1a1a1a;
+  background: #fff;
+  outline: none;
+  box-shadow: none;
+  transition: border-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.field-input:focus {
+  border-color: #1a1a1a;
+}
+
+.field-error {
+  font-size: 0.75rem;
+  color: #e74c3c;
+  margin-top: 4px;
+}
+
+/* ===== Remember Me ===== */
+.remember-row {
+  margin-bottom: 20px;
+}
+
+.remember-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: #777;
+  cursor: pointer;
+}
+
+.remember-label input[type="checkbox"] {
+  accent-color: #c89b3c;
+  width: 15px;
+  height: 15px;
+}
+
+/* ===== Submit Button ===== */
+.btn-signup {
+  width: 100%;
+  padding: 14px;
+  background: #1a1a1a;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.3px;
+  transition: background 0.2s, transform 0.15s;
+  cursor: pointer;
+  margin-bottom: 18px;
+}
+
+.btn-signup:hover:not(:disabled) {
+  background: #c89b3c;
+  transform: translateY(-1px);
+}
+
+.btn-signup:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ===== Sign In Link ===== */
+.signin-link {
+  text-align: left;
+  font-size: 0.88rem;
+  color: #777;
+  margin: 0;
+}
+
+.signin-link a {
+  color: #1a1a1a;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.signin-link a:hover {
+  color: #c89b3c;
 }
