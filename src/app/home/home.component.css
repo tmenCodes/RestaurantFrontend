@@ -4,21 +4,25 @@
   background: #fafaf8;
   display: flex;
   align-items: center;
-  padding: 80px 5vw 60px;
+  padding: 0px 5vw 60px;
   position: relative;
   overflow: hidden;
 }
 
 /* Subtle decorative background circle */
 .hero::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -120px;
   right: -120px;
   width: 600px;
   height: 600px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(200, 155, 60, 0.08) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(200, 155, 60, 0.08) 0%,
+    transparent 70%
+  );
   pointer-events: none;
 }
 
@@ -138,7 +142,7 @@
   width: 100%;
   max-width: 480px;
   height: auto;
-  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.12));
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.12));
 }
 
 /* ===== Stats Section ===== */
