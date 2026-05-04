@@ -70,6 +70,11 @@ export class MenuComponent {
   menuItemOptionsArray: string[] = [];
 
   ngOnInit() {
+    this.menuItems$.subscribe((value) => {
+      for (let item of value) {
+        console.log(item);
+      }
+    });
     //load menu options into the form array
     this.HttpService.GetMenuItemOptions().subscribe((value) => {
       for (let option of value) {

@@ -229,6 +229,7 @@ export class HttpService {
 
   public GetMenuItems(): Observable<any> {
     let urlconcat = this.url + '' + 'api/Order/GetMenuItems';
+    console.log(urlconcat);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });

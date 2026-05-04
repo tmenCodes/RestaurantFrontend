@@ -233,39 +233,18 @@ export class CheckoutComponent {
       //use map or filter
       for (let i = 0; i < val1.length; i++) {
         for (let z = 0; z < val2.length; z++) {
-          //   console.log(val1[i]);
           if (val2[z].menuItemName == val1[i].name) {
-            // console.log(val1[i]);
-            //console.log(val2[z].menuItemBasePrice);
-            newObject = { ...val1[i], basePrice: val2[z].menuItemBasePrice };
-            //  console.log(newObject);
+            newObject = {
+              ...val1[i],
+              basePrice: val2[z].menuItemBasePrice,
+              totalItemPrice: val1[i].totalItemPrice.toFixed(2),
+            };
             this.displayArray.push(newObject);
-            console.log(this.displayArray);
+            //   console.log(this.displayArray);
           }
         }
       }
-
-      // let x = val1.filter((cartItem: any) => {
-      //   if (cartItem.menuItemName == val1.name) {
-      //     console.log(val1.name);
-      //   }
-      // });
     });
-
-    //   this.cartService
-    //     .getAllCartItems()
-    //     .pipe(switchMap((value) => {this.HttpService.GetMenuItems()
-    //       .pipe(
-    //         tap((menuItems) => {
-    //           console.log(value)
-    //             console.log(menuItems)
-    //           })
-    //         })
-    //       )
-    //       })
-
-    //     .subscribe();
-    // });
 
     if (!this.Token) {
       this.oppositetogglebutton = false;
