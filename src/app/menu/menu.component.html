@@ -88,7 +88,7 @@
                 class="menu-card-img"
                 [alt]="menuItem.menuItemName"
               />
-              <div class="menu-card-price-badge">${{ menuItem.menuItemBasePrice }}</div>
+              <div class="menu-card-price-badge">${{ menuItem.menuItemBasePrice | number : "1.2-2" }}</div>
             </div>
             <div class="menu-card-body">
               <h4 class="menu-card-name">{{ menuItem.menuItemName }}</h4>
