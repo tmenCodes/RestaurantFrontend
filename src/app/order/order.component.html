@@ -1,1 +1,44 @@
-<p>order works!</p>
+<section class="orders-section">
+  <div class="orders-container">
+
+    <div class="orders-page-header">
+      <p class="orders-subtitle">Your History</p>
+      <h1 class="orders-title">My Orders</h1>
+      <div class="orders-divider"></div>
+    </div>
+
+    <div class="orders-grid">
+      @for (order of (orders$ | async) ?? []; track order; let i = $index) {
+        <div class="order-card">
+          <div class="order-card-top">
+            <div class="order-number">Order #{{ i + 1 }}</div>
+            <span class="order-badge">Completed</span>
+          </div>
+          <div class="order-card-body">
+            <div class="order-detail">
+              <span class="order-detail-label">Date</span>
+              <span class="order-detail-value">{{ order.date }}</span>
+            </div>
+            <div class="order-divider-line"></div>
+            <div class="order-detail">
+              <span class="order-detail-label">Total</span>
+              <span class="order-total">${{ order.totalPrice | number : '1.2-2' }}</span>
+            </div>
+          </div>
+        </div>
+      } @empty {
+        <div class="orders-empty">
+          <div class="empty-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+          </div>
+          <h2>No orders yet</h2>
+          <p>Looks like you haven't placed any orders. Check out our menu!</p>
+          <a routerLink="/menu" class="btn-browse-menu">Browse Menu</a>
+        </div>
+      }
+    </div>
+
+  </div>
+</section>

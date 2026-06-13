@@ -1,20 +1,25 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import {HttpClient} from "@angular/common/http"; 
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
-import { map, tap, pipe, mergeMap } from 'rxjs';
+import { map, tap, pipe, mergeMap, filter } from 'rxjs';
 
 import { CheckEmailExistsValidator } from '../check-email-exists.validator';
 import { HttpService } from '../http.service';
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css'],
-    standalone: false
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css'],
+  standalone: false,
 })
 export class LoginComponent {
   constructor(
@@ -66,11 +71,9 @@ export class LoginComponent {
       .subscribe();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.HttpService.CheckIfUserLoggedIn()
+      .pipe(filter((value) => value === true))
+      .subscribe(() => this.Router.navigate(['/userinfo']));
+  }
 }
-
-
-
-
-
-

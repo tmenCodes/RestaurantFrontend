@@ -1,81 +1,126 @@
 
+<section class="profile-section">
+  <div class="profile-container">
 
-<div class="container" >
-  <div class="row">
+    <div class="profile-page-header">
+      <p class="profile-subtitle">My Account</p>
+      <h1 class="profile-title">
+        @if (username) { Welcome, {{ username }} }
+        @if (!username) { Account Settings }
+      </h1>
+      <div class="profile-divider"></div>
+    </div>
 
-    <div class="col-md-8 order-md-1" [formGroup]="InformationForm" [ngStyle]="{'margin': '100px'}">
-      <h2>Welcome, {{username}}</h2>
-      <h4 class="mb-3">Add Payment Information</h4>
-    
-      <div class="d-block my-3">
-        <div class="custom-control custom-radio">
-          <input id="cardType" name="cardType" type="radio" class="custom-control-input" value="credit" formControlName="cardType" checked required>
-          <label class="custom-control-label" for="credit">Credit card</label>
+    <div class="profile-grid">
+
+      <!-- Payment Card -->
+      <div class="profile-card" [formGroup]="InformationForm">
+        <h3 class="card-heading">Payment Information</h3>
+
+        <div class="card-type-group">
+          <label class="card-type-option">
+            <input type="radio" name="cardType" value="credit" formControlName="cardType" checked />
+            <span class="card-type-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+              </svg>
+              Credit Card
+            </span>
+          </label>
+          <label class="card-type-option">
+            <input type="radio" name="cardType" value="debit" formControlName="cardType" />
+            <span class="card-type-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+              </svg>
+              Debit Card
+            </span>
+          </label>
         </div>
-        <div class="custom-control custom-radio">
-          <input id="cardType" name="cardType" type="radio" class="custom-control-input" value="debit" formControlName="cardType">
-          <label class="custom-control-label" for="debit">Debit card</label>
+
+        <div class="fields-stack">
+          <div class="field-group">
+            <label class="field-label" for="cc-name">Name on Card</label>
+            <input type="text" class="field-input" id="cc-name" placeholder="John Doe" formControlName="nameonCard" />
+            @if (NameonCard && NameonCard.invalid && NameonCard.touched) {
+              <span class="field-error">Please enter a valid name</span>
+            }
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="cc-number">Card Number</label>
+            <input type="text" class="field-input" id="cc-number" placeholder="000-000-0000" formControlName="creditCardNumber" />
+            @if (CreditCardNumber && CreditCardNumber.invalid && CreditCardNumber.touched) {
+              <span class="field-error">Please enter a valid card number</span>
+            }
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label" for="cc-expiration">Expiration</label>
+              <input type="text" class="field-input" id="cc-expiration" placeholder="MM/YY" formControlName="expiration" />
+              @if (Expiration && Expiration.invalid && Expiration.touched) {
+                <span class="field-error">Invalid expiration</span>
+              }
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="cc-cvv">CVV</label>
+              <input type="text" class="field-input" id="cc-cvv" placeholder="000" formControlName="cvv" />
+              @if (CVV && CVV.invalid && CVV.touched) {
+                <span class="field-error">Invalid CVV</span>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-actions">
+          @if (!username) {
+            <button class="btn-profile-primary" type="button" (click)="submitInformation()">
+              Save Info
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+              </svg>
+            </button>
+          }
+          @if (username && !updatePayMentInfo) {
+            <button class="btn-profile-secondary" type="button" (click)="editInformation()">Edit Info</button>
+          }
+          @if (updatePayMentInfo) {
+            <button class="btn-profile-primary" type="button" (click)="updateUserPayment()">
+              Save Changes
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+            </button>
+          }
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label for="cc-name">Name on card</label>
-          <input type="text" class="form-control" id="cc-name" placeholder="name" formControlName="nameonCard" required>
-          @if (NameonCard && NameonCard.invalid && NameonCard.touched) {
-            <span>Please enter a (correct) Name</span>
-          }
-        </div>
-        <div class="col-md-6 mb-3">
-          <label for="cc-number">Credit card number</label>
-          <input type="text" class="form-control" id="cc-number" placeholder="value" formControlName="creditCardNumber" >
-          @if (CreditCardNumber && CreditCardNumber.invalid && CreditCardNumber.touched) {
-            <span>Please enter a valid Credit Card Number</span>
-          }
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-3 mb-3">
-          <label for="cc-expiration">Expiration</label>
-          <input type="text" class="form-control" id="cc-expiration"  placeholder="12/30"  formControlName="expiration" required>
-          @if ( Expiration && Expiration.invalid && Expiration.touched) {
-            <span>Please enter an expiration</span>
-          }
-        </div>
-        <div class="col-md-3 mb-3">
-          <label for="cc-cvv">CVV</label>
-          <input type="text" class="form-control" id="cc-cvv" placeholder="000"  formControlName="cvv" required>
-          @if ( CVV && CVV.invalid && CVV.touched) {
-            <span>Please enter an CVV</span>
+
+      <!-- Order History Card -->
+      <div class="profile-card">
+        <h3 class="card-heading">Recent Orders</h3>
+        <div class="orders-list">
+          @for (history of (PastHistory | async) ?? []; track history) {
+            <div class="order-item">
+              <div class="order-info">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                <span class="order-date">{{ history.date }}</span>
+              </div>
+              <span class="order-total">${{ history.totalPrice | number : '1.2-2' }}</span>
+            </div>
+          } @empty {
+            <div class="orders-empty">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+              </svg>
+              <p>No orders yet</p>
+            </div>
           }
         </div>
       </div>
 
-      <hr class="mb-4">
-      @if (!username) {
-        <button class="btn btn-primary btn-lg btn-block" type="submit" (click)="submitInformation()">Save Info</button>
-      }
-      @if (username) {
-        <button class="btn btn-primary btn-lg btn-block"   type="submit"  (click)="editInformation()">Edit Info</button>
-      }
-      @if (updatePayMentInfo) {
-           <button class="btn btn-primary btn-lg btn-block"   type="submit" [ngStyle]="{'margin': '10px'}" (click)="updateUserPayment()">Save Changes</button>
-      }
     </div>
   </div>
-
-  <div class="row">
-    <div class="col-md-8 order-md-1" [formGroup]="InformationForm" >
-       <hr class="mb-4">
-      <h4 class="mb-3">Last 5 Orders</h4>
-      <ul *ngFor="let history of PastHistory | async">
-        <tr>Total Price: {{history.totalPrice | number : '1.2-2'}}</tr>
-        <tr>Date: {{history.date}}</tr>      
-      </ul>
-    </div>
-</div>
-
-
-
-
-
-</div>
+</section>

@@ -1,0 +1,173 @@
+/* ===== Layout ===== */
+.orders-section {
+  min-height: 80vh;
+  background: #fafaf8;
+  padding: 60px 16px 80px;
+}
+
+.orders-container {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* ===== Page Header ===== */
+.orders-page-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.orders-subtitle {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #c89b3c;
+  margin-bottom: 8px;
+}
+
+.orders-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 14px;
+}
+
+.orders-divider {
+  width: 48px;
+  height: 3px;
+  background: #c89b3c;
+  margin: 0 auto;
+  border-radius: 2px;
+}
+
+/* ===== Order Cards Grid ===== */
+.orders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* ===== Individual Order Card ===== */
+.order-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  overflow: hidden;
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+
+.order-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.11);
+}
+
+.order-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid #f3f3f3;
+}
+
+.order-number {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #1a1a1a;
+}
+
+.order-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #4caf50;
+  background: rgba(76, 175, 80, 0.1);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.order-card-body {
+  padding: 18px 22px 22px;
+}
+
+.order-detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-detail-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #aaa;
+}
+
+.order-detail-value {
+  font-size: 0.88rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.order-divider-line {
+  height: 1px;
+  background: #f3f3f3;
+  margin: 14px 0;
+}
+
+.order-total {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #c89b3c;
+}
+
+/* ===== Empty State ===== */
+.orders-empty {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 20px;
+  gap: 14px;
+}
+
+.empty-icon {
+  color: #d0c9be;
+  margin-bottom: 4px;
+}
+
+.orders-empty h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.orders-empty p {
+  color: #888;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.btn-browse-menu {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 12px 28px;
+  background: #1a1a1a;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.btn-browse-menu:hover {
+  background: #c89b3c;
+  color: #fff;
+}

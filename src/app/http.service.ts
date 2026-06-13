@@ -34,7 +34,8 @@ export class HttpService {
         error.error
       );
     }
-    // Return an observable with a user-facing error message.
+    // Return an observable with a user-facing error message
+    //general error outside of status code
     return throwError(
       () => new Error('Something bad happened; please try again later.')
     );
@@ -43,20 +44,10 @@ export class HttpService {
   CreateNewUser(body: any, email: string) {
     let url = this.url + '' + 'api/RegisterUser/CreateUser';
 
-    return this.Http.post<JSON>(url, body)
-      .pipe(retry(2), catchError(this.handleBackendDownError))
-      .subscribe({
-        next: (data) => {
-          //if the backend returns an error
-
-          console.log(data);
-          this.router.navigate(['home']);
-        },
-        error: (error) => {
-          console.log('this is the error: ');
-          console.log(error);
-        },
-      });
+    return this.Http.post<JSON>(url, body, { observe: 'response' }).pipe(
+      retry(2),
+      catchError(this.handleBackendDownError)
+    );
   }
 
   GetCartItems() {
@@ -155,16 +146,13 @@ export class HttpService {
     });
   }
 
-  public CheckIfUserLoggedIn(): Observable<any> {
+  public CheckIfUserLoggedIn(): Observable<boolean> {
     let urlconcat = this.url + '' + 'api/RegisterUser/IsUserLoggedIn';
 
-    return this.Http.get<any>(urlconcat, {
+    return this.Http.get<boolean>(urlconcat, {
       withCredentials: true,
     }).pipe(
-      tap((value) => console.log('from the checkuserloggin' + value)),
-      catchError((value) => {
-        return of(value);
-      })
+      catchError(() => of(false))
     );
   }
 

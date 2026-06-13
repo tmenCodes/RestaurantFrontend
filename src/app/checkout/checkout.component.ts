@@ -119,6 +119,7 @@ export class CheckoutComponent {
           return this.cartService.makePayment(this.paymentInformation).pipe(
             tap((value) => {
               localStorage.removeItem('myGuid');
+              this.cartService.CartCount.next(0);
               this.Router.navigate(['/complete']);
             })
           );
@@ -139,6 +140,7 @@ export class CheckoutComponent {
             return this.cartService.makePayment(this.paymentInformation).pipe(
               tap((_) => {
                 localStorage.removeItem('myGuid');
+                this.cartService.CartCount.next(0);
                 this.Router.navigate(['/complete']);
               })
             );

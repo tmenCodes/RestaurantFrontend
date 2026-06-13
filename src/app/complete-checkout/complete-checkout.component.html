@@ -1,31 +1,38 @@
-<body class="bg-light">
-<div class="container-fluid">
-<div class="row">
+<section class="confirm-section">
+  <div class="confirm-container">
 
+    <div class="confirm-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+      </svg>
+    </div>
 
-    <section id="testimonials" class="testimonials section-bg">
-        <div class="container" data-aos="fade-up">
-  
-          <div class="section-header">
-            <h2>Order</h2>
-            <p [style]="{'paddingtop': '30px'}">Order is now complete!</p>
-            <p [style]="{'paddingtop': '30px'}"><p><span> Please pickup in 30 minutes &#64; {{calcTime}}</span></p>
-          </div>
-  
-          <div class="slides-1 swiper" data-aos="fade-up" >
-            <div class="swiper-wrapper" [style]="{'padding': '50px'}">
-                <div></div>
-                <div></div>    
+    <p class="confirm-subtitle">Thank You</p>
+    <h1 class="confirm-title">Order Confirmed</h1>
+    <div class="confirm-divider"></div>
 
-          </div>
-          
-          </div>
-  
-        </div>
-      </section><!-- End Testimonials Section -->
+    <div class="confirm-card">
+      <p class="confirm-message">Your order is being prepared fresh for you!</p>
 
+      <div class="confirm-pickup">
+        <span class="pickup-label">Estimated Pickup</span>
+        <span class="pickup-time">30 min &mdash; {{ calcTime }}</span>
+      </div>
 
+      <p class="confirm-disclaimer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        This is a mock website — no real order was placed.
+      </p>
+    </div>
 
-</div>
-</div>
-</body>
+    <a routerLink="/menu" class="btn-confirm-back">
+      Back to Menu
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+      </svg>
+    </a>
+
+  </div>
+</section>

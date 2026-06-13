@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { HttpService } from '../http.service';
 
 @Component({
     selector: 'app-order',
@@ -6,6 +8,10 @@ import { Component } from '@angular/core';
     styleUrls: ['./order.component.css'],
     standalone: false
 })
-export class OrderComponent {
+export class OrderComponent implements OnInit {
+  constructor(private HttpService: HttpService) {}
 
+  orders$: Observable<any> = this.HttpService.GetPastOrders();
+
+  ngOnInit() {}
 }

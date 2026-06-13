@@ -8,13 +8,13 @@ import { map, tap, pipe, filter, Subscription, mergeMap } from 'rxjs';
 import { Observable, debounceTime } from 'rxjs';
 
 @Component({
-    selector: 'app-nav-bar',
-    templateUrl: './nav-bar.component.html',
-    styleUrls: ['./nav-bar.component.css'],
-    standalone: false
+  selector: 'app-nav-bar',
+  templateUrl: './nav-bar.component.html',
+  styleUrls: ['./nav-bar.component.css'],
+  standalone: false,
 })
 export class NavBarComponent {
-  cartSize: number = 0; 
+  cartSize: number = 0;
   showLogin: boolean = true;
   showUserInfo: boolean = false;
   showLogOut: boolean = false;
@@ -32,12 +32,13 @@ export class NavBarComponent {
     private Httpservice: HttpService,
     private Router: Router
   ) {
-    
     this.Router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         // Update navbar elements based on the new route or state
 
-        this.LoginInCheck.subscribe();
+        this.LoginInCheck.subscribe((value) =>
+          console.log('the value from teh check' + value)
+        );
         let loggedIn = localStorage.getItem('login');
         //  console.log('the current status of the loggin ' + loggedIn);
 
@@ -63,31 +64,30 @@ export class NavBarComponent {
   }
 
   ngOnInit() {
-    this.cartService.getCartSizeLength().pipe(tap(value => {
+    if (localStorage.getItem('login') === 'true') {
+      this.showLogOut = true;
+      this.showUserInfo = true;
+      this.showLogin = false;
+    }
 
-        this.cartService.CartCount.next(value)
-        return this.cartService.CartCount.subscribe({
-          next: (value) => {
-       
-            this.cartSize = value; 
-          },
-          error: (error) => {
-            console.log(error);
-          },
-        });
-    })).subscribe({
-   //   next: (value)=>console.log(value), 
-   //   error: (error)=>console.log(error)
-
-    }); 
- 
-
-
-
+    this.cartService
+      .getCartSizeLength()
+      .pipe(
+        tap((value) => {
+          this.cartService.CartCount.next(value);
+          return this.cartService.CartCount.subscribe({
+            next: (value) => {
+              this.cartSize = value;
+            },
+            error: (error) => {
+              console.log(error);
+            },
+          });
+        })
+      )
+      .subscribe({
+        //   next: (value)=>console.log(value),
+        //   error: (error)=>console.log(error)
+      });
   }
-
-
-
-
-
 }

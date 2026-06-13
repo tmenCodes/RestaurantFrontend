@@ -27,7 +27,7 @@ const routes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'chefs', component: ChefsComponent },
   { path: 'book', component: BookComponent },
-  // {path: "order", component: OrderComponent},
+  { path: 'order', component: OrderComponent },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'cart', component: CheckoutComponent },
@@ -55,7 +55,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule], 
-
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
