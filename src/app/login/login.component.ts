@@ -58,14 +58,13 @@ export class LoginComponent {
     this.HttpService.Login(LoginInformation)
       .pipe(
         mergeMap((value) => {
-          //  console.log(value.body.succeeded);
-          this.HttpService.updateCheckIfLoggedIn(value.body.succeded);
+          this.HttpService.updateCheckIfLoggedIn(true);
           //send this value onto
-          localStorage.setItem('login', value.body.succeeded);
+          localStorage.setItem('login', value.body.message);
 
           this.Router.navigateByUrl('/userinfo');
           //   this.Router.navigate(['userinfo']);
-          return value.body.succeeded;
+          return value.body.message;
         })
       )
       .subscribe();

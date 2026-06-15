@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { catchError, retry, throwError, Observable } from 'rxjs';
-import { BehaviorSubject, of, tap } from 'rxjs';
+import { BehaviorSubject, of, tap, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
@@ -15,8 +15,13 @@ export class HttpService {
   //url: string = 'http://34.224.64.48';
   //url: string = 'https://resturant.tonymdesigns.com/backend/'
 
-  public loginBehavoir = new BehaviorSubject<boolean>(false);
+  //this behavoir is to update the behavior when theu user logs out
+  public loginBehavoir = new BehaviorSubject<boolean>(this.checkIfLoggedIn());
   CheckIfLoggedIn = this.loginBehavoir.asObservable();
+
+  checkIfLoggedIn() {
+    return localStorage.getItem('login') === 'Login successful';
+  }
 
   updateCheckIfLoggedIn(changeValue: boolean) {
     this.loginBehavoir.next(changeValue);
@@ -146,13 +151,18 @@ export class HttpService {
     });
   }
 
-  public CheckIfUserLoggedIn(): Observable<boolean> {
-    let urlconcat = this.url + '' + 'api/RegisterUser/IsUserLoggedIn';
+  public CheckIfUserLoggedIn(): Observable<any> {
+    const urlconcat = `${this.url}api/RegisterUser/IsUserLoggedIn`;
 
-    return this.Http.get<boolean>(urlconcat, {
-      withCredentials: true,
-    }).pipe(
-      catchError(() => of(false))
+    return this.Http.get<any>(urlconcat, { withCredentials: true }).pipe(
+      // map automatically wraps the returned value back into the main stream
+      tap((value) => console.log('Login check response:', value)),
+      map((value) => value),
+      catchError((error) => {
+        // Handle the error and return a fallback value or rethrow
+        console.error('Login check failed:', error);
+        return of(null);
+      })
     );
   }
 

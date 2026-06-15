@@ -1,56 +1,96 @@
 <div class="signup-page">
   <div class="signup-card">
-
     <div class="signup-header">
-      <img class="signup-logo" src="./assets/img/yum.jpg" alt="Yummy logo">
+      <img class="signup-logo" src="./assets/img/yum.jpg" alt="Yummy logo" />
       <p class="signup-eyebrow">Welcome</p>
       <h1 class="signup-title">Create an Account</h1>
       <div class="signup-divider"></div>
     </div>
 
     <form [formGroup]="SignUpForm" class="signup-form">
-
       <div class="field-group">
         <label class="field-label" for="fullName">Full Name</label>
-        <input class="field-input" type="text" id="fullName" placeholder="Jane Doe" formControlName="FullName">
+        <input
+          class="field-input"
+          type="text"
+          id="fullName"
+          placeholder="Full Name"
+          formControlName="FullName"
+        />
       </div>
 
-      <div class="field-group">
+      <!-- <div class="field-group">
         <label class="field-label" for="username">Username</label>
-        <input class="field-input" type="text" id="username" placeholder="janedoe" formControlName="UserName">
+        <input
+          class="field-input"
+          type="text"
+          id="username"
+          placeholder="User Name"
+          formControlName="UserName"
+        />
         @if (SignUpForm.get('UserName')?.hasError('UserNameDuplicate')) {
-          <span class="field-error">Username has already been taken.</span>
+        <span class="field-error">Username has already been taken.</span>
         }
-      </div>
+      </div> -->
 
       <div class="field-group">
         <label class="field-label" for="email">Email</label>
-        <input class="field-input" type="email" id="email" placeholder="you@example.com" formControlName="Email">
+        <input
+          class="field-input"
+          type="email"
+          id="email"
+          placeholder="you@example.com"
+          formControlName="Email"
+        />
         @if (SignUpForm.get('Email')?.hasError('EmailDuplicate')) {
-          <span class="field-error">Email has already been taken.</span>
+        <span class="field-error">Email has already been taken</span>
         }
       </div>
 
       <div class="field-group">
         <label class="field-label" for="inputPassword">Password</label>
-        <input class="field-input" type="password" id="inputPassword" placeholder="••••••••" formControlName="Password">
-        @if (Password && Password.invalid && Password.touched) {
-          <span class="field-error">Please enter a valid password.</span>
+        <input
+          class="field-input"
+          type="password"
+          id="inputPassword"
+          placeholder="Password"
+          formControlName="Password"
+        />
+        <!-- @if (Password && Password.invalid && Password.touched) {
+        <span class="field-error">Please enter a valid password.</span>
+        } -->
+        @if (Password && Password.touched) {
+
+        <span class="field-error">
+          Passwords must be at least 6 characters and also contain one digit and
+          at least one uppercase letter</span
+        >
+
         }
       </div>
 
       <div class="remember-row">
         <label class="remember-label">
-          <input type="checkbox" value="remember-me"> Remember me
+          <input type="checkbox" value="remember-me" /> Remember me
         </label>
       </div>
 
-      <button class="btn-signup" type="submit" [disabled]="SignUpForm.invalid" (click)="SubmitSignUp()">
+      <button
+        class="btn-signup"
+        type="submit"
+        [disabled]="SignUpForm.invalid"
+        (click)="SubmitSignUp()"
+      >
         Create Account
       </button>
 
-      <p class="signin-link">Already have an account? <a href="login">Sign in</a></p>
+      @if (errorMessage) {
+      <span class="field-error">{{ errorMessage }}</span>
+      }
 
+      <p class="signin-link">
+        Already have an account? <a href="login">Log In</a>
+      </p>
     </form>
   </div>
 </div>

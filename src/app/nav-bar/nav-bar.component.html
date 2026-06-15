@@ -1,53 +1,56 @@
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #37373f;">
+<nav
+  class="navbar navbar-expand-lg navbar-dark"
+  style="background-color: #37373f"
+>
   <div class="container px-4 px-lg-5">
-    <a href="index.html" class="logo d-flex align-items-center me-auto me-lg-0">
-
+    <a href="/home" class="logo d-flex align-items-center me-auto me-lg-0">
       <h1>Yummy<span>.</span></h1>
     </a>
 
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-        <li class="nav-item"><a class="nav-link active" aria-current="page" href="home">Home</a></li>
-        <li class="nav-item"><a class="nav-link active" aria-current="page"href="menu">Menu</a></li>
-        <li class="nav-item"><a class="nav-link active" aria-current="page"href="chefs">Chefs</a></li>
-        <li class="nav-item"><a class="nav-link active" aria-current="page"href="contact">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="/home">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/menu">Menu</a></li>
+        <li class="nav-item"><a class="nav-link" href="/chefs">Chefs</a></li>
+        <li class="nav-item">
+          <a class="nav-link" href="/contact">Contact</a>
+        </li>
 
-        <li class="nav-item">@if (showLogin) {
-          <a class="nav-link active" aria-current="page"href="login">Log In</a>
-        }</li>
-        <li class="nav-item">@if (showUserInfo) {
-          <a class="nav-link active" aria-current="page"href="userinfo">User Info</a>
-        }</li>
-        <li class="nav-item">@if (showLogOut) {
-          <button class="nav-link active"(click)="SignOut($event)"  aria-current="page"href="">Sign Out</button>
-        }</li>
-        <!--       <li class="nav-item"> <a class="nav-link active" aria-current="page"href="information">Information</a></li>
-        <li class="nav-item"><a class="nav-link active" aria-current="page"href="order">Order</a></li>
-
-        -->
-
-        <!-- <li class="nav-item"><a class="nav-link active" aria-current="page"href="signup" *ngIf="showSignup">Sign Up</a></li>
-        <li class="nav-item"><a class="nav-link active" aria-current="page"href="login" *ngIf="showLogin">Login</a></li>
-        <li class="nav-item"><a class="nav-link active" aria-current="page"href="/userinfo" *ngIf="showLogOut">UserInfo</a></li>
-        <li class="nav-item"><a class="nav-link active" aria-current="page"href="/" *ngIf="showLogOut" (click)="LogOut()">LogOut</a></li>   -->
-
-
+        @if (!isLoggedIn) {
+        <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
+        } @if (checkifLoggedIn$ | async) {
+        <li class="nav-item">
+          <a class="nav-link" href="/userinfo">Account</a>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link sign-out-btn" (click)="signOut()">
+            Sign Out
+          </button>
+        </li>
+        }
       </ul>
 
-      <form class="d-flex">
-        <a href="cart">
-          <button class="btn btn-outline-light" type="button" >
-            <i class="bi-cart-fill me-1"></i>
-            Cart
-            <span class="badge bg-dark text-white ms-1 rounded-pill">{{cartSize}}</span>
-          </button>
-        </a>
-      </form>
-
-      <!-- <app-cart-count [cartSize]="this.cartSize"></app-cart-count> -->
-
+      <a href="/cart">
+        <button class="btn btn-outline-light" type="button">
+          <i class="bi-cart-fill me-1"></i>
+          Cart
+          <span class="badge bg-dark text-white ms-1 rounded-pill">{{
+            cartSize
+          }}</span>
+        </button>
+      </a>
     </div>
   </div>
 </nav>

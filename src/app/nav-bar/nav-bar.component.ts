@@ -1,11 +1,8 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { CartService } from '../cart.service';
-import { HttpClient } from '@angular/common/http';
 import { HttpService } from '../http.service';
-import { Router, NavigationEnd } from '@angular/router';
-import { map, tap, pipe, filter, Subscription, mergeMap } from 'rxjs';
-
-import { Observable, debounceTime } from 'rxjs';
+import { Router } from '@angular/router';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-nav-bar',
@@ -15,79 +12,45 @@ import { Observable, debounceTime } from 'rxjs';
 })
 export class NavBarComponent {
   cartSize: number = 0;
-  showLogin: boolean = true;
-  showUserInfo: boolean = false;
-  showLogOut: boolean = false;
+  isLoggedIn: boolean = false;
 
-  //retrieve the child component
   @Output() addCartItemEvent = new EventEmitter<number>();
-  // private routerSubscription: Subscription = this.Router.events
-  //   .pipe(filter((event) => event instanceof NavigationEnd))
-  //   .subscribe();
-
-  public LoginInCheck: Observable<boolean> = this.Httpservice.CheckIfLoggedIn;
 
   constructor(
     private cartService: CartService,
-    private Httpservice: HttpService,
-    private Router: Router
-  ) {
-    this.Router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        // Update navbar elements based on the new route or state
+    private httpService: HttpService,
+    private router: Router
+  ) {}
 
-        this.LoginInCheck.subscribe((value) =>
-          console.log('the value from teh check' + value)
-        );
-        let loggedIn = localStorage.getItem('login');
-        //  console.log('the current status of the loggin ' + loggedIn);
-
-        if (loggedIn === 'true') {
-          this.showLogOut = true;
-          this.showUserInfo = true;
-          this.showLogin = false;
-        }
-        //  this.updateNavbar();
-      }
-    });
-  }
-
-  SignOut(event: Event): void {
-    console.log('from the signout');
-    this.Httpservice.SignOut().subscribe((value) => {
-      this.showLogin = true;
-      this.showUserInfo = false;
-      localStorage.removeItem('login');
-      window.location.reload();
-      //   this.Router.navigate(['/home']);
-    });
-  }
+  checkifLoggedIn$ = this.httpService.CheckIfLoggedIn;
 
   ngOnInit() {
-    if (localStorage.getItem('login') === 'true') {
-      this.showLogOut = true;
-      this.showUserInfo = true;
-      this.showLogin = false;
-    }
-
+    this.isLoggedIn = localStorage.getItem('login') === 'Login successful';
+    this.checkifLoggedIn$.subscribe((value) => {
+      console.log(value);
+    });
     this.cartService
       .getCartSizeLength()
       .pipe(
         tap((value) => {
           this.cartService.CartCount.next(value);
-          return this.cartService.CartCount.subscribe({
-            next: (value) => {
-              this.cartSize = value;
-            },
-            error: (error) => {
-              console.log(error);
-            },
+          this.cartService.CartCount.subscribe({
+            next: (count) => (this.cartSize = count),
           });
         })
       )
-      .subscribe({
-        //   next: (value)=>console.log(value),
-        //   error: (error)=>console.log(error)
-      });
+      .subscribe();
+  }
+
+  signOut(): void {
+    //this is needed to remmove the button from the navbar without refreshing the page, if we didnt have this the user would have to refresh the page to see the change
+    this.httpService.updateCheckIfLoggedIn(false);
+
+    this.httpService.SignOut().subscribe(() => {
+      localStorage.removeItem('login');
+      this.isLoggedIn = false;
+      this.cartService.CartCount.next(0);
+      this.router.navigate(['/home']);
+    });
   }
 }

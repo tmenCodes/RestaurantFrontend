@@ -3,14 +3,13 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { confirmPasswordValidator } from '../confirm-password.validator';
 import { HttpService } from '../http.service';
 import { HttpClient } from '@angular/common/http';
-import {Router} from '@angular/router'; 
+import { Router } from '@angular/router';
 import { CheckEmailExistsValidator } from '../check-email-exists.validator';
 
-
- interface UserInfo {
-  Email: string, 
-  Password?: string, 
-  PasswordConfirm?: string
+interface UserInfo {
+  Email: string;
+  Password?: string;
+  PasswordConfirm?: string;
 }
 @Component({
   selector: 'app-signup',
@@ -30,11 +29,11 @@ export class SignupComponent {
   SignUpForm = new FormGroup(
     {
       FullName: new FormControl('', Validators.required),
-      UserName: new FormControl(
-        '',
-        [Validators.required],
-        CheckEmailExistsValidator.CheckDuplicateNameValidator(this.Http)
-      ),
+      // UserName: new FormControl(
+      //   '',
+      //   [Validators.required],
+      //   CheckEmailExistsValidator.CheckDuplicateNameValidator(this.Http)
+      // ),
       Email: new FormControl(
         '',
         [Validators.required, Validators.email],
@@ -61,9 +60,27 @@ export class SignupComponent {
     return this.SignUpForm.get('PasswordConfirm');
   }
 
+  errorMessage: string | null = null;
+
   //cannot submit unless the form is free of errors....
   SubmitSignUp() {
+    this.errorMessage = null;
+
     var SignUpForm = this.SignUpForm.value;
-    this.Http.CreateNewUser(SignUpForm, this.SignUpForm.value.Email!);
+
+    this.Http.CreateNewUser(SignUpForm, this.SignUpForm.value.Email!).subscribe(
+      {
+        next: (response) => {
+          if (response.status === 200) {
+            this.Router.navigate(['userinfo']);
+          } else {
+            this.errorMessage = 'Unexpected error. Please try again.';
+          }
+        },
+        error: (value) => {
+          this.errorMessage = 'Something went wrong. Unable to create account.';
+        },
+      }
+    );
   }
 }
