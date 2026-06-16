@@ -67,6 +67,7 @@ export class SignupComponent {
     this.errorMessage = null;
 
     var SignUpForm = this.SignUpForm.value;
+    console.log(this.SignUpForm.value);
 
     this.Http.CreateNewUser(SignUpForm).subscribe({
       next: (response) => {

@@ -50,7 +50,15 @@ export class HttpService {
     let url = this.url + '' + 'api/RegisterUser/CreateUser';
     console.log(body);
 
-    return this.Http.post<JSON>(url, body, { observe: 'response' }).pipe(
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.Http.post<JSON>(url, body, {
+      headers,
+      observe: 'response',
+    }).pipe(
+      tap((response) => console.log('CreateNewUser response:', response)),
       retry(2),
       catchError(this.handleBackendDownError)
     );
