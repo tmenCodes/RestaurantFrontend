@@ -29,11 +29,11 @@ export class SignupComponent {
   SignUpForm = new FormGroup(
     {
       FullName: new FormControl('', Validators.required),
-      // UserName: new FormControl(
-      //   '',
-      //   [Validators.required],
-      //   CheckEmailExistsValidator.CheckDuplicateNameValidator(this.Http)
-      // ),
+      UserName: new FormControl(
+        '',
+        [Validators.required],
+        CheckEmailExistsValidator.CheckDuplicateNameValidator(this.Http)
+      ),
       Email: new FormControl(
         '',
         [Validators.required, Validators.email],
