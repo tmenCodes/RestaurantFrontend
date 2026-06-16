@@ -68,19 +68,17 @@ export class SignupComponent {
 
     var SignUpForm = this.SignUpForm.value;
 
-    this.Http.CreateNewUser(SignUpForm, this.SignUpForm.value.Email!).subscribe(
-      {
-        next: (response) => {
-          if (response.status === 200) {
-            this.Router.navigate(['userinfo']);
-          } else {
-            this.errorMessage = 'Unexpected error. Please try again.';
-          }
-        },
-        error: (value) => {
-          this.errorMessage = 'Something went wrong. Unable to create account.';
-        },
-      }
-    );
+    this.Http.CreateNewUser(SignUpForm).subscribe({
+      next: (response) => {
+        if (response.status === 200) {
+          this.Router.navigate(['userinfo']);
+        } else {
+          this.errorMessage = 'Unexpected error. Please try again.';
+        }
+      },
+      error: (value) => {
+        this.errorMessage = 'Something went wrong. Unable to create account.';
+      },
+    });
   }
 }

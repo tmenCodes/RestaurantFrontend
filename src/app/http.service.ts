@@ -46,8 +46,9 @@ export class HttpService {
     );
   }
 
-  CreateNewUser(body: any, email: string) {
+  CreateNewUser(body: any) {
     let url = this.url + '' + 'api/RegisterUser/CreateUser';
+    console.log(body);
 
     return this.Http.post<JSON>(url, body, { observe: 'response' }).pipe(
       retry(2),
