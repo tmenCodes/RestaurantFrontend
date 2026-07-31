@@ -4,8 +4,6 @@ An Angular-based restaurant web application that allows customers to browse the 
 
 ## Live Demo
 
-[https://yummy.tonymdesigns.com](https://yummy.tonymdesigns.com)
-
 ## Features
 
 - **Home** — Landing page with restaurant highlights
