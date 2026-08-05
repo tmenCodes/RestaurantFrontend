@@ -12,7 +12,6 @@ import { tap } from 'rxjs';
 })
 export class NavBarComponent {
   cartSize: number = 0;
-  isLoggedIn: boolean = false;
 
   @Output() addCartItemEvent = new EventEmitter<number>();
 
@@ -25,10 +24,6 @@ export class NavBarComponent {
   checkifLoggedIn$ = this.httpService.CheckIfLoggedIn;
 
   ngOnInit() {
-    this.isLoggedIn = localStorage.getItem('login') === 'Login successful';
-    this.checkifLoggedIn$.subscribe((value) => {
-      console.log(value);
-    });
     this.cartService
       .getCartSizeLength()
       .pipe(
@@ -47,8 +42,7 @@ export class NavBarComponent {
     this.httpService.updateCheckIfLoggedIn(false);
 
     this.httpService.SignOut().subscribe(() => {
-      localStorage.removeItem('login');
-      this.isLoggedIn = false;
+      this.httpService.clearToken();
       this.cartService.CartCount.next(0);
       this.router.navigate(['/home']);
     });

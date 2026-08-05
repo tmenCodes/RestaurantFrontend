@@ -7,7 +7,7 @@
       <div class="signup-divider"></div>
     </div>
 
-    <form [formGroup]="SignUpForm" class="signup-form">
+    <form [formGroup]="signUpForm" class="signup-form">
       <div class="field-group">
         <label class="field-label" for="fullName">Full Name</label>
         <input
@@ -15,7 +15,7 @@
           type="text"
           id="fullName"
           placeholder="Full Name"
-          formControlName="FullName"
+          formControlName="fullName"
         />
       </div>
 
@@ -26,9 +26,14 @@
           type="text"
           id="username"
           placeholder="User Name"
-          formControlName="UserName"
+          formControlName="userName"
         />
-        @if (SignUpForm.get('UserName')?.hasError('UserNameDuplicate')) {
+        @if (userName && userName.hasError('pattern') && userName.touched) {
+        <span class="field-error">
+          Username can only contain letters, numbers, and - . _ @ +
+        </span>
+        }
+        @if (signUpForm.get('userName')?.hasError('UserNameDuplicate')) {
         <span class="field-error">Username has already been taken.</span>
         }
       </div>
@@ -40,9 +45,9 @@
           type="email"
           id="email"
           placeholder="you@example.com"
-          formControlName="Email"
+          formControlName="email"
         />
-        @if (SignUpForm.get('Email')?.hasError('EmailDuplicate')) {
+        @if (signUpForm.get('email')?.hasError('EmailDuplicate')) {
         <span class="field-error">Email has already been taken</span>
         }
       </div>
@@ -54,18 +59,13 @@
           type="password"
           id="inputPassword"
           placeholder="Password"
-          formControlName="Password"
+          formControlName="password"
         />
-        <!-- @if (Password && Password.invalid && Password.touched) {
-        <span class="field-error">Please enter a valid password.</span>
-        } -->
-        @if (Password && Password.touched) {
-
+        @if (password && password.invalid && password.touched) {
         <span class="field-error">
-          Passwords must be at least 6 characters and also contain one digit and
-          at least one uppercase letter</span
-        >
-
+          Passwords must be at least 6 characters and contain a lowercase
+          letter, an uppercase letter, a digit, and a special character.
+        </span>
         }
       </div>
 
@@ -78,8 +78,8 @@
       <button
         class="btn-signup"
         type="submit"
-        [disabled]="SignUpForm.invalid"
-        (click)="SubmitSignUp()"
+        [disabled]="signUpForm.invalid || signUpForm.pending"
+        (click)="submitSignUp()"
       >
         Create Account
       </button>

@@ -4,13 +4,8 @@ import { confirmPasswordValidator } from '../confirm-password.validator';
 import { HttpService } from '../http.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { CheckEmailExistsValidator } from '../check-email-exists.validator';
+import { checkEmailExistsValidator } from '../check-email-exists.validator';
 
-interface UserInfo {
-  Email: string;
-  Password?: string;
-  PasswordConfirm?: string;
-}
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -18,61 +13,58 @@ interface UserInfo {
   standalone: false,
 })
 export class SignupComponent {
-  constructor(
-    private Http: HttpService,
-    private HttpClient: HttpClient,
-    private Router: Router
-  ) {}
+  constructor(private http: HttpService, private router: Router) {}
 
-  //Url: string = 'https://localhost:7004/api/Auth/SignUp';
-
-  SignUpForm = new FormGroup(
+  signUpForm = new FormGroup(
     {
-      FullName: new FormControl('', Validators.required),
-      UserName: new FormControl(
-        '',
-        [Validators.required],
-        CheckEmailExistsValidator.CheckDuplicateNameValidator(this.Http)
-      ),
-      Email: new FormControl(
-        '',
-        [Validators.required, Validators.email],
-        CheckEmailExistsValidator.createValidator(this.Http)
-      ),
-      // Password: new FormControl('', Validators.required),
-      Password: new FormControl(null, Validators.required),
-      //   PasswordConfirm: new FormControl('', Validators.required),
+      fullName: new FormControl('', Validators.required),
+      userName: new FormControl('', {
+        validators: [Validators.required, Validators.pattern(/^[a-zA-Z0-9\-._@+]+$/)],
+        asyncValidators: [
+          checkEmailExistsValidator.checkDuplicateNameValidator(this.http),
+        ],
+        updateOn: 'blur',
+      }),
+      email: new FormControl('', {
+        validators: [Validators.required, Validators.email],
+        asyncValidators: [checkEmailExistsValidator.createValidator(this.http)],
+        updateOn: 'blur',
+      }),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.pattern(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/
+        ),
+      ]),
     }
     // {
     //   validators: [confirmPasswordValidator],
     // }
   );
 
-  get Email() {
-    return this.SignUpForm.get('Email');
+  get userName() {
+    return this.signUpForm.get('userName');
   }
-
-  get Password() {
-    return this.SignUpForm.get('Password');
+  get email() {
+    return this.signUpForm.get('email');
   }
-
-  get PasswordConfirm() {
-    return this.SignUpForm.get('PasswordConfirm');
+  get password() {
+    return this.signUpForm.get('password');
   }
 
   errorMessage: string | null = null;
 
   //cannot submit unless the form is free of errors....
-  SubmitSignUp() {
+  submitSignUp() {
     this.errorMessage = null;
 
-    var SignUpForm = this.SignUpForm.value;
-    console.log(this.SignUpForm.value);
+    var formValue = this.signUpForm.value;
+    console.log(this.signUpForm.value);
 
-    this.Http.CreateNewUser(SignUpForm).subscribe({
+    this.http.createNewUser(formValue).subscribe({
       next: (response) => {
         if (response.status === 200) {
-          this.Router.navigate(['userinfo']);
+          this.router.navigate(['login']);
         } else {
           this.errorMessage = 'Unexpected error. Please try again.';
         }

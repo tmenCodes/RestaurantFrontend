@@ -4,7 +4,11 @@ import { HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { catchError, retry, throwError, Observable } from 'rxjs';
 import { BehaviorSubject, of, tap, map } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
 import { environment } from 'src/environments/environment';
+
+export const TOKEN_KEY = 'id_token';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -19,8 +23,31 @@ export class HttpService {
   public loginBehavoir = new BehaviorSubject<boolean>(this.checkIfLoggedIn());
   CheckIfLoggedIn = this.loginBehavoir.asObservable();
 
-  checkIfLoggedIn() {
-    return localStorage.getItem('login') === 'Login successful';
+  //a user is considered logged in when a non-expired JWT is present
+  checkIfLoggedIn(): boolean {
+    const token = this.getToken();
+    if (!token) {
+      return false;
+    }
+
+    try {
+      const decoded = jwtDecode<{ exp?: number }>(token);
+      return decoded.exp === undefined || decoded.exp * 1000 > Date.now();
+    } catch {
+      return false;
+    }
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(TOKEN_KEY);
+  }
+
+  setToken(token: string): void {
+    localStorage.setItem(TOKEN_KEY, token);
+  }
+
+  clearToken(): void {
+    localStorage.removeItem(TOKEN_KEY);
   }
 
   updateCheckIfLoggedIn(changeValue: boolean) {
@@ -46,7 +73,7 @@ export class HttpService {
     );
   }
 
-  CreateNewUser(body: any) {
+  createNewUser(body: any) {
     let url = this.url + '' + 'api/RegisterUser/CreateUser';
     console.log(body);
 
@@ -82,12 +109,12 @@ export class HttpService {
   }
 
   //returns an obersvable???
-  CheckEmailExist(email: string) {
-    let urlconcat =
+  checkEmailExist(email: string) {
+    let checkDuplicateEmailUrl =
       this.url + '' + 'api/RegisterUser/CheckDuplicateEmail?email=' + email;
 
     //return obsevable boolean
-    return this.Http.get<boolean>(urlconcat);
+    return this.Http.get<boolean>(checkDuplicateEmailUrl);
   }
 
   CheckIfUserExists(username: string) {

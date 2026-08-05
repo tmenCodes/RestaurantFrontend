@@ -6,6 +6,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { TOKEN_KEY } from './http.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,16 @@ export class AuthInterceptorService implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    //   console.log('from the interceptor');
+    // Read the token straight from localStorage (not via HttpService) to
+    // avoid a circular DI dependency between HTTP_INTERCEPTORS and HttpClient.
+    const token = localStorage.getItem(TOKEN_KEY);
+
+    if (token) {
+      req = req.clone({
+        setHeaders: { Authorization: `Bearer ${token}` },
+      });
+    }
+
     return next.handle(req);
   }
 }

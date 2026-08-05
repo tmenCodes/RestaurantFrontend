@@ -9,10 +9,9 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 import { Router } from '@angular/router';
-import { jwtDecode } from 'jwt-decode';
 import { map, tap, pipe, mergeMap, filter } from 'rxjs';
 
-import { CheckEmailExistsValidator } from '../check-email-exists.validator';
+import { checkEmailExistsValidator } from '../check-email-exists.validator';
 import { HttpService } from '../http.service';
 
 @Component({
@@ -33,7 +32,7 @@ export class LoginComponent {
     Email: new FormControl(
       '',
       [Validators.required, Validators.email],
-      CheckEmailExistsValidator.createValidator(this.HttpService)
+      checkEmailExistsValidator.createValidator(this.HttpService)
     ),
     Password: new FormControl('', Validators.required),
   });
@@ -58,9 +57,8 @@ export class LoginComponent {
     this.HttpService.Login(LoginInformation)
       .pipe(
         mergeMap((value) => {
+          this.HttpService.setToken(value.body.token);
           this.HttpService.updateCheckIfLoggedIn(true);
-          //send this value onto
-          localStorage.setItem('login', value.body.message);
 
           this.Router.navigateByUrl('/userinfo');
           //   this.Router.navigate(['userinfo']);
