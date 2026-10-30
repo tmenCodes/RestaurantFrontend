@@ -78,7 +78,7 @@ export class MenuComponent {
     //load menu options into the form array
     this.HttpService.GetMenuItemOptions().subscribe((value) => {
       for (let option of value) {
-        this.menuItemOptionsArray.push(option.menuOptionName);
+        this.menuItemOptionsArray.push(option.name);
       }
 
       //make array of same size as above with boolean values to represent if the option is selected or not
