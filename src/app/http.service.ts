@@ -91,23 +91,6 @@ export class HttpService {
     );
   }
 
-  GetCartItems() {
-    let urlconcat = this.url + '' + 'api/Order/PaymentInformation';
-    this.Http.get<any>(urlconcat).subscribe({
-      next: (data) => console.log('GET worked!'),
-      error: (data) => console.log(data),
-    });
-  }
-
-  InformationForm(body: any) {
-    let urlconcat = this.url + '' + 'api/Order/PaymentInformation';
-
-    return this.Http.post<any>(urlconcat, body).subscribe({
-      next: (data) => this.router.navigate(['complete']),
-      error: (error) => this.router.navigate(['errors']),
-    });
-  }
-
   //returns an obersvable???
   checkEmailExist(email: string) {
     let checkDuplicateEmailUrl =
@@ -138,19 +121,6 @@ export class HttpService {
       withCredentials: true,
     }).subscribe({
       next: (data) => this.router.navigate(['saved']),
-      error: (error) => console.log(error),
-    });
-  }
-
-  EditUserInformation(email: string, InformationForm: any) {
-    let urlconcant =
-      this.url + '' + 'api/Auth/UpdateUserInformation?email=' + email;
-    console.log(urlconcant);
-    this.Http.put<any>(urlconcant, InformationForm.value).subscribe({
-      next: (data) => {
-        this.router.navigate(['saved']);
-        console.log(data);
-      },
       error: (error) => console.log(error),
     });
   }
