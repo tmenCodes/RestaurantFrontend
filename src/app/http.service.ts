@@ -165,7 +165,7 @@ export class HttpService {
   }
 
   ContactForm(body: any): void {
-    let urlconcat = this.url + '' + 'api/Order/ContactInformation';
+    let urlconcat = this.url + '' + 'api/Misc/CustomerInquiry';
     this.Http.post<any>(urlconcat, body).subscribe({
       //change this in the future
       next: (data) => this.router.navigate(['contactcomplete']),
