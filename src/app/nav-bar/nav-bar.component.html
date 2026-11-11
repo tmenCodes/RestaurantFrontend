@@ -1,9 +1,10 @@
-<nav
-  class="navbar navbar-expand-lg navbar-dark"
-  style="background-color: #37373f"
->
+<nav class="navbar navbar-expand-lg navbar-dark site-nav">
   <div class="container px-4 px-lg-5">
-    <a href="/home" class="logo d-flex align-items-center me-auto me-lg-0">
+    <a
+      routerLink="/home"
+      class="logo d-flex align-items-center me-auto me-lg-0"
+      (click)="closeMobileMenu()"
+    >
       <h1>Yummy<span>.</span></h1>
     </a>
 
@@ -19,20 +20,35 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-        <li class="nav-item"><a class="nav-link" href="/home">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="/menu">Menu</a></li>
-        <li class="nav-item"><a class="nav-link" href="/chefs">Chefs</a></li>
+    <div
+      #navCollapse
+      class="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul
+        class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4"
+        (click)="closeMobileMenu()"
+      >
         <li class="nav-item">
-          <a class="nav-link" href="/contact">Contact</a>
+          <a class="nav-link" routerLink="/home" routerLinkActive="active" ariaCurrentWhenActive="page">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/menu" routerLinkActive="active" ariaCurrentWhenActive="page">Menu</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/chefs" routerLinkActive="active" ariaCurrentWhenActive="page">Chefs</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/contact" routerLinkActive="active" ariaCurrentWhenActive="page">Contact</a>
         </li>
 
         @if (!(checkifLoggedIn$ | async)) {
-        <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page">Log In</a>
+        </li>
         } @if (checkifLoggedIn$ | async) {
         <li class="nav-item">
-          <a class="nav-link" href="/userinfo">Account</a>
+          <a class="nav-link" routerLink="/userinfo" routerLinkActive="active" ariaCurrentWhenActive="page">Account</a>
         </li>
         <li class="nav-item">
           <button class="nav-link sign-out-btn" (click)="signOut()">
@@ -42,11 +58,11 @@
         }
       </ul>
 
-      <a href="/cart">
+      <a routerLink="/cart" (click)="closeMobileMenu()">
         <button class="btn btn-outline-light" type="button">
           <i class="bi-cart-fill me-1"></i>
           Cart
-          <span class="badge bg-dark text-white ms-1 rounded-pill">{{
+          <span class="badge cart-badge ms-1 rounded-pill">{{
             cartSize
           }}</span>
         </button>

@@ -1,8 +1,23 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { CartService } from '../cart.service';
 import { HttpService } from '../http.service';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
+
+/** The part of the global Bootstrap bundle (loaded in index.html) used to close the mobile menu. */
+interface BootstrapGlobal {
+  Collapse: {
+    getOrCreateInstance(element: Element, config: { toggle: boolean }): {
+      hide(): void;
+    };
+  };
+}
 
 @Component({
   selector: 'app-nav-bar',
@@ -14,6 +29,8 @@ export class NavBarComponent {
   cartSize: number = 0;
 
   @Output() addCartItemEvent = new EventEmitter<number>();
+
+  @ViewChild('navCollapse') navCollapse?: ElementRef<HTMLElement>;
 
   constructor(
     private cartService: CartService,
@@ -35,6 +52,17 @@ export class NavBarComponent {
         })
       )
       .subscribe();
+  }
+
+  /** Closes the expanded mobile menu after a link is chosen, since router navigation no longer reloads the page. */
+  closeMobileMenu(): void {
+    const menu = this.navCollapse?.nativeElement;
+    if (!menu?.classList.contains('show')) {
+      return;
+    }
+    const bootstrap = (window as unknown as { bootstrap?: BootstrapGlobal })
+      .bootstrap;
+    bootstrap?.Collapse.getOrCreateInstance(menu, { toggle: false }).hide();
   }
 
   signOut(): void {
