@@ -1,16 +1,18 @@
 /* ===== Page ===== */
-html,
-body {
-  height: 100%;
-}
+.login-page {
+  --login-ink: #1a1a1a;
+  --login-muted: #6b6b6b;
+  --login-accent: #c89b3c;
+  --login-border: #e8e8e8;
+  --login-error: #b3261e;
 
-body {
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 100vh;
   padding: 60px 5vw;
   background: #fafaf8;
-  min-height: 100vh;
+  text-align: center;
 }
 
 /* ===== Card ===== */
@@ -30,85 +32,121 @@ body {
   }
 }
 
-/* ===== Logo ===== */
-.form-signin .mb-4 {
+/* ===== Logo & Title ===== */
+.login-logo {
+  display: block;
+  margin: 0 auto 20px;
   border-radius: 14px;
   object-fit: cover;
-  display: block;
-  margin: 0 auto 20px !important;
 }
 
-/* ===== Title ===== */
-.form-signin h1 {
+.login-title {
+  margin: 0 0 28px;
   font-size: 1.6rem;
   font-weight: 800;
-  color: #1a1a1a;
+  color: var(--login-ink);
   letter-spacing: -0.3px;
   font-family: var(--font-secondary, "Inter", sans-serif);
-  margin-bottom: 28px !important;
+}
+
+/* ===== Errors ===== */
+.login-error {
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  font-size: 0.88rem;
+  text-align: left;
+  color: var(--login-error);
+  background: #fdf1f0;
+  border: 1px solid #f3c9c5;
+  border-radius: 10px;
+}
+
+.field-error {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  text-align: left;
+  color: var(--login-error);
 }
 
 /* ===== Inputs ===== */
-.form-signin .form-control {
+.form-field {
+  margin-bottom: 14px;
+}
+
+.form-control {
   padding: 11px 14px;
-  border: 1.5px solid #e8e8e8;
-  border-radius: 10px !important;
   font-size: 0.92rem;
-  color: #1a1a1a;
+  color: var(--login-ink);
   background: #fff;
+  border: 1.5px solid var(--login-border);
+  border-radius: 10px;
   box-shadow: none;
-  transition: border-color 0.2s;
-  margin-bottom: 14px !important;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.form-signin .form-control:focus {
-  border-color: #1a1a1a;
-  box-shadow: none;
-  z-index: unset;
+.form-control::placeholder {
+  color: var(--login-muted);
 }
 
-/* ===== Checkbox / Sign Up Row ===== */
-.form-signin .checkbox {
+.form-control:focus {
+  border-color: var(--login-accent);
+  box-shadow: 0 0 0 3px rgba(200, 155, 60, 0.25);
+}
+
+.form-control[aria-invalid="true"] {
+  border-color: var(--login-error);
+}
+
+/* ===== Sign Up Prompt ===== */
+.signup-prompt {
+  margin: 6px 0 20px;
   font-size: 0.88rem;
-  color: #777;
-  font-weight: 400;
-  margin-bottom: 20px !important;
   text-align: left;
+  color: var(--login-muted);
 }
 
-.form-signin .checkbox a {
-  color: #1a1a1a;
+.signup-prompt a {
   font-weight: 700;
+  color: var(--login-ink);
   text-decoration: none;
   transition: color 0.2s;
 }
 
-.form-signin .checkbox a:hover {
-  color: #c89b3c;
+.signup-prompt a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--login-accent);
+  text-underline-offset: 3px;
 }
 
 /* ===== Submit Button ===== */
-.form-signin .btn-primary {
+.login-submit {
   width: 100%;
   padding: 14px;
-  background: #1a1a1a;
-  border: none;
-  border-radius: 12px;
   font-size: 0.95rem;
   font-weight: 700;
-  color: #fff;
   letter-spacing: 0.3px;
-  transition: background 0.2s, transform 0.15s;
+  color: #fff;
+  background: var(--login-ink);
+  border: none;
+  border-radius: 12px;
   cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
 }
 
-.form-signin .btn-primary:hover {
-  background: #c89b3c;
+.login-submit:hover:not(:disabled),
+.login-submit:focus-visible {
+  color: var(--login-ink);
+  background: var(--login-accent);
   transform: translateY(-1px);
 }
 
-.form-signin .btn-primary:focus,
-.form-signin .btn-primary:active {
-  background: #c89b3c;
-  box-shadow: none;
+.login-submit:focus-visible {
+  outline: 2px solid var(--login-ink);
+  outline-offset: 3px;
+}
+
+.login-submit:disabled {
+  cursor: progress;
+  opacity: 0.7;
 }

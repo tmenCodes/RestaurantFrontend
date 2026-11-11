@@ -1,53 +1,67 @@
-<body class="text-center">
+<main class="login-page">
   <form
-    [formGroup]="LogInForm"
+    [formGroup]="loginForm"
     class="form-signin"
     (ngSubmit)="onSubmit()"
-    #myform="ngForm"
+    novalidate
   >
     <img
-      class="mb-4"
+      class="login-logo"
       src="./assets/img/yum.jpg"
       alt=""
       width="72"
       height="72"
     />
-    <h1 class="h3 mb-3 font-weight-normal">Login To Your Account</h1>
+    <h1 class="login-title">Login To Your Account</h1>
 
-    <input
-      type="email"
-      id="inputUser"
-      class="form-control"
-      placeholder="Email"
-      formControlName="Email"
-      [ngStyle]="{ margin: '10px' }"
-    />
-
-    <input
-      type="password"
-      id="inputPassword"
-      class="form-control"
-      placeholder="Password"
-      formControlName="Password"
-      [ngStyle]="{ margin: '10px' }"
-    />
-    @if (Password && Password.invalid && Password.touched) {
-    <span>Please enter a valid Password </span>
-    } @if (LogInForm.get('Email')?.hasError('EmailDuplicate') &&
-    myform.submitted) {
-    <div style="color: red">Something is wrong, please try again</div>
+    @if (errorMessage) {
+    <div class="login-error" role="alert">{{ errorMessage }}</div>
     }
 
-    <div class="checkbox mb-3">
-      <!-- <label>
-      <input type="checkbox" value="remember-me"> Remember me
-    </label> -->
-      <label> New to Yummy? <a href="/signup">Sign Up</a> </label>
+    <div class="form-field">
+      <label for="login-email" class="visually-hidden">Email</label>
+      <input
+        id="login-email"
+        type="email"
+        class="form-control"
+        placeholder="Email"
+        formControlName="email"
+        autocomplete="email"
+        [attr.aria-invalid]="email.invalid && email.touched"
+        aria-describedby="login-email-error"
+      />
+      @if (email.invalid && email.touched) {
+      <span id="login-email-error" class="field-error" role="alert">
+        Please enter a valid email address.
+      </span>
+      }
     </div>
 
-    <button class="btn btn-lg btn-primary btn-block" type="submit">
-      Submit
+    <div class="form-field">
+      <label for="login-password" class="visually-hidden">Password</label>
+      <input
+        id="login-password"
+        type="password"
+        class="form-control"
+        placeholder="Password"
+        formControlName="password"
+        autocomplete="current-password"
+        [attr.aria-invalid]="password.invalid && password.touched"
+        aria-describedby="login-password-error"
+      />
+      @if (password.invalid && password.touched) {
+      <span id="login-password-error" class="field-error" role="alert">
+        Please enter your password.
+      </span>
+      }
+    </div>
+
+    <p class="signup-prompt">
+      New to Yummy? <a routerLink="/signup">Sign Up</a>
+    </p>
+
+    <button class="login-submit" type="submit" [disabled]="submitting">
+      {{ submitting ? "Signing in…" : "Log In" }}
     </button>
-    <p class="mt-5 mb-3 text-muted"></p>
   </form>
-</body>
+</main>
