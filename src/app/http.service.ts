@@ -9,6 +9,21 @@ import { environment } from 'src/environments/environment';
 
 export const TOKEN_KEY = 'id_token';
 
+/** Body of `POST api/RegisterUser/CreateUser`. */
+export interface NewAccount {
+  fullName: string;
+  userName: string;
+  email: string;
+  password: string;
+}
+
+/** Successful response of `POST api/RegisterUser/CreateUser`. */
+export interface CreatedAccount {
+  message: string;
+  username: string;
+  email: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -54,41 +69,15 @@ export class HttpService {
     this.loginBehavoir.next(changeValue);
   }
 
-  private handleBackendDownError(error: HttpErrorResponse) {
-    if (error.status === 0) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error);
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong.
-      console.error(
-        `Backend returned code ${error.status}, body was: `,
-        error.error
-      );
-    }
-    // Return an observable with a user-facing error message
-    //general error outside of status code
-    return throwError(
-      () => new Error('Something bad happened; please try again later.')
-    );
-  }
-
-  createNewUser(body: any) {
-    let url = this.url + '' + 'api/RegisterUser/CreateUser';
-    console.log(body);
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    return this.Http.post<JSON>(url, body, {
-      headers,
+  /**
+   * Registers a new account. Errors are passed through as {@link HttpErrorResponse} so callers can show the
+   * API's message; the request is never retried because it creates data.
+   */
+  createNewUser(account: NewAccount) {
+    const url = this.url + 'api/RegisterUser/CreateUser';
+    return this.Http.post<CreatedAccount>(url, account, {
       observe: 'response',
-    }).pipe(
-      tap((response) => console.log('CreateNewUser response:', response)),
-      retry(2),
-      catchError(this.handleBackendDownError)
-    );
+    });
   }
 
   //returns an obersvable???

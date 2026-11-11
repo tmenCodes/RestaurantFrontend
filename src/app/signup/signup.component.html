@@ -7,7 +7,16 @@
       <div class="signup-divider"></div>
     </div>
 
-    <form [formGroup]="signUpForm" class="signup-form">
+    <form
+      [formGroup]="signUpForm"
+      class="signup-form"
+      (ngSubmit)="submitSignUp()"
+      novalidate
+    >
+      @if (errorMessage) {
+      <div class="form-error" role="alert">{{ errorMessage }}</div>
+      }
+
       <div class="field-group">
         <label class="field-label" for="fullName">Full Name</label>
         <input
@@ -16,7 +25,15 @@
           id="fullName"
           placeholder="Full Name"
           formControlName="fullName"
+          autocomplete="name"
+          [attr.aria-invalid]="fullName.invalid && fullName.touched"
+          aria-describedby="fullName-error"
         />
+        @if (fullName.invalid && fullName.touched) {
+        <span id="fullName-error" class="field-error" role="alert">
+          Please enter your full name.
+        </span>
+        }
       </div>
 
       <div class="field-group">
@@ -27,15 +44,25 @@
           id="username"
           placeholder="User Name"
           formControlName="userName"
+          autocomplete="username"
+          autocapitalize="none"
+          spellcheck="false"
+          [attr.aria-invalid]="userName.invalid && userName.touched"
+          aria-describedby="username-error"
         />
-        @if (userName && userName.hasError('pattern') && userName.touched) {
-        <span class="field-error">
-          Username can only contain letters, numbers, and - . _ @ +
+        <span id="username-error">
+          @if (userName.hasError('required') && userName.touched) {
+          <span class="field-error" role="alert">Please choose a username.</span>
+          } @else if (userName.hasError('pattern') && userName.touched) {
+          <span class="field-error" role="alert">
+            Username can only contain letters, numbers, and - . _ &#64; +
+          </span>
+          } @else if (userName.hasError('UserNameDuplicate')) {
+          <span class="field-error" role="alert">
+            That username is already taken.
+          </span>
+          }
         </span>
-        }
-        @if (signUpForm.get('userName')?.hasError('UserNameDuplicate')) {
-        <span class="field-error">Username has already been taken.</span>
-        }
       </div>
 
       <div class="field-group">
@@ -46,10 +73,22 @@
           id="email"
           placeholder="you@example.com"
           formControlName="email"
+          autocomplete="email"
+          [attr.aria-invalid]="email.invalid && email.touched"
+          aria-describedby="email-error"
         />
-        @if (signUpForm.get('email')?.hasError('EmailDuplicate')) {
-        <span class="field-error">Email has already been taken</span>
-        }
+        <span id="email-error">
+          @if (email.hasError('EmailDuplicate')) {
+          <span class="field-error" role="alert">
+            An account with this email already exists.
+            <a routerLink="/login">Log in instead?</a>
+          </span>
+          } @else if (email.invalid && email.touched) {
+          <span class="field-error" role="alert">
+            Please enter a valid email address.
+          </span>
+          }
+        </span>
       </div>
 
       <div class="field-group">
@@ -60,36 +99,53 @@
           id="inputPassword"
           placeholder="Password"
           formControlName="password"
+          autocomplete="new-password"
+          [attr.aria-invalid]="password.invalid && password.touched"
+          aria-describedby="password-help"
         />
-        @if (password && password.invalid && password.touched) {
-        <span class="field-error">
-          Passwords must be at least 6 characters and contain a lowercase
-          letter, an uppercase letter, a digit, and a special character.
+        <span
+          id="password-help"
+          class="field-hint"
+          [class.field-error]="password.invalid && password.touched"
+          [attr.role]="password.invalid && password.touched ? 'alert' : null"
+        >
+          At least 6 characters, with a lowercase letter, an uppercase letter,
+          a digit, and a special character.
         </span>
-        }
       </div>
 
-      <div class="remember-row">
-        <label class="remember-label">
-          <input type="checkbox" value="remember-me" /> Remember me
-        </label>
+      <div class="field-group">
+        <label class="field-label" for="confirmPassword">Confirm Password</label>
+        <input
+          class="field-input"
+          type="password"
+          id="confirmPassword"
+          placeholder="Confirm Password"
+          formControlName="confirmPassword"
+          autocomplete="new-password"
+          [attr.aria-invalid]="
+            (confirmPassword.invalid && confirmPassword.touched) ||
+            passwordMismatch
+          "
+          aria-describedby="confirmPassword-error"
+        />
+        <span id="confirmPassword-error">
+          @if (confirmPassword.hasError('required') && confirmPassword.touched) {
+          <span class="field-error" role="alert">
+            Please confirm your password.
+          </span>
+          } @else if (passwordMismatch) {
+          <span class="field-error" role="alert">Passwords don't match.</span>
+          }
+        </span>
       </div>
 
-      <button
-        class="btn-signup"
-        type="submit"
-        [disabled]="signUpForm.invalid || signUpForm.pending"
-        (click)="submitSignUp()"
-      >
-        Create Account
+      <button class="btn-signup" type="submit" [disabled]="submitting">
+        {{ submitting ? "Creating account…" : "Create Account" }}
       </button>
 
-      @if (errorMessage) {
-      <span class="field-error">{{ errorMessage }}</span>
-      }
-
       <p class="signin-link">
-        Already have an account? <a href="login">Log In</a>
+        Already have an account? <a routerLink="/login">Log In</a>
       </p>
     </form>
   </div>
