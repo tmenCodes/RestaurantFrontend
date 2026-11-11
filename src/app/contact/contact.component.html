@@ -6,133 +6,152 @@
       <p>Need Help? <span>Contact Us</span></p>
     </div>
 
-    <div class="mb-3">
-      <!-- <iframe style="border:0; width: 100%; height: 350px;" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621" frameborder="0" allowfullscreen></iframe> -->
+    <div class="contact-map">
       <iframe
-        style="border: 0; width: 100%; height: 350px"
+        title="Map of Minneapolis, MN"
         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d90325.57945468338!2d-93.34400317322715!3d44.97061032353067!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x52b333909377bbbd%3A0x939fc9842f7aee07!2sMinneapolis%2C%20MN!5e0!3m2!1sen!2sus!4v1761004097074!5m2!1sen!2sus"
-        frameborder="0"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
         allowfullscreen
       ></iframe>
     </div>
-    <!-- End Google Maps -->
 
     <div class="row gy-4">
       <div class="col-md-6">
-        <div class="info-item d-flex align-items-center">
-          <i class="icon bi bi-map flex-shrink-0"></i>
+        <div class="info-item">
+          <i class="icon bi bi-geo-alt" aria-hidden="true"></i>
           <div>
             <h3>Our Address</h3>
-            <p>A108 Adam Street, Minneapolis, MN 55404</p>
+            <p>{{ info.street }}, {{ info.cityLine }}</p>
           </div>
         </div>
       </div>
-      <!-- End Info Item -->
 
       <div class="col-md-6">
-        <div class="info-item d-flex align-items-center">
-          <i class="icon bi bi-envelope flex-shrink-0"></i>
+        <div class="info-item">
+          <i class="icon bi bi-envelope" aria-hidden="true"></i>
           <div>
             <h3>Email Us</h3>
-            <p>yummy&#64;gmail.com</p>
+            <p><a [href]="'mailto:' + info.email">{{ info.email }}</a></p>
           </div>
         </div>
       </div>
-      <!-- End Info Item -->
 
       <div class="col-md-6">
-        <div class="info-item d-flex align-items-center">
-          <i class="icon bi bi-telephone flex-shrink-0"></i>
+        <div class="info-item">
+          <i class="icon bi bi-telephone" aria-hidden="true"></i>
           <div>
             <h3>Call Us</h3>
-            <p>(612) 999-9999</p>
+            <p><a [href]="'tel:' + info.phoneHref">{{ info.phone }}</a></p>
           </div>
         </div>
       </div>
-      <!-- End Info Item -->
 
       <div class="col-md-6">
-        <div class="info-item d-flex align-items-center">
-          <i class="icon bi bi-share flex-shrink-0"></i>
+        <div class="info-item">
+          <i class="icon bi bi-clock" aria-hidden="true"></i>
           <div>
             <h3>Opening Hours</h3>
-            <div><strong>Mon-Sat:</strong> 9AM - 10PM</div>
+            <p><strong>{{ info.openDays }}:</strong> {{ info.openHours }}</p>
           </div>
         </div>
       </div>
-      <!-- End Info Item -->
     </div>
 
-    <form [formGroup]="ContactForm" class="php-email-form p-3 p-md-4">
+    <form
+      [formGroup]="contactForm"
+      (ngSubmit)="submit()"
+      class="contact-form"
+      novalidate
+    >
+      <h3 class="contact-form-title">Send us a message</h3>
+
       <div class="row">
-        <div class="col-xl-6 form-group">
+        <div class="col-xl-6 form-field">
+          <label for="contact-name" class="visually-hidden">Your name</label>
           <input
+            id="contact-name"
             type="text"
-            name="name"
             class="form-control"
             formControlName="name"
             placeholder="Your Name"
-            required
+            autocomplete="name"
+            [attr.aria-invalid]="name.invalid && name.touched"
+            aria-describedby="contact-name-error"
           />
-          @if (name && name.invalid && name.touched) {
-          <span>Please fill out a name</span>
+          @if (name.invalid && name.touched) {
+          <span id="contact-name-error" class="field-error" role="alert">
+            Please enter your name ({{ limits.name.min }}–{{ limits.name.max }} characters).
+          </span>
           }
         </div>
-        <div class="col-xl-6 form-group">
+
+        <div class="col-xl-6 form-field">
+          <label for="contact-email" class="visually-hidden">Your email</label>
           <input
+            id="contact-email"
             type="email"
             class="form-control"
             formControlName="email"
-            id="email"
             placeholder="Your Email"
-            required
+            autocomplete="email"
+            [attr.aria-invalid]="email.invalid && email.touched"
+            aria-describedby="contact-email-error"
           />
-          @if (email && email.invalid && email.touched) {
-          <span>Please fill out a valid email</span>
+          @if (email.invalid && email.touched) {
+          <span id="contact-email-error" class="field-error" role="alert">
+            Please enter a valid email address.
+          </span>
           }
         </div>
       </div>
-      <div class="form-group">
+
+      <div class="form-field">
+        <label for="contact-subject" class="visually-hidden">Subject</label>
         <input
+          id="contact-subject"
           type="text"
           class="form-control"
           formControlName="subject"
-          id="subject"
           placeholder="Subject"
-          required
+          [attr.aria-invalid]="subject.invalid && subject.touched"
+          aria-describedby="contact-subject-error"
         />
-        @if (subject && subject.invalid && subject.touched) {
-        <span>Please fill out a subject</span>
+        @if (subject.invalid && subject.touched) {
+        <span id="contact-subject-error" class="field-error" role="alert">
+          Please enter a subject ({{ limits.subject.min }}–{{ limits.subject.max }} characters).
+        </span>
         }
       </div>
-      <div class="form-group">
+
+      <div class="form-field">
+        <label for="contact-message" class="visually-hidden">Message</label>
         <textarea
+          id="contact-message"
           class="form-control"
           formControlName="message"
           rows="5"
           placeholder="Message"
-          required
+          [attr.maxlength]="limits.message.max"
+          [attr.aria-invalid]="message.invalid && message.touched"
+          aria-describedby="contact-message-error contact-message-count"
         ></textarea>
-        @if (message && message.invalid && message.touched) {
-        <span>Message is either too long or short</span>
-        }
+        <div class="field-meta">
+          @if (message.invalid && message.touched) {
+          <span id="contact-message-error" class="field-error" role="alert">
+            Please write a message ({{ limits.message.min }}–{{ limits.message.max }} characters).
+          </span>
+          }
+          <span id="contact-message-count" class="char-count">
+            {{ message.value.length }} / {{ limits.message.max }}
+          </span>
+        </div>
       </div>
-      <div class="my-3">
-        <div class="loading">Loading</div>
-        <div class="error-message"></div>
-        <div class="sent-message">Your message has been sent. Thank you!</div>
-      </div>
+
       <div class="text-center">
-        <button
-          type="submit"
-          [disabled]="ContactForm.invalid"
-          (click)="FormSubmit()"
-        >
-          Send Message
-        </button>
+        <button type="submit" class="contact-submit">Send Message</button>
       </div>
     </form>
-    <!--End Contact Form -->
   </div>
 </section>
 <!-- End Contact Section -->

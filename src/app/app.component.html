@@ -11,8 +11,8 @@
           <div>
             <h4 data-testid="address">Address</h4>
             <p>
-              A108 Adam Street <br />
-              Minneapolis, MN 55404 - US<br />
+              {{ info.street }} <br />
+              {{ info.cityLine }} - {{ info.country }}<br />
             </p>
           </div>
         </div>
@@ -22,8 +22,8 @@
           <div>
             <h4>Reservations</h4>
             <p>
-              <strong>Phone:</strong> (612) 830-8080<br />
-              <strong>Email:</strong> yummy&#64;gmail.com<br />
+              <strong>Phone:</strong> {{ info.phone }}<br />
+              <strong>Email:</strong> {{ info.email }}<br />
             </p>
           </div>
         </div>
@@ -32,7 +32,7 @@
           <i class="bi bi-clock icon"></i>
           <div>
             <h4>Hours</h4>
-            <p><strong>Mon-Sun: 9AM - 10PM </strong><br /></p>
+            <p><strong>{{ info.openDays }}: {{ info.openHours }}</strong><br /></p>
           </div>
         </div>
 

@@ -1,0 +1,203 @@
+/* ===== Contact Section ===== */
+.contact {
+  --contact-ink: #1a1a1a;
+  --contact-muted: #6b6b6b;
+  --contact-accent: #c89b3c;
+  --contact-surface: #fff;
+  --contact-border: #e8e4dc;
+  --contact-error: #b3261e;
+
+  background: #fafaf8;
+  padding: 90px 5vw;
+}
+
+.contact .container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ===== Section Header (matches Chefs/Menu) ===== */
+.contact .section-header {
+  text-align: center;
+  padding-bottom: 48px;
+}
+
+.contact .section-header h2 {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: var(--contact-accent);
+  margin-bottom: 10px;
+  font-family: var(--font-secondary, "Inter", sans-serif);
+}
+
+.contact .section-header p {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--contact-ink);
+  font-family: var(--font-secondary, "Inter", sans-serif);
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+  margin: 0;
+}
+
+.contact .section-header p span {
+  color: var(--contact-accent);
+}
+
+/* ===== Map ===== */
+.contact .contact-map {
+  margin-bottom: 32px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+}
+
+.contact .contact-map iframe {
+  display: block;
+  width: 100%;
+  height: 350px;
+  border: 0;
+}
+
+/* ===== Info Cards ===== */
+.contact .info-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 100%;
+  padding: 24px;
+  background: var(--contact-surface);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+}
+
+.contact .info-item .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  margin: 0;
+  font-size: 22px;
+  line-height: 0;
+  color: var(--contact-ink);
+  background: var(--contact-accent);
+  border-radius: 50%;
+}
+
+.contact .info-item h3 {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--contact-muted);
+  margin: 0 0 4px;
+  font-family: var(--font-secondary, "Inter", sans-serif);
+}
+
+.contact .info-item p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--contact-ink);
+}
+
+.contact .info-item a {
+  color: var(--contact-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--contact-accent);
+  text-underline-offset: 3px;
+}
+
+.contact .info-item a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* ===== Form ===== */
+.contact .contact-form {
+  margin-top: 32px;
+  padding: 32px;
+  background: var(--contact-surface);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+}
+
+.contact .contact-form-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--contact-ink);
+  margin: 0 0 20px;
+  font-family: var(--font-secondary, "Inter", sans-serif);
+}
+
+.contact .form-field {
+  margin-bottom: 20px;
+}
+
+.contact .form-control {
+  padding: 12px 15px;
+  font-size: 14px;
+  color: var(--contact-ink);
+  background: #fff;
+  border: 1px solid var(--contact-border);
+  border-radius: 10px;
+  box-shadow: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.contact .form-control::placeholder {
+  color: var(--contact-muted);
+}
+
+.contact .form-control:focus {
+  border-color: var(--contact-accent);
+  box-shadow: 0 0 0 3px rgba(200, 155, 60, 0.25);
+}
+
+.contact .form-control[aria-invalid="true"] {
+  border-color: var(--contact-error);
+}
+
+.contact .field-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.contact .field-error {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: var(--contact-error);
+}
+
+.contact .char-count {
+  margin-top: 6px;
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: var(--contact-muted);
+}
+
+.contact .contact-submit {
+  padding: 12px 40px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--contact-ink);
+  border: 0;
+  border-radius: 50px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.contact .contact-submit:hover,
+.contact .contact-submit:focus-visible {
+  color: var(--contact-ink);
+  background: var(--contact-accent);
+}
+
+.contact .contact-submit:focus-visible {
+  outline: 2px solid var(--contact-ink);
+  outline-offset: 3px;
+}

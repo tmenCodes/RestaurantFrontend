@@ -71,46 +71,6 @@
   transform: scale(1.04);
 }
 
-/* ===== Social Overlay ===== */
-.chefs .chef-member .social {
-  position: absolute;
-  right: -100%;
-  top: 20px;
-  opacity: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 8px 6px;
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(4px);
-  border-radius: 10px 0 0 10px;
-  transition: right 0.3s, opacity 0.3s;
-}
-
-.chefs .chef-member:hover .social {
-  right: 0;
-  opacity: 1;
-}
-
-.chefs .chef-member .social a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.85);
-  color: #1a1a1a;
-  font-size: 14px;
-  text-decoration: none;
-  transition: background 0.2s, color 0.2s;
-}
-
-.chefs .chef-member .social a:hover {
-  background: #c89b3c;
-  color: #fff;
-}
-
 /* ===== Member Info ===== */
 .chefs .chef-member .member-info {
   padding: 20px 22px 24px;

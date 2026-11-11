@@ -1,47 +1,77 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators} from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from '../http.service';
-import { Router } from '@angular/router';
+import { RESTAURANT_INFO } from '../restaurant-info';
+
+/** Length limits for the contact form fields. */
+export const CONTACT_LIMITS = {
+  name: { min: 2, max: 50 },
+  subject: { min: 3, max: 100 },
+  message: { min: 10, max: 1000 },
+} as const;
+
 @Component({
-    selector: 'app-contact',
-    templateUrl: './contact.component.html',
-    styleUrls: ['./contact.component.css'],
-    standalone: false
+  selector: 'app-contact',
+  templateUrl: './contact.component.html',
+  styleUrls: ['./contact.component.css'],
+  standalone: false,
 })
 export class ContactComponent {
+  readonly info = RESTAURANT_INFO;
+  readonly limits = CONTACT_LIMITS;
 
-  
-  constructor(private HttpService: HttpService, private Router: Router) {   
-  }
+  readonly contactForm = new FormGroup({
+    name: new FormControl('', {
+      nonNullable: true,
+      validators: [
+        Validators.required,
+        Validators.minLength(CONTACT_LIMITS.name.min),
+        Validators.maxLength(CONTACT_LIMITS.name.max),
+      ],
+    }),
+    email: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email],
+    }),
+    subject: new FormControl('', {
+      nonNullable: true,
+      validators: [
+        Validators.required,
+        Validators.minLength(CONTACT_LIMITS.subject.min),
+        Validators.maxLength(CONTACT_LIMITS.subject.max),
+      ],
+    }),
+    message: new FormControl('', {
+      nonNullable: true,
+      validators: [
+        Validators.required,
+        Validators.minLength(CONTACT_LIMITS.message.min),
+        Validators.maxLength(CONTACT_LIMITS.message.max),
+      ],
+    }),
+  });
 
-  ContactForm = new FormGroup({
-     name: new FormControl("", [Validators.required, Validators.maxLength(30), Validators.minLength(2)]),
-     email: new FormControl("", [Validators.required, Validators.email]),
-     subject: new FormControl("",[Validators.required, Validators.maxLength(30), Validators.minLength(3), Validators.pattern('[a-zA-Z]+$')]),
-     message: new FormControl("", [Validators.required, Validators.maxLength(30)])
-  })
+  constructor(private httpService: HttpService) {}
 
   get name() {
-    return this.ContactForm.get('name');
+    return this.contactForm.controls.name;
   }
   get email() {
-    return this.ContactForm.get("email")
+    return this.contactForm.controls.email;
   }
   get subject() {
-    return this.ContactForm.get("subject")
+    return this.contactForm.controls.subject;
   }
   get message() {
-    return this.ContactForm.get("message")
+    return this.contactForm.controls.message;
   }
 
-FormSubmit() {
-    console.log(this.ContactForm); 
-    this.HttpService.ContactForm(this.ContactForm.value);   
-}
-
-ngOnInit() {
- 
-}
-
+  /** Sends the inquiry when the form is valid; otherwise reveals every field's error. */
+  submit(): void {
+    if (this.contactForm.invalid) {
+      this.contactForm.markAllAsTouched();
+      return;
+    }
+    this.httpService.ContactForm(this.contactForm.getRawValue());
+  }
 }
