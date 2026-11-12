@@ -24,6 +24,17 @@ export interface CreatedAccount {
   email: string;
 }
 
+/** Body of `POST api/Misc/BookingInformation`. */
+export interface BookingRequest {
+  name: string;
+  email: string;
+  phone: string;
+  date: string;
+  time: string;
+  people: number;
+  message: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -135,15 +146,10 @@ export class HttpService {
     });
   }
 
-  BookReservation(body: any): void {
-    let urlconcat = this.url + '' + 'api/Misc/BookingInformation';
-    this.Http.post(urlconcat, body, { responseType: 'text' }).subscribe({
-      next: (data) => this.router.navigate(['bookingcomplete']),
-      error: (error) => {
-        console.log(error);
-        this.router.navigate(['errors']);
-      },
-    });
+  /** Sends a table reservation to `POST api/Misc/BookingInformation`. */
+  BookReservation(body: BookingRequest): Observable<string> {
+    const urlconcat = `${this.url}api/Misc/BookingInformation`;
+    return this.Http.post(urlconcat, body, { responseType: 'text' });
   }
 
   public CheckIfUserLoggedIn(): Observable<any> {
