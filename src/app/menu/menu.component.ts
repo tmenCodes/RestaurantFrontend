@@ -46,7 +46,7 @@ interface CartItem {
   standalone: false,
 })
 export class MenuComponent {
-  public GettotalPrice$: Observable<any> = this.cartService.getTotalPrice();
+  public GettotalPrice$: Observable<any> = this.cartService.getTotalPriceByGuid();
   public DisplayCartItems$: Observable<any> =
     this.cartService.getAllCartItems();
 
@@ -152,7 +152,7 @@ export class MenuComponent {
         switchMap((value) => {
           this.cartService.CartCount.next(value);
           //update the async pipe
-          this.GettotalPrice$ = this.cartService.getTotalPrice();
+          this.GettotalPrice$ = this.cartService.getTotalPriceByGuid();
           if (value == 0) {
             this.sidebarOpen = false;
           }
@@ -200,7 +200,7 @@ export class MenuComponent {
           //  this.sidebarOpen = true;
           this.menuForm.reset();
           // update async pipes
-          this.GettotalPrice$ = this.cartService.getTotalPrice();
+          this.GettotalPrice$ = this.cartService.getTotalPriceByGuid();
 
           this.DisplayCartItems$ = this.cartService.getAllCartItems();
 

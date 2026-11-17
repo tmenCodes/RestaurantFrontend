@@ -48,7 +48,7 @@ export class CartService {
   }
 
   putItemsIntoCart(item: CartItem): Observable<any> {
-    let urlconcat = this.url + '' + 'Misc/CreateGuideForFrontend';
+    let urlconcat = this.url + '' + 'Cart/CreateCart';
 
     console.log(item);
 
@@ -65,7 +65,7 @@ export class CartService {
             options: item.options,
           };
           return this.Http.post<any>(
-            this.url + '' + 'Order/ShoppingCartItems',
+            this.url + '' + 'Cart/AddItem',
             object
           );
         })
@@ -81,7 +81,7 @@ export class CartService {
       };
       console.log(object);
       return this.Http.post<any>(
-        this.url + '' + 'Order/ShoppingCartItems',
+        this.url + '' + 'Cart/AddItem',
         object
       );
     }
@@ -90,14 +90,14 @@ export class CartService {
   getAllCartItems(): Observable<any> {
     var guid = localStorage.getItem('myGuid');
 
-    var url = this.url + '' + 'Order/GetMenuItemByGuid?guidId=' + guid;
+    var url = this.url + '' + 'Cart/GetItems?guidId=' + guid;
     return this.Http.get(url);
   }
 
-  getTotalPrice(): Observable<any> {
+  getTotalPriceByGuid(): Observable<any> {
     let guid = localStorage.getItem('myGuid');
 
-    let url = this.url + '' + 'Order/GetTotalPrice?guid=' + guid;
+    let url = this.url + '' + 'Cart/GetTotals?guid=' + guid;
     return this.Http.get<Observable<any>>(url);
   }
 
@@ -105,26 +105,19 @@ export class CartService {
     let guid = localStorage.getItem('myGuid');
     //  var url = 'http://localhost:5182/api/Order/Deletemenuitem?id=' + numero;
     var url =
-      this.url + '' + 'Order/DeleteMenuItem?id=' + numero + '&guidId=' + guid;
+      this.url + '' + 'Cart/RemoveItem?id=' + numero + '&guidId=' + guid;
 
     return this.Http.delete(url);
   }
 
   makePayment(PaymentInformation: any): Observable<any> {
-    var url = this.url + '' + 'Payment/PaymentInformation';
+    var url = this.url + '' + 'Cart/Checkout';
     return this.Http.post<any>(url, PaymentInformation);
-  }
-
-  CartSize(): Observable<any> {
-    var guid = localStorage.getItem('myGuid');
-    var url = this.url + '' + 'Order/GetMenuItemByGuid?guidId=' + guid;
-
-    return this.Http.get<Observable<any>>(url);
   }
 
   getCartSizeLength(): Observable<any> {
     var guid = localStorage.getItem('myGuid');
-    var url = this.url + '' + 'Order/GetMenuItemByGuidSize?guidId=' + guid;
+    var url = this.url + '' + 'Cart/GetItemCount?guidId=' + guid;
 
     return this.Http.get(url);
   }

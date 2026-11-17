@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 
 export const TOKEN_KEY = 'id_token';
 
-/** Body of `POST api/RegisterUser/CreateUser`. */
+/** Body of `POST api/Registration/CreateUser`. */
 export interface NewAccount {
   fullName: string;
   userName: string;
@@ -17,14 +17,14 @@ export interface NewAccount {
   password: string;
 }
 
-/** Successful response of `POST api/RegisterUser/CreateUser`. */
+/** Successful response of `POST api/Registration/CreateUser`. */
 export interface CreatedAccount {
   message: string;
   username: string;
   email: string;
 }
 
-/** Body of `POST api/Misc/BookingInformation`. */
+/** Body of `POST api/Contact/MakeReservation`. */
 export interface BookingRequest {
   name: string;
   email: string;
@@ -85,7 +85,7 @@ export class HttpService {
    * API's message; the request is never retried because it creates data.
    */
   createNewUser(account: NewAccount) {
-    const url = this.url + 'api/RegisterUser/CreateUser';
+    const url = this.url + 'api/Registration/CreateUser';
     return this.Http.post<CreatedAccount>(url, account, {
       observe: 'response',
     });
@@ -94,7 +94,7 @@ export class HttpService {
   //returns an obersvable???
   checkEmailExist(email: string) {
     let checkDuplicateEmailUrl =
-      this.url + '' + 'api/RegisterUser/CheckDuplicateEmail?email=' + email;
+      this.url + '' + 'api/Registration/CheckDuplicateEmail?email=' + email;
 
     //return obsevable boolean
     return this.Http.get<boolean>(checkDuplicateEmailUrl);
@@ -102,13 +102,13 @@ export class HttpService {
 
   CheckIfUserExists(username: string) {
     let urlconcant =
-      this.url + '' + 'api/RegisterUser/FindByUser?username=' + username;
+      this.url + '' + 'api/Registration/FindByUser?username=' + username;
     return this.Http.get<boolean>(urlconcant);
   }
 
   AddUserInformation(body: any) {
     let urlconcat =
-      this.url + '' + 'api/UserInformation/AddUserPaymentInformation';
+      this.url + '' + 'api/UserInformation/AddPaymentMethod';
     console.log('from inside the obsevable');
 
     const headers = new HttpHeaders({
@@ -126,7 +126,7 @@ export class HttpService {
   }
 
   Login(body: Object): Observable<any> {
-    let urlconcat = this.url + '' + 'api/RegisterUser/Login';
+    let urlconcat = this.url + '' + 'api/Login/Login';
 
     return this.Http.post<Observable<any>>(urlconcat, body, {
       observe: 'response',
@@ -135,7 +135,7 @@ export class HttpService {
   }
 
   ContactForm(body: any): void {
-    let urlconcat = this.url + '' + 'api/Misc/CustomerInquiry';
+    let urlconcat = this.url + '' + 'api/Contact/SendInquiry';
     this.Http.post<any>(urlconcat, body).subscribe({
       //change this in the future
       next: (data) => this.router.navigate(['contactcomplete']),
@@ -146,14 +146,14 @@ export class HttpService {
     });
   }
 
-  /** Sends a table reservation to `POST api/Misc/BookingInformation`. */
+  /** Sends a table reservation to `POST api/Contact/MakeReservation`. */
   BookReservation(body: BookingRequest): Observable<string> {
-    const urlconcat = `${this.url}api/Misc/BookingInformation`;
+    const urlconcat = `${this.url}api/Contact/MakeReservation`;
     return this.Http.post(urlconcat, body, { responseType: 'text' });
   }
 
   public CheckIfUserLoggedIn(): Observable<any> {
-    const urlconcat = `${this.url}api/RegisterUser/IsUserLoggedIn`;
+    const urlconcat = `${this.url}api/Login/IsUserLoggedIn`;
 
     return this.Http.get<any>(urlconcat, { withCredentials: true }).pipe(
       // map automatically wraps the returned value back into the main stream
@@ -167,16 +167,8 @@ export class HttpService {
     );
   }
 
-  public GetCurrentUser(): Observable<any> {
-    let urlconcat = this.url + '' + 'api/RegisterUser/GetTheCurrentUser';
-
-    return this.Http.get<any>(urlconcat, {
-      withCredentials: true,
-    });
-  }
-
   public SignOut() {
-    let urlconcat = this.url + '' + 'api/RegisterUser/SignOut';
+    let urlconcat = this.url + '' + 'api/Login/SignOut';
     const headers = new HttpHeaders({
       'Content-Type': 'application/json', // Or 'text/plain' if sending plain text
     });
@@ -189,7 +181,7 @@ export class HttpService {
 
   public GetUserPaymentInformation(): Observable<any> {
     let urlconcat =
-      this.url + '' + 'api/UserInformation/GetUserPaymentInformation';
+      this.url + '' + 'api/UserInformation/GetPaymentMethod';
     const headers = new HttpHeaders({
       'Content-Type': 'application/json', // Or 'text/plain' if sending plain text
     });
@@ -202,7 +194,7 @@ export class HttpService {
 
   public UpdateUserPaymentInformation(body: any) {
     let urlconcat =
-      this.url + '' + 'api/UserInformation/UpdateUserPaymentInformation';
+      this.url + '' + 'api/UserInformation/UpdatePaymentMethod';
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       // Or 'text/plain' if sending plain text
@@ -227,7 +219,7 @@ export class HttpService {
   }
 
   public GetMenuItems(): Observable<any> {
-    let urlconcat = this.url + '' + 'api/Order/GetMenuItems';
+    let urlconcat = this.url + '' + 'api/Menu/GetMenuItems';
     console.log(urlconcat);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -240,22 +232,7 @@ export class HttpService {
   }
 
   public GetMenuItemOptions(): Observable<any> {
-    let urlconcat = this.url + '' + 'api/Order/GetMenuItemOptions';
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    return this.Http.get(urlconcat, {
-      headers: headers,
-      withCredentials: true,
-    });
-  }
-
-  public GetImageUrlPath(): Observable<any> {
-    //let urlconcat = this.url + '' + 'api/Order/GetImageUrlPath';
-    // let urlconcat = this.url + '' + 'api/Order/ImagePath?menuItemName=' + path;
-    let urlconcat = this.url + '' + 'api/Order/ImagePath';
-
+    let urlconcat = this.url + '' + 'api/Menu/GetMenuItemOptions';
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });

@@ -19,7 +19,6 @@ import {
   tap,
   delay,
   of,
-  mergeMap,
   switchMap,
   combineLatest,
 } from 'rxjs';
@@ -98,53 +97,28 @@ export class CheckoutComponent {
   username: string = '';
   GuidValue: any = '';
 
-  /* prettier-ignore */
+  /**
+   * Checks out the cart. The API takes the buyer from the auth interceptor's token, so a signed-in user's order
+   * lands in their history and a guest's order belongs to nobody; the body carries no user name.
+   */
   submitInformation() {
-    this.HttpService.GetCurrentUser()
+    this.paymentInformation = {
+      credit: this.InformationForm.value.NameonCard,
+      NameonCard: this.InformationForm.value.NameonCard,
+      CreditCardNumber: this.InformationForm.value.CreditCardNumber,
+      Expiration: this.InformationForm.value.Expiration,
+      CVV: this.InformationForm.value.CVV,
+      CartsIdentity: this.GuidValue,
+    };
+
+    this.cartService
+      .makePayment(this.paymentInformation)
       .pipe(
-        mergeMap((value) => {
-          //never goes in here
-          this.paymentInformation = {
-            credit: this.InformationForm.value.NameonCard,
-            NameonCard: this.InformationForm.value.NameonCard,
-            CreditCardNumber: this.InformationForm.value.CreditCardNumber,
-            Expiration: this.InformationForm.value.Expiration,
-            CVV: this.InformationForm.value.CVV,
-            UserName: value.userName,
-            CartsIdentity: this.GuidValue,
-          };
-          console.log('IT SHOULD NOT BE GOING HERE!');
-          console.log(value.userName);
-
-          return this.cartService.makePayment(this.paymentInformation).pipe(
-            tap((value) => {
-              localStorage.removeItem('myGuid');
-              this.cartService.CartCount.next(0);
-              this.Router.navigate(['/complete']);
-            })
-          );
-        }),
-          //catches error from the first observable
-          catchError((_) => {
-            //never goes in here
-            this.paymentInformation = {
-              credit: this.InformationForm.value.NameonCard,
-              NameonCard: this.InformationForm.value.NameonCard,
-              CreditCardNumber: this.InformationForm.value.CreditCardNumber,
-              Expiration: this.InformationForm.value.Expiration,
-              CVV: this.InformationForm.value.CVV,
-              UserName: 'undefined',
-              CartsIdentity: this.GuidValue,
-            };
-
-            return this.cartService.makePayment(this.paymentInformation).pipe(
-              tap((_) => {
-                localStorage.removeItem('myGuid');
-                this.cartService.CartCount.next(0);
-                this.Router.navigate(['/complete']);
-              })
-            );
-          })
+        tap(() => {
+          localStorage.removeItem('myGuid');
+          this.cartService.CartCount.next(0);
+          this.Router.navigate(['/complete']);
+        })
       )
       .subscribe({
         next: (value) => console.log(value),
@@ -172,7 +146,7 @@ export class CheckoutComponent {
               tap((value) => {
                 this.cartService.CartCount.next(value);
 
-                this.cartService.getTotalPrice().subscribe((value) => {
+                this.cartService.getTotalPriceByGuid().subscribe((value) => {
                   console.log(value);
                   this.subtotal = value.subTotal;
                   this.taxamount = value.taxAmount;
@@ -209,7 +183,7 @@ export class CheckoutComponent {
   ngOnInit(): void {
     this.GuidValue = localStorage.getItem('myGuid');
 
-    this.cartService.getTotalPrice().subscribe((value) => {
+    this.cartService.getTotalPriceByGuid().subscribe((value) => {
       this.subtotal = value.subTotal;
       this.taxamount = value.taxAmount;
       this.totalprice = value.totalPrice;
